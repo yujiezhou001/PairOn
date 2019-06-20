@@ -8,6 +8,10 @@ const bodyParser = require('body-parser');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
+const knexConfig = require('./knexfile');
+const knex = require('knex')(knexConfig['development']);
+require('dotenv').config();
+
 const app = express();
 require('dotenv').config();
 
