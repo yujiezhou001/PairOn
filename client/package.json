@@ -17,11 +17,9 @@
     "eject": "react-scripts eject",
     "watch": "npm-watch"
   },
-
   "watch": {
     "test": "{src,test}/*.js"
   },
-
   "eslintConfig": {
     "extends": "react-app"
   },
