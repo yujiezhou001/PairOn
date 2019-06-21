@@ -4,6 +4,10 @@ const FormRegister = () => {
   return (
     <div>
       
+
+      <form action="">
+        
+      </form>
     </div>
   );
 };
