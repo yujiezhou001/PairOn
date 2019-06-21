@@ -7,9 +7,9 @@ exports.up = function(knex, Promise) {
       table.string('email');
       table.string('password');
       table.string('hometown');
-      table.float('longitude');
-      table.float('latitude');
-      table.string('avatar');
+      table.float('hometown_latitude');
+      table.float('hometown_longitude');
+      table.string('avatar_url');
       table.string('about_me');
       table.timestamps(true, true); 
   })
