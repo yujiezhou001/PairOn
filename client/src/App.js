@@ -63,7 +63,6 @@ class App extends Component {
   render(){
     return (
       <div>
-        <Logo />
         <Router>
           <div>
             <nav>
