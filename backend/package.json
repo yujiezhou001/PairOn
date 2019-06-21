@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "nodemon -L ./bin/www"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -16,9 +16,9 @@
     "http-errors": "~1.6.3",
     "knex": "^0.17.6",
     "morgan": "~1.9.1",
-    "pg": "^7.11.0"
+    "pg": "^7.11.0",
+    "ws": "^7.0.1"
   },
-  
   "devDependencies": {
     "dotenv": "^8.0.0",
     "nodemon": "^1.19.1"
