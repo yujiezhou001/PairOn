@@ -1,5 +1,5 @@
-import React from 'react';
-import axios from 'axios';
+import React from "react";
+import axios from "axios";
 
 class Login extends React.Component {
   constructor(props) {
@@ -15,7 +15,6 @@ class Login extends React.Component {
     //   .catch(function (error) {
     //     console.log(error);
     //   });
-
     // axios.post('/login').then(({data}) => {
     //     console.log(data);
     // })
@@ -23,20 +22,47 @@ class Login extends React.Component {
 
   handleOnSubmit(e) {
     e.preventDefault();
-    axios.post('/login').then(({data}) => {
-        console.log(data);
-    })
+    axios.post("/login").then(({ data }) => {
+      console.log(data);
+    });
   }
 
   render() {
     return (
-      <form onSubmit={this.handleOnSubmit}>
-        <label htmlFor="login">name</label>
-        <input type="text" name="login" id="login"/>
-        <input type="submit" value="Submit"/>
-      </form>
+      <div>
+        <form onSubmit={this.handleOnSubmit}>
+          <div className="form-group">
+            <label for="inputEmail4">Email</label>
+            <input
+              type="email"
+              className="form-control"
+              id="inputEmail"
+              placeholder="Email"
+            />
+          </div>
+          <div className="form-group">
+            <label for="inputPassword4">Password</label>
+            <input
+              type="password"
+              className="form-control"
+              id="inputPassword"
+              placeholder="Password"
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">
+            Login
+          </button>
+        </form>
+
+        <p>
+          Don't have an account? <br />
+          <button className="btn btn-primary" type="submit">
+            Join
+          </button>
+        </p>
+      </div>
     );
   }
-} 
+}
 
 export { Login };

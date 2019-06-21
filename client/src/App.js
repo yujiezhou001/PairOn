@@ -7,7 +7,7 @@ import { Register } from "./Register";
 import { Login } from "./Login";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
-import Logo from "./components/Logo.jsx";
+import BtnProfile from "./components/BtnProfile.jsx";
 
 // function App() {
 //   return (
@@ -56,7 +56,7 @@ function Users() {
 function App() {
   return (
     <div>
-      <Logo />
+      <BtnProfile />
       <Router>
         <div>
           <nav>
