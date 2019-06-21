@@ -4,43 +4,48 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-
 const knexConfig = require('./knexfile');
 const knex = require('knex')(knexConfig['development']);
+const http = require('http');
 require('dotenv').config();
+
 // express server
-const server = express();
-require('dotenv').config();
+const app = express();
+//Websocket Server
+
+const SocketServer = require('ws');
+var server = http.createServer(app);
+
 
 // view engine setup
-server.set('views', path.join(__dirname, 'views'));
-server.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
-server.use(logger('dev'));
-server.use(express.json());
-server.use(express.urlencoded({ extended: false }));
-server.use(cookieParser());
-server.use(express.static(path.join(__dirname, 'public')));
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// parse application/x-www-form-urlencoded
-server.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 // parse application/json
-server.use(bodyParser.json());
+app.use(bodyParser.json());
 
-server.use('/', indexRouter);
-server.use('/users', usersRouter);
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-server.use(function(req, res, next) {
+app.use(function(req, res, next) {
   next(createError(404));
 });
 
 // error handler
-server.use(function(err, req, res, next) {
+app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -49,7 +54,8 @@ server.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-// var server = http.createServer(app);
+
+
 
 //Express Server
 const PORT = 3001;
@@ -57,13 +63,10 @@ server.listen(PORT, ()=>{
   console.log(`Server running at port ${PORT}`)
 })
 
-//Websocket Server
-const SocketServer = require('ws').Server;
-const uuidv4 = require('uuid/v4');
 
-// const http = require('http');
-// const uuidv4 = require('uuid/v4');
-const wss = new SocketServer({ server });
+const uuidv4 = require('uuid/v4');
+const wss = new SocketServer.Server({ server });
+
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
