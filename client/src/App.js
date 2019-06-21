@@ -8,6 +8,9 @@ import { Login } from './Login';
 import { Home } from './Home';
 import { Profile } from './Profile';
 
+
+
+// Can we delete this guys?
 // function App() {
 //   return (
 //     <div className="App">
@@ -36,7 +39,7 @@ import { Profile } from './Profile';
 function Index() {
   return (
     <div>
-      
+
         <h2>Home</h2>
     </div>
   );
