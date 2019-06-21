@@ -7,14 +7,11 @@ const bodyParser = require('body-parser');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const SocketServer = require('ws').Server;
-var http = require('http');
-const PORT = 3001;
 
 const knexConfig = require('./knexfile');
 const knex = require('knex')(knexConfig['development']);
 require('dotenv').config();
-
+// express server
 const server = express();
 require('dotenv').config();
 
@@ -53,18 +50,39 @@ server.use(function(err, req, res, next) {
   res.render('error');
 });
 // var server = http.createServer(app);
-const wss = new SocketServer({ server });
 
+//Express Server
+const PORT = 3001;
+server.listen(PORT, ()=>{
+  console.log(`Server running at port ${PORT}`)
+})
+
+//Websocket Server
+const SocketServer = require('ws').Server;
+// const http = require('http');
+// const uuidv4 = require('uuid/v4');
+const wss = new SocketServer({ server });
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
+const clientList = {};
+const id = uuidv4();
+const geolocation =[
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+]
+
+
 wss.on('connection', (ws) => {
   console.log('Client connected');
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => console.log('Client disconnected'));
 });
-
-server.listen(PORT, ()=>{
-  console.log(`Server running at port ${PORT}`)
-})
