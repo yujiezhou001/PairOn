@@ -1,12 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Chat } from './Chat';
-import { Register } from './Register';
-import { Login } from './Login';
-import { Home } from './Home';
-import { Profile } from './Profile';
+import { Chat } from "./Chat";
+import { Register } from "./Register";
+import { Login } from "./Login";
+import { Home } from "./Home";
+import { Profile } from "./Profile";
+import {
+  withGoogleMap,
+  withScriptjs,
+  GoogleMap,
+  Marker,
+  InfoWindow
+} from "react-google-maps";
+
+function Map() {
+  return (
+    <GoogleMap
+      defaultZoom={16}
+      defaultCenter={{ lat: 45.527535, lng: -73.59643 }}
+    />
+  );
+}
+
+const WrappedMap = withScriptjs(withGoogleMap(Map));
 
 // function App() {
 //   return (
@@ -31,13 +49,10 @@ import { Profile } from './Profile';
 
 // export default App;
 
-
-
 function Index() {
   return (
     <div>
-      
-        <h2>Home</h2>
+      <h2>Home</h2>
     </div>
   );
 }
@@ -78,13 +93,22 @@ function App() {
             </li>
           </ul>
         </nav>
+        <div style={{ width: "100vw", height: "100vh" }}>
+          <WrappedMap
+            googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${
+              process.env.REACT_APP_GOOGLE_KEY
+            }`}
+            loadingElement={<div style={{ height: `100%` }} />}
+            containerElement={<div style={{ height: `100%` }} />}
+            mapElement={<div style={{ height: `100%` }} />}
+          />
+        </div>
 
         <Route path="/" exact component={Home} />
-        <Route path="/chat/"  component={Chat} />
+        <Route path="/chat/" component={Chat} />
         <Route path="/login" exact component={Login} />
         <Route path="/register" exact component={Register} />
         <Route path="/users/id" component={Profile} />
-
       </div>
     </Router>
   );
