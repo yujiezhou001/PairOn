@@ -7,24 +7,7 @@ import { Register } from "./Register";
 import { Login } from "./Login";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
-import {
-  withGoogleMap,
-  withScriptjs,
-  GoogleMap,
-  Marker,
-  InfoWindow
-} from "react-google-maps";
-
-function Map() {
-  return (
-    <GoogleMap
-      defaultZoom={16}
-      defaultCenter={{ lat: 45.527535, lng: -73.59643 }}
-    />
-  );
-}
-
-const WrappedMap = withScriptjs(withGoogleMap(Map));
+import { Map } from "./Map.jsx";
 
 // function App() {
 //   return (
