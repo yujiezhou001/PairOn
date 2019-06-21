@@ -46,6 +46,7 @@ class App extends React.Component {
     }
 
 
+// everything except the current location (not stored in db)
   getUserInfoFromDB = () => {
     const userObjFromDB = {};
     knex
@@ -62,7 +63,7 @@ class App extends React.Component {
    // const newCurrentUser = Object.assign({}, this.state.currentUser)
     // newCurrentUser.name = newName
 
-        const newCurrentUser = { ...this.state.currentUser, firstName: newUser.firstName , hometown: this.state.currentUser.hometown, experiences: "All",}
+        const newCurrentUser = { ...this.state.currentUser, firstName: newUser.firstName , hometown: this.state.currentUser.hometown, experiences: "All", currentLocation: }
 
 
         this.setState({currentUser: newCurrentUser})
