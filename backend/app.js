@@ -4,16 +4,20 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-
 const knexConfig = require('./knexfile');
 const knex = require('knex')(knexConfig['development']);
+const http = require('http');
 require('dotenv').config();
 
+// express server
 const app = express();
-require('dotenv').config();
+//Websocket Server
+
+const SocketServer = require('ws');
+var server = http.createServer(app);
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,4 +54,38 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+
+
+//Express Server
+const PORT = 3001;
+server.listen(PORT, ()=>{
+  console.log(`Server running at port ${PORT}`)
+})
+
+
+const uuidv4 = require('uuid/v4');
+const wss = new SocketServer.Server({ server });
+// Set up a callback that will run when a client connects to the server
+// When a client connects they are assigned a socket, represented by
+// the ws parameter in the callback.
+const clientList = {};
+const id = uuidv4();
+const geolocation =[
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+]
+
+
+wss.on('connection', (ws) => {
+  console.log('Client connected');
+
+  // Set up a callback for when a client closes the socket. This usually means they closed their browser.
+  ws.on('close', () => console.log('Client disconnected'));
+});

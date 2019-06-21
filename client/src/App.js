@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
@@ -53,41 +53,51 @@ function Users() {
   return <h2>Users</h2>;
 }
 
-function App() {
-  return (
-    <div>
-      <BtnProfile />
-      <Router>
-        <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/users/id">Profile</Link>
-              </li>
-              <li>
-                <Link to="/login/">Login</Link>
-              </li>
-              <li>
-                <Link to="/register/">Register</Link>
-              </li>
-              <li>
-                <Link to="/chat/">Chat</Link>
-              </li>
-            </ul>
-          </nav>
+class App extends Component {
+  componentDidMount() {
+    this.socket = new WebSocket('ws://localhost:3001')
+    this.socket.onopen = function () {
+      console.log("Connected to server");
+    };
+  }
+  render(){
+    return (
+      <div>
+        <Logo />
+        <Router>
+          <div>
+            <nav>
+              <ul>
+                <li>
+                  <Link to="/">Home</Link>
+                </li>
+                <li>
+                  <Link to="/users/id">Profile</Link>
+                </li>
+                <li>
+                  <Link to="/login/">Login</Link>
+                </li>
+                <li>
+                  <Link to="/register/">Register</Link>
+                </li>
+                <li>
+                  <Link to="/chat/">Chat</Link>
+                </li>
+              </ul>
+            </nav>
+  
+            <Route path="/" exact component={Home} />
+            <Route path="/chat/" component={Chat} />
+            <Route path="/login" exact component={Login} />
+            <Route path="/register" exact component={Register} />
+            <Route path="/users/id" component={Profile} />
+          </div>
+        </Router>
+      </div>
+    );
 
-          <Route path="/" exact component={Home} />
-          <Route path="/chat/" component={Chat} />
-          <Route path="/login" exact component={Login} />
-          <Route path="/register" exact component={Register} />
-          <Route path="/users/id" component={Profile} />
-        </div>
-      </Router>
-    </div>
-  );
+  }
+  
 }
 
 export default App;
