@@ -27,7 +27,7 @@ server.use(express.static(path.join(__dirname, 'public')));
 
 // parse application/x-www-form-urlencoded
 server.use(bodyParser.urlencoded({ extended: false }));
- 
+
 // parse application/json
 server.use(bodyParser.json());
 
@@ -59,6 +59,8 @@ server.listen(PORT, ()=>{
 
 //Websocket Server
 const SocketServer = require('ws').Server;
+const uuidv4 = require('uuid/v4');
+
 // const http = require('http');
 // const uuidv4 = require('uuid/v4');
 const wss = new SocketServer({ server });
