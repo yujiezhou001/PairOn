@@ -87,7 +87,7 @@ const geolocation =[
 
 wss.on('connection', (ws) => {
   console.log('Client connected');
-
+  const clientList = [currentUser: {firstName: null, hometown: null, experiences: "All", avatarURL: null, currentLocation: { lat, lng,}, aboutMe: null}]
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => console.log('Client disconnected'));
 });
