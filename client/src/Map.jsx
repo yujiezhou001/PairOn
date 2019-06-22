@@ -232,12 +232,19 @@ export class MapContainer extends Component {
   // }
 
   render() {
-
     const { lat, lng } = this.state.userLocation;
 
     return (
-      { this.state.geoReady && (
       <GoogleMap
+        ref={map => {
+          this.map = map;
+          if (map && lat && lng) {
+            // console.log(bounds);
+            // const bounds = new google.maps.LatLngBounds({ lat, lng });
+            //map.fitBounds(bounds);
+            map.panTo({ lat, lng });
+          }
+        }}
         defaultZoom={16}
         defaultCenter={{
           lat: this.state.userLocation.lat,
@@ -272,7 +279,6 @@ export class MapContainer extends Component {
                 //   </InfoWindow>
               // )} */}
       </GoogleMap>
-      )}
     );
   }
 }
