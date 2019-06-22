@@ -4,7 +4,31 @@ import axios from "axios";
 class Profile extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      // currentUser: {
+      //   avatar_url:
+      //     "https://pbs.twimg.com/profile_images/834493671785525249/XdLjsJX_.jpg",
+      //   first_name: "Chatal",
+      //   last_name: "Tremblay",
+      //   hometown: "Laval, Canada",
+      //   email: "Chantal.t@gmail.com",
+      //   password: "patate",
+      //   about_me:
+      //     "Fam actually scenester microdosing church-key pinterest synth copper mug enamel pin narwhal YOLO helvetica 8-bit cardigan. Sartorial selvage hashtag, cliche pug yr artisan iceland scenester art party live-edge. Try-hard synth vaporware austin."
+      // },
+      // messages: [
+      //   {
+      //     first_name: "Mathieu",
+      //     about_me:
+      //       "Fam actually scenester microdosing church-key pinterest synth copper mug enamel pin narwhal YOLO helvetica 8-bit cardigan. Sartorial selvage hashtag, cliche pug yr artisan iceland scenester art party live-edge. Try-hard synth vaporware austin."
+      //   },
+      //   {
+      //     first_name: "Eric",
+      //     about_me:
+      //       "Fam actually scenester microdosing church-key pinterest synth copper mug enamel pin narwhal YOLO helvetica 8-bit cardigan. Sartorial selvage hashtag, cliche pug yr artisan iceland scenester art party live-edge. Try-hard synth vaporware austin."
+      //   }
+      // ]
+    };
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
   }
 
