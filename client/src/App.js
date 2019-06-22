@@ -9,57 +9,32 @@ import { Home } from "./Home";
 import { Profile } from "./Profile";
 import BtnProfile from "./components/BtnProfile.jsx";
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
 
-// export default App;
-
-function Index() {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
-}
-
-function About() {
-  return (
-    <div>
-      <h1>hello</h1>
-      <h2>hello world</h2>
-    </div>
-  );
-}
-
-function Users() {
-  return <h2>Users</h2>;
-}
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      currentUser: {firstName: null, hometown: null, experiences: "All", avatarURL: null, currentLocation: { lat: null, lng: null}, aboutMe: null},
+      clientList: [], // full of currentUser objects sent from WebSocket
+      chatMessages: []
+    }
+  };
+
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:3001')
     this.socket.onopen = function () {
       console.log("Connected to server");
-    };
+    }
+
+    this.socket.onmessage = event => {
+        //console.log(event)
+      // console.log("THIS", event.data)
+      const parsedEvent = JSON.parse(event.data);
+      console.log(parsedEvent)
+    }
   }
+
   render(){
     return (
       <div>
@@ -84,7 +59,7 @@ class App extends Component {
                 </li>
               </ul>
             </nav>
-  
+
             <Route path="/" exact component={Home} />
             <Route path="/chat/" component={Chat} />
             <Route path="/login" exact component={Login} />
@@ -96,7 +71,7 @@ class App extends Component {
     );
 
   }
-  
+
 }
 
 export default App;

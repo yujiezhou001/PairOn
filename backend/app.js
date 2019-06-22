@@ -105,10 +105,55 @@ const clientList = {};
 const id = uuidv4();
 const geolocations = generateRandomPoints(ourLocation, 100, 20);
 
+const fakeExperience = ['All',
+                        'Food',
+                        'Drink',
+                        'All',
+                        'All',
+                        'Culture',
+                        'Drink',
+                        'Food',
+                        'Culture'
+                        ]
 
 wss.on('connection', (ws) => {
   console.log('Client connected');
-  const clientList = [currentUser: {firstName: null, hometown: null, experiences: "All", avatarURL: null, currentLocation: { lat, lng,}, aboutMe: null}]
+// once login authentication working - wrap all this code in "Usercredentials valid?"
+
+  let clientList =[];
+
+  knex
+    .select("*")
+    .from("users")
+    .where('id', '<',10)
+    .then(results => {
+      let i = 0;
+      results.forEach(userObj => {
+        clientList.push({currentUser: {firstName: userObj.first_name, hometown: userObj.hometown, experiences: fakeExperience[i], avatarURL: userObj.avatar_url, currentLocation: geolocations[i], aboutMe: userObj.about_me}});
+        i++;
+        //console.log(results);
+      })
+      console.log(clientList)
+    })
+    .then(results => {
+    const realUserId = 10; // Once login authentication implemented this value comes from the Cookie.
+
+    knex
+      .select('*')
+      .from("users")
+      .where('id', realUserId)
+      .then(result => {
+        clientList.push({currentUser: {firstName: result.first_name, hometown: result.hometown, experiences: "All", avatarURL: result.avatar_url, currentLocation: ourLocation, aboutMe: result.about_me}});
+      })
+    .finally(results=>{
+      wss.clients.forEach(function each(client){
+        client.send(JSON.stringify({clientList}));
+      })
+    })
+
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
+  });
+
   ws.on('close', () => console.log('Client disconnected'));
+
 });
