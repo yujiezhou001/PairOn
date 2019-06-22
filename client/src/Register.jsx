@@ -1,5 +1,6 @@
-import React from 'react';
-import axios from 'axios';
+import React from "react";
+import axios from "axios";
+
 
 class Register extends React.Component {
   constructor(props) {
@@ -15,7 +16,6 @@ class Register extends React.Component {
     //   .catch(function (error) {
     //     console.log(error);
     //   });
-
     // axios.post('/register').then(({data}) => {
     //     console.log(data);
     // })
@@ -23,20 +23,72 @@ class Register extends React.Component {
 
   handleOnSubmit(e) {
     e.preventDefault();
-    axios.post('/register').then(({data}) => {
-        console.log(data);
-    })
+    axios.post("/register").then(({ data }) => {
+      console.log(data);
+    });
   }
 
   render() {
     return (
-      <form onSubmit={this.handleOnSubmit}>
-        <label htmlFor="register">name</label>
-        <input type="text" name="register" id="register"/>
-        <input type="submit" value="Submit"/>
-      </form>
-      );
+      <div>
+        <form onSubmit={this.handleOnSubmit}>
+          <div className="form-group">
+            <label for="inputAddress">First name</label>
+            <input
+              type="text"
+              className="form-control"
+              id="inputFirstName"
+              placeholder="Hey ton "
+            />
+          </div>
+          <div className="form-group">
+            <label for="inputAddress2">Last name</label>
+            <input
+              type="text"
+              className="form-control"
+              id="inputLastName"
+              placeholder="Yo ton"
+            />
+          </div>
+          <div className="form-group">
+            <label for="inputAddress2">Hometown</label>
+            <input
+              type="text"
+              className="form-control"
+              id="inputHomeTown"
+              placeholder="Ton Hometown"
+            />
+          </div>
+          <div className="form-group">
+            <label for="inputEmail4">Email</label>
+            <input
+              type="email"
+              className="form-control"
+              id="inputEmail"
+              placeholder="Email"
+            />
+          </div>
+          <div className="form-group">
+            <label for="inputPassword4">Password</label>
+            <input
+              type="password"
+              className="form-control"
+              id="inputPassword"
+              placeholder="Password"
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">
+            Join
+          </button>
+        </form>
+        <p>
+          Already a member?
+          <br />
+          <a href="#">Login</a>
+        </p>
+      </div>
+    );
   }
-} 
+}
 
 export { Register };

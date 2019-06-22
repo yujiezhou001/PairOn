@@ -247,8 +247,8 @@ export class MapContainer extends Component {
         }}
         defaultZoom={16}
         defaultCenter={{
-          lat: this.state.userLocation.lat,
-          lng: this.state.userLocation.lng
+          lat: lat,
+          lng: lng
         }}
       >
         {this.state.persons.map((person, index) => (
@@ -262,22 +262,22 @@ export class MapContainer extends Component {
             onClick={() => this.setState({ selectedPerson: person })}
           />
         ))}
-        {/* {this.state.selectedPerson && (
-            //   <InfoWindow
-            //     onCloseClick={() => {
-              //       this.setState({ selectedPerson: null });
-              //     }}
-              //     position={{
-                //       lat: this.state.selectedPerson.latitude,
-                //       lng: this.state.selectedPerson.longitude
-                //     }}
-                //   >
-                //     <div>
-                //       <h3>{this.state.selectedPerson.firstName}</h3>
-                //       <p>{this.state.selectedPerson.hometown}</p>
-                //     </div>
-                //   </InfoWindow>
-              // )} */}
+        {this.state.selectedPerson && (
+          <InfoWindow
+            onCloseClick={() => {
+              this.setState({ selectedPerson: null });
+            }}
+            position={{
+              lat: this.state.selectedPerson.latitude,
+              lng: this.state.selectedPerson.longitude
+            }}
+          >
+            <div>
+              <h3>{this.state.selectedPerson.firstName}</h3>
+              <p>{this.state.selectedPerson.hometown}</p>
+            </div>
+          </InfoWindow>
+        )}
       </GoogleMap>
     );
   }

@@ -4,16 +4,20 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-
 const knexConfig = require('./knexfile');
 const knex = require('knex')(knexConfig['development']);
+const http = require('http');
 require('dotenv').config();
 
+// express server
 const app = express();
-require('dotenv').config();
+//Websocket Server
+
+const SocketServer = require('ws');
+var server = http.createServer(app);
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,4 +54,59 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+
+
+//Express Server
+const PORT = 3001;
+server.listen(PORT, ()=>{
+  console.log(`Server running at port ${PORT}`)
+})
+
+
+const uuidv4 = require('uuid/v4');
+const wss = new SocketServer.Server({ server });
+// Set up a callback that will run when a client connects to the server
+// When a client connects they are assigned a socket, represented by
+// the ws parameter in the callback.
+
+// Function that generates random geolation around our location.
+function generateRandomPoint(center, radius) {
+  var x0 = center.lng;
+  var y0 = center.lat;
+  // Convert Radius from meters to degrees.
+  var rd = radius/111300;
+
+  var u = Math.random();
+  var v = Math.random();
+
+  var w = rd * Math.sqrt(u);
+  var t = 2 * Math.PI * v;
+  var x = w * Math.cos(t);
+  var y = w * Math.sin(t);
+
+  var xp = x/Math.cos(y0);
+
+  // Resulting point.
+  return {'lat': y+y0, 'lng': xp+x0};
+}
+
+function generateRandomPoints(center, radius, count) {
+  var points = [];
+  for (var i=0; i<count; i++) {
+    points.push(generateRandomPoint(center, radius));
+  }
+  return points;
+}
+
+const ourLocation = {latitude: 45.5269919, longitude:-73.5967626};
+const clientList = {};
+const id = uuidv4();
+const geolocations = generateRandomPoints(ourLocation, 100, 20);
+
+
+wss.on('connection', (ws) => {
+  console.log('Client connected');
+
+  // Set up a callback for when a client closes the socket. This usually means they closed their browser.
+  ws.on('close', () => console.log('Client disconnected'));
+});

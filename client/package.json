@@ -4,16 +4,16 @@
   "private": true,
   "proxy": "http://localhost:3001",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.19",
+    "@fortawesome/free-solid-svg-icons": "^5.9.0",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "axios": "^0.19.0",
-    "google-maps-react": "^2.0.2",
+    "react-google-maps": "^9.4.5",
+    "bootstrap": "^4.3.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-google-maps": "^9.4.5",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1"
-  },
-  "watch": {
-    "test": "{src,test}/*.js"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -21,6 +21,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "watch": "npm-watch"
+  },
+  "watch": {
+    "test": "{src,test}/*.js"
   },
   "eslintConfig": {
     "extends": "react-app"
