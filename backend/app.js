@@ -101,7 +101,7 @@ function generateRandomPoints(center, radius, count) {
 }
 
 const ourLocation = {latitude: 45.5269919, longitude:-73.5967626};
-const clientList = {};
+// const clientList = {};
 const id = uuidv4();
 const geolocations = generateRandomPoints(ourLocation, 100, 20);
 

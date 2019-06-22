@@ -21,18 +21,18 @@ class App extends Component {
     }
   };
 
+  handleOnMessage = event => {
+    const parsedEvent = JSON.parse(event.data);
+    console.log(parsedEvent)
+  }
+
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:3001')
     this.socket.onopen = function () {
       console.log("Connected to server");
     }
 
-    this.socket.onmessage = event => {
-        //console.log(event)
-      // console.log("THIS", event.data)
-      const parsedEvent = JSON.parse(event.data);
-      console.log(parsedEvent)
-    }
+    this.socket.onmessage = this.handleOnMessage;
   }
 
   render(){
