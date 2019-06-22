@@ -17,36 +17,36 @@ import {
   InfoWindow
 } from "react-google-maps";
 
-// const WrappedMap = withScriptjs(withGoogleMap(Map));
-
 const WrappedMap = withScriptjs(withGoogleMap(MapContainer));
 
-function Index() {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
-}
-
-function About() {
-  return (
-    <div>
-      <h1>hello</h1>
-      <h2>hello world</h2>
-    </div>
-  );
-}
-
-function Users() {
-  return <h2>Users</h2>;
-}
-
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentUser: {
+        firstName: null,
+        hometown: null,
+        experiences: "All",
+        avatarURL: null,
+        currentLocation: { lat: null, lng: null },
+        aboutMe: null
+      },
+      clientList: [], // full of currentUser objects sent from WebSocket
+      chatMessages: []
+    };
+  }
+
   componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001");
     this.socket.onopen = function() {
       console.log("Connected to server");
+    };
+
+    this.socket.onmessage = event => {
+      //console.log(event)
+      // console.log("THIS", event.data)
+      const parsedEvent = JSON.parse(event.data);
+      console.log(parsedEvent);
     };
   }
   render() {
