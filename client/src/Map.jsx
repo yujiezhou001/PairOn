@@ -7,16 +7,28 @@ import {
   withScriptjs,
   GoogleMap,
   Marker,
-  InfoWindow
+  InfoWindow,
 } from "react-google-maps";
 
 // export const WrappedMap = withScriptjs(withGoogleMap(Map));
-
+// console.log("This is Map:", this.props.clientList)
 export class MapContainer extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      selectedPerson: {
+        firstName: "Marie-Anne",
+        hometown: "Laval",
+        latitude: 45.5246127,
+        longitude: -73.5987241
+      },
+      userLocation: {
+        lat: 0,
+        lng: 0
+      },
+      geoReady: false,
+      geoError: null,
       persons: [
         {
           firstName: "Rebecca",
@@ -102,19 +114,7 @@ export class MapContainer extends Component {
           latitude: 45.52714,
           longitude: -73.59613
         }
-      ],
-      selectedPerson: {
-        firstName: "Marie-Anne",
-        hometown: "Laval",
-        latitude: 45.5246127,
-        longitude: -73.5987241
-      },
-      userLocation: {
-        lat: 0,
-        lng: 0
-      },
-      geoReady: false,
-      geoError: null
+      ]
     };
   }
 
