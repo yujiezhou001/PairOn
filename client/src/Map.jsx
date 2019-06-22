@@ -7,7 +7,7 @@ import {
   withScriptjs,
   GoogleMap,
   Marker,
-  InfoWindow,
+  InfoWindow
 } from "react-google-maps";
 
 // export const WrappedMap = withScriptjs(withGoogleMap(Map));
@@ -118,64 +118,6 @@ export class MapContainer extends Component {
     };
   }
 
-  // useEffect(() => {
-  //   const listener = e => {
-  //     if (e.key === "Escape") {
-  //       this.setState({ selectedPerson: person });
-  //     }
-  //   };
-  //   window.addEventListener("keydown", listener);
-
-  //   return () => {
-  //     window.removeEventListener("keydown", listener);
-  //   };
-  // }, []);
-
-  //   handleToggleOpen = () => {
-  //     this.setState({
-  //       isOpen: true
-  //     });
-  //   };
-
-  //   handleToggleClose = () => {
-  //     this.setState({
-  //       isOpen: false
-  //     });
-  //   };
-
-  //   displayMarkers = () => {
-  //     return this.state.persons.map((person, index) => {
-  //       return (
-  //         <Marker
-  //           key={index}
-  //           id={index}
-  //           position={{
-  //             lat: person.latitude,
-  //             lng: person.longitude
-  //           }}
-  //           onClick={() => this.setState({ selectedPerson: person })}
-  //         />
-  //       );
-  //     });
-  //   };
-
-  //   displayMarkers = () => {
-
-  // return this.state.persons.map((person, index) => {
-  //   return (
-  //     <Marker
-  //       key={index}
-  //       id={index}
-  //       position={{
-  //         lat: person.latitude,
-  //         lng: person.longitude
-  //       }}
-  //     onClick={() => console.log("You clicked me!")} />
-  //     });
-  // }
-
-  //   const [selectedPerson, setSelectedPerson] = useState(null);
-
   geoSuccess = position => {
     console.log(position.coords.latitude, position.coords.longitude);
 
@@ -210,27 +152,6 @@ export class MapContainer extends Component {
     );
   }
 
-  // componentDidMount() {
-  //   if (navigator.geolocation) {
-  //     navigator.geolocation.watchPosition(
-  //       position => {
-  //         this.setState({
-  //           userLocation: {
-  //             lat: position.coords.latitude,
-  //             lng: position.coords.longitude
-  //           }
-  //         });
-  //       },
-  //       err => console.log(err),
-  //       { enableHighAccuracy: true, timeout: 20000, maximumAge: 60 * 60 }
-  //     );
-  //   } else {
-  //     alert("Error! Browser does not support geolocation.");
-  //   }
-
-  //   console.log(this.state.userLocation);
-  // }
-
   render() {
     const { lat, lng } = this.state.userLocation;
 
@@ -239,9 +160,6 @@ export class MapContainer extends Component {
         ref={map => {
           this.map = map;
           if (map && lat && lng) {
-            // console.log(bounds);
-            // const bounds = new google.maps.LatLngBounds({ lat, lng });
-            //map.fitBounds(bounds);
             map.panTo({ lat, lng });
           }
         }}
@@ -282,104 +200,5 @@ export class MapContainer extends Component {
     );
   }
 }
-
-// {/*
-//         /* {this.state.person && (
-//           <InfoWindow
-//             onCloseClick={() => {
-//               this.setState.persons(null);
-//             }}
-//             position={{
-//               lat: this.state.persons.latitude,
-//               lng: this.state.persons.longitude
-//             }}
-//           >
-//             <div>
-//               <h3>{this.state.persons.firstName}</h3>
-//               <p>{this.state.persons.hometown}</p>
-//             </div>
-//           </InfoWindow> */
-//           )}
-
-/* <Marker
-          position={
-            ({
-              lat: 45.52754,
-              lng: -73.59663
-            },
-            {
-              lat: 45.5258607,
-              lng: -73.5986309
-            },
-            {
-              lat: 45.52753,
-              lng: -73.59623
-            },
-            {
-              lat: 45.52744,
-              lng: -73.59603
-            },
-            {
-              lat: 45.52752,
-              lng: -73.59623
-            },
-            {
-              lat: 45.52755,
-              lng: -73.59653
-            })
-          } */
-
-// onClick={() => {
-//     setSelectedPerson(park);
-// }}
-// />
-
-/* <Marker position={{ lat: 45.5258607, lng: -73.5986309 }} /> */
-
-// export class MapContainer extends Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
-//       stores: [
-//         { lat: 47.49855629475769, lng: -122.14184416996333 },
-//         { latitude: 47.359423, longitude: -122.021071 },
-//         { latitude: 47.2052192687988, longitude: -121.988426208496 },
-//         { latitude: 47.6307081, longitude: -122.1434325 },
-//         { latitude: 47.3084488, longitude: -122.2140121 },
-//         { latitude: 47.5524695, longitude: -122.0425407 }
-//       ]
-//     };
-//   }
-
-//   displayMarkers = () => {
-//     return this.state.stores.map((store, index) => {
-//       return (
-//         <Marker
-//           key={index}
-//           id={index}
-//           position={{
-//             lat: store.latitude,
-//             lng: store.longitude
-//           }}
-//           onClick={() => console.log("You clicked me!")}
-//         />
-//       );
-//     });
-//   };
-
-//   render() {
-//     return (
-//       <Map
-//         google={this.props.google}
-//         zoom={8}
-//         style={mapStyles}
-//         initialCenter={{ lat: 47.444, lng: -122.176 }}
-//       >
-//         {this.displayMarkers()}
-//       </Map>
-//     );
-//   }
-// }
 
 export default MapContainer;
