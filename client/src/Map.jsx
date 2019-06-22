@@ -107,25 +107,48 @@ export class MapContainer extends Component {
     };
   }
 
+  //   handleToggleOpen = () => {
+  //     this.setState({
+  //       isOpen: true
+  //     });
+  //   };
 
-  displayMarkers = () => {
+  //   handleToggleClose = () => {
+  //     this.setState({
+  //       isOpen: false
+  //     });
+  //   };
 
-    return this.state.persons.map((person, index) => {
-      return (
-        <Marker
-          key={index}
-          id={index}
-          position={{
-            lat: person.latitude,
-            lng: person.longitude
-          }}
-          onClick={() => 
-            this.setState({ selectedPerson: person })
-          };
-        />
-      );
-    });
-  
+  //   displayMarkers = () => {
+  //     return this.state.persons.map((person, index) => {
+  //       return (
+  //         <Marker
+  //           key={index}
+  //           id={index}
+  //           position={{
+  //             lat: person.latitude,
+  //             lng: person.longitude
+  //           }}
+  //           onClick={() => this.setState({ selectedPerson: person })}
+  //         />
+  //       );
+  //     });
+  //   };
+
+  //   displayMarkers = () => {
+
+  // return this.state.persons.map((person, index) => {
+  //   return (
+  //     <Marker
+  //       key={index}
+  //       id={index}
+  //       position={{
+  //         lat: person.latitude,
+  //         lng: person.longitude
+  //       }}
+  //     onClick={() => console.log("You clicked me!")} />
+  //     });
+  // }
 
   //   const [selectedPerson, setSelectedPerson] = useState(null);
 
@@ -143,19 +166,46 @@ export class MapContainer extends Component {
   //   }, []);
 
   render() {
+    console.log(this.state.selectedPerson);
     return (
       <GoogleMap
         defaultZoom={16}
         defaultCenter={{ lat: 45.5279216, lng: -73.597181 }}
       >
-        {this.displayMarkers()}
+        {this.state.persons.map((person, index) => (
+          <Marker
+            key={index}
+            id={index}
+            position={{
+              lat: person.latitude,
+              lng: person.longitude
+            }}
+            onClick={() => this.setState({ selectedPerson: person })}
+          />
+        ))}
 
+        {this.state.selectedPerson && (
+          <InfoWindow
+            onCloseClick={() => {
+              this.setState({ selectedPerson: null });
+            }}
+            position={{
+              lat: this.state.selectedPerson.latitude,
+              lng: this.state.selectedPerson.longitude
+            }}
+          >
+            <div>
+              <h2>{this.state.selectedPerson.firstName}</h2>
+              <p>{this.state.selectedPerson.hometown}</p>
+            </div>
+          </InfoWindow>
+        )}
       </GoogleMap>
     );
   }
 }
 
-// {/* 
+// {/*
 //         /* {this.state.person && (
 //           <InfoWindow
 //             onCloseClick={() => {
@@ -170,11 +220,10 @@ export class MapContainer extends Component {
 //               <h3>{this.state.persons.firstName}</h3>
 //               <p>{this.state.persons.hometown}</p>
 //             </div>
-//           </InfoWindow> */ 
+//           </InfoWindow> */
 //           )}
 
-
-  /* <Marker
+/* <Marker
           position={
             ({
               lat: 45.52754,
@@ -201,7 +250,7 @@ export class MapContainer extends Component {
               lng: -73.59653
             })
           } */
-}
+
 // onClick={() => {
 //     setSelectedPerson(park);
 // }}
