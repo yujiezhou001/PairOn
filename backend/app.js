@@ -89,7 +89,7 @@ function generateRandomPoint(center, radius) {
   var xp = x/Math.cos(y0);
 
   // Resulting point.
-  return {'lat': y+y0, 'lng': xp+x0};
+  return {lat: y+y0, lng: xp+x0};
 }
 
 function generateRandomPoints(center, radius, count) {
@@ -100,8 +100,8 @@ function generateRandomPoints(center, radius, count) {
   return points;
 }
 
-const ourLocation = {latitude: 45.5269919, longitude:-73.5967626};
-const clientList = {};
+const ourLocation = {lat: 45.5269919, lng:-73.5967626};
+// const clientList = {};
 const id = uuidv4();
 const geolocations = generateRandomPoints(ourLocation, 100, 20);
 
@@ -129,11 +129,18 @@ wss.on('connection', (ws) => {
     .then(results => {
       let i = 0;
       results.forEach(userObj => {
-        clientList.push({currentUser: {firstName: userObj.first_name, hometown: userObj.hometown, experiences: fakeExperience[i], avatarURL: userObj.avatar_url, currentLocation: geolocations[i], aboutMe: userObj.about_me}});
+        clientList.push({currentUser: {
+          firstName: userObj.first_name, 
+          hometown: userObj.hometown, 
+          experiences: fakeExperience[i], 
+          avatarURL: userObj.avatar_url, 
+          currentLocation: generateRandomPoint(ourLocation, 100), 
+          aboutMe: userObj.about_me }
+        });
         i++;
         //console.log(results);
       })
-      console.log(clientList)
+      console.log(clientList[0].currentLocation)
     })
     .then(results => {
     const realUserId = 10; // Once login authentication implemented this value comes from the Cookie.
@@ -143,7 +150,15 @@ wss.on('connection', (ws) => {
       .from("users")
       .where('id', realUserId)
       .then(result => {
-        clientList.push({currentUser: {firstName: result.first_name, hometown: result.hometown, experiences: "All", avatarURL: result.avatar_url, currentLocation: ourLocation, aboutMe: result.about_me}});
+        clientList.push({currentUser: {firstName: result.first_name, 
+          lastName: result.last_name,
+          email: result.email,
+          password: result.password,
+          hometown: result.hometown,
+          experiences: "All",
+          avatarURL: result.avatar_url,
+          currentLocation: ourLocation,
+          aboutMe: result.about_me}});
       })
     .finally(results=>{
       wss.clients.forEach(function each(client){
