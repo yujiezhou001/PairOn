@@ -2,10 +2,14 @@ import React from 'react';
 import axios from 'axios';
 
 class Home extends React.Component {
-  constructor(props) {
+
+  constructor(props){
     super(props);
     this.state = {};
   }
+
+
+
 
   componentDidMount() {
     axios.get('/').then(({data}) => {
@@ -14,8 +18,12 @@ class Home extends React.Component {
   }
 
   render() {
-    return <h2>Home</h2>;
+    return (
+      <div>
+      <h2>Home</h2>;
+      </div>
+    )
   }
-} 
+}
 
 export { Home };
