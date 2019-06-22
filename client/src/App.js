@@ -7,17 +7,6 @@ import { Register } from "./Register";
 import { Login } from "./Login";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
-import { MapContainer } from "./Map.jsx";
-import {
-  Map,
-  withGoogleMap,
-  withScriptjs,
-  GoogleMap,
-  Marker,
-  InfoWindow
-} from "react-google-maps";
-
-const WrappedMap = withScriptjs(withGoogleMap(MapContainer));
 
 class App extends Component {
   constructor(props) {
@@ -36,19 +25,21 @@ class App extends Component {
     };
   }
 
+  handleOnMessage = event => {
+    const usersObj = JSON.parse(event.data);
+    this.setState({
+      clientList: usersObj
+    });
+  }
+
   componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001");
     this.socket.onopen = function() {
       console.log("Connected to server");
     };
-
-    this.socket.onmessage = event => {
-      //console.log(event)
-      // console.log("THIS", event.data)
-      const parsedEvent = JSON.parse(event.data);
-      console.log(parsedEvent);
-    };
+    this.socket.onmessage = this.handleOnMessage;
   }
+
   render() {
     return (
       <div>
@@ -72,18 +63,8 @@ class App extends Component {
               </li>
             </ul>
           </nav>
-          <div style={{ width: "100vw", height: "100vh" }}>
-            <WrappedMap
-              googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${
-                process.env.REACT_APP_GOOGLE_KEY
-              }`}
-              loadingElement={<div style={{ height: `100%` }} />}
-              containerElement={<div style={{ height: `100%` }} />}
-              mapElement={<div style={{ height: `100%` }} />}
-            />
-          </div>
 
-          <Route path="/" exact component={Home} />
+          <Route path="/" component={() => (<Home clientList={this.state.clientList} />)}/>
           <Route path="/chat/" component={Chat} />
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
