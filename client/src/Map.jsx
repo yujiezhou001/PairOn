@@ -103,9 +103,33 @@ export class MapContainer extends Component {
           longitude: -73.59613
         }
       ],
-      selectedPerson: {}
+      selectedPerson: {
+        firstName: "Marie-Anne",
+        hometown: "Laval",
+        latitude: 45.5246127,
+        longitude: -73.5987241
+      },
+      userLocation: {
+        lat: 0,
+        lng: 0
+      },
+      geoReady: false,
+      geoError: null
     };
   }
+
+  // useEffect(() => {
+  //   const listener = e => {
+  //     if (e.key === "Escape") {
+  //       this.setState({ selectedPerson: person });
+  //     }
+  //   };
+  //   window.addEventListener("keydown", listener);
+
+  //   return () => {
+  //     window.removeEventListener("keydown", listener);
+  //   };
+  // }, []);
 
   //   handleToggleOpen = () => {
   //     this.setState({
@@ -152,25 +176,73 @@ export class MapContainer extends Component {
 
   //   const [selectedPerson, setSelectedPerson] = useState(null);
 
-  //   useEffect(() => {
-  //     const listener = e => {
-  //       if (e.key === "Escape") {
-  //         setSelectedPerson(null);
-  //       }
-  //     };
-  //     window.addEventListener("keydown", listener);
+  geoSuccess = position => {
+    console.log(position.coords.latitude, position.coords.longitude);
 
-  //     return () => {
-  //       window.removeEventListener("keydown", listener);
-  //     };
-  //   }, []);
+    this.setState({
+      geoReady: true,
+      userLocation: {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      }
+    });
+
+    console.log(this.state.userLocation);
+  };
+
+  geoFailure = err => {
+    this.setState({ geoError: err.message });
+  };
+
+  componentDidMount() {
+    let geoOptions = {
+      enableHighAccuracy: true,
+      timeOut: 20000,
+      maximumAge: 60 * 60
+    };
+
+    this.setState({ geoReady: false, error: null });
+
+    navigator.geolocation.getCurrentPosition(
+      this.geoSuccess,
+      this.geoFailure,
+      geoOptions
+    );
+  }
+
+  // componentDidMount() {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.watchPosition(
+  //       position => {
+  //         this.setState({
+  //           userLocation: {
+  //             lat: position.coords.latitude,
+  //             lng: position.coords.longitude
+  //           }
+  //         });
+  //       },
+  //       err => console.log(err),
+  //       { enableHighAccuracy: true, timeout: 20000, maximumAge: 60 * 60 }
+  //     );
+  //   } else {
+  //     alert("Error! Browser does not support geolocation.");
+  //   }
+
+  //   console.log(this.state.userLocation);
+  // }
 
   render() {
-    console.log(this.state.selectedPerson);
+
+    const { lat, lng } = this.state.userLocation;
+
     return (
+      { this.state.geoReady && (
       <GoogleMap
         defaultZoom={16}
-        defaultCenter={{ lat: 45.5279216, lng: -73.597181 }}
+        defaultCenter={{
+          lat: this.state.userLocation.lat,
+          lng: this.state.userLocation.lng
+        }}
       >
         {this.state.persons.map((person, index) => (
           <Marker
@@ -183,24 +255,24 @@ export class MapContainer extends Component {
             onClick={() => this.setState({ selectedPerson: person })}
           />
         ))}
-
-        {this.state.selectedPerson && (
-          <InfoWindow
-            onCloseClick={() => {
-              this.setState({ selectedPerson: null });
-            }}
-            position={{
-              lat: this.state.selectedPerson.latitude,
-              lng: this.state.selectedPerson.longitude
-            }}
-          >
-            <div>
-              <h2>{this.state.selectedPerson.firstName}</h2>
-              <p>{this.state.selectedPerson.hometown}</p>
-            </div>
-          </InfoWindow>
-        )}
+        {/* {this.state.selectedPerson && (
+            //   <InfoWindow
+            //     onCloseClick={() => {
+              //       this.setState({ selectedPerson: null });
+              //     }}
+              //     position={{
+                //       lat: this.state.selectedPerson.latitude,
+                //       lng: this.state.selectedPerson.longitude
+                //     }}
+                //   >
+                //     <div>
+                //       <h3>{this.state.selectedPerson.firstName}</h3>
+                //       <p>{this.state.selectedPerson.hometown}</p>
+                //     </div>
+                //   </InfoWindow>
+              // )} */}
       </GoogleMap>
+      )}
     );
   }
 }
