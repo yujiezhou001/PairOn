@@ -64,7 +64,7 @@ class App extends Component {
             <Route path="/chat/" component={Chat} />
             <Route path="/login" exact component={Login} />
             <Route path="/register" exact component={Register} />
-            <Route path="/users/id" component={Profile} />
+            <Route path="/users/:id" component={Profile} />
           </div>
         </Router>
       </div>
