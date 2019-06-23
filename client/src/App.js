@@ -26,10 +26,7 @@ class App extends Component {
     };
   }
 
-  updateCurrentLocation = (lat, lng) => {
-   // this.setState({currentUser: {currentLocation}})
-    //console.log(locationObject)
-  }
+
 
   updateExperiences = (experience) => {
     //this.setSate(experiences: experience)
@@ -46,6 +43,13 @@ class App extends Component {
   //     this.setState({currentUser: event.onClick})
   //   }
   // }
+
+  updateCurrentLocation = (locationObject) => {
+    this.setState({currentUser: {currentLocation: locationObject}})
+    console.log("successfully passed to parent state", locationObject)
+    // this.socket.send(JSON.stringify(locationObject))
+  }
+
 
   handleOnMessage = event => {
     const usersObj = JSON.parse(event.data);
@@ -84,11 +88,24 @@ class App extends Component {
             </ul>
           </nav>
 
-          <Route path="/" component={() => (<Home clientList={this.state.clientList} updateCurrentLocation={this.updateCurrentLocation} updateExperiences={this.updateExperiences} handleOnClick={this.state.handleOnClick}/>)}/>
-          <Route path="/chat/" component={Chat} />
-          <Route path="/login" exact component={Login} />
-          <Route path="/register" exact component={Register} />
-          <Route path="/users/id" component={Profile} />
+
+          // <Route path="/" component={() => (<Home clientList={this.state.clientList} updateCurrentLocation={this.updateCurrentLocation} updateExperiences={this.updateExperiences} handleOnClick={this.state.handleOnClick}/>)}/>
+          // <Route path="/chat/" component={Chat} />
+          // <Route path="/login" exact component={Login} />
+          // <Route path="/register" exact component={Register} />
+          // <Route path="/users/id" component={Profile} />
+
+          <Route
+            path="/"
+            render={props => <Home {...props}
+              clientList={this.state.clientList}
+              updateCurrentLocation={this.updateCurrentLocation}
+              currentLocation={this.state.currentUser.currentLocation} />}
+          />
+          <Route path="/chat/" render={() => <Chat />} />
+          <Route path="/login" render={() => <Login />} />
+          <Route path="/register" render={() => <Register />} />
+          <Route path="/users/id" render={() => <Profile />} />
 
         </Router>
       </div>

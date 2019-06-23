@@ -42,6 +42,7 @@ class Home extends React.Component {
               clientList={this.props.clientList}
               updateCurrentLocation={this.props.updateCurrentLocation}
               updateExperiences={this.props.updateExperiences}
+              currentLocation={this.props.currentLocation}
 
             />
         </div>

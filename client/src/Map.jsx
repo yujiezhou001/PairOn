@@ -20,7 +20,6 @@ export class MapContainer extends Component {
 
     this.state = {
       selectedPerson: null,
-
       currentLocation: {
         lat: 0,
         lng: 0
@@ -32,7 +31,9 @@ export class MapContainer extends Component {
   }
 
   geoSuccess = position => {
-    console.log(position.coords.latitude, position.coords.longitude);
+    // console.log(position.coords.latitude, position.coords.longitude);
+    let tempObj = {lat: position.coords.latitude, lng: position.coords.longitude};
+    this.props.updateCurrentLocation(tempObj)
 
     this.setState({
       geoReady: true,
@@ -41,9 +42,12 @@ export class MapContainer extends Component {
         lng: position.coords.longitude
       }
     });
-    //this.props.updateCurrentLocation(this.state.currentLocation(lat, lgn))
-    console.log(this.state.currentLocation);
+    // this.props.updateCurrentLocation(tempObj)
+    console.log("This is from local state:", this.state.currentLocation);
+    console.log("This is from parent state:", this.props.currentLocation);
   };
+
+
 
   geoFailure = err => {
     this.setState({ geoError: err.message });
@@ -64,7 +68,7 @@ export class MapContainer extends Component {
       timeOut: 20000,
       maximumAge: 60 * 60
     };
-
+    // console.log(this.props.updateCurrentLocation)
     this.setState({ geoReady: false, error: null });
 
     navigator.geolocation.getCurrentPosition(
@@ -73,10 +77,11 @@ export class MapContainer extends Component {
       geoOptions
     );
   }
-
+    // const updatedLocation = this.props.currentUser.currentLocation
   render() {
 
-    const { lat, lng } = this.state.currentLocation;
+    const { lat, lng } = this.props.currentLocation;
+
     const imgPicture = {
       width: "50px"
     };
