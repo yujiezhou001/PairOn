@@ -41,7 +41,6 @@ class Home extends React.Component {
               loadingElement={<div style={{ height: `100%` }} />}
               containerElement={<div style={{ height: `100%` }} />}
               mapElement={<div style={{ height: `100%` }} />}
-              clientList={this.userObj}
             />
         </div>
       </div>
