@@ -26,6 +26,11 @@ class App extends Component {
     };
   }
 
+  updateCurrentLocation = (locationObject) => {
+    this.setState({currentUser: {currentLocation: locationObject}})
+    console.log("successfully passed to parent state", locationObject)
+  }
+
   handleOnMessage = event => {
     const usersObj = JSON.parse(event.data);
     this.setState(usersObj);
@@ -65,7 +70,9 @@ class App extends Component {
 
           <Route
             path="/"
-            component={() => <Home clientList={this.state.clientList} />}
+            component={() => <Home clientList={this.state.clientList}
+             updateCurrentLocation={this.updateCurrentLocation}
+              currentLocation={this.state.currentUser.currentLocation} />}
           />
           <Route path="/chat/" component={Chat} />
           <Route path="/login" exact component={Login} />
