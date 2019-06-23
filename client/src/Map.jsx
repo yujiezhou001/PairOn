@@ -7,7 +7,7 @@ import {
   withScriptjs,
   GoogleMap,
   Marker,
-  InfoWindow,
+  InfoWindow
 } from "react-google-maps";
 
 // export const WrappedMap = withScriptjs(withGoogleMap(Map));
@@ -20,8 +20,7 @@ export class MapContainer extends Component {
       selectedPerson: {
         firstName: "Marie-Anne",
         hometown: "Laval",
-        currentLocation:{ lat: 45.5246127,
-                          lng: -73.5987241}
+        currentLocation: { lat: 45.5246127, lng: -73.5987241 }
       },
       userLocation: {
         lat: 0,
@@ -29,7 +28,7 @@ export class MapContainer extends Component {
       },
       geoReady: false,
       geoError: null,
-      persons: this.props.clientList// [
+      persons: this.props.clientList // [
       //   {
       //     firstName: "Rebecca",
       //     hometown: "Montreal",
@@ -231,9 +230,11 @@ export class MapContainer extends Component {
   //   console.log(this.state.userLocation);
   // }
 
-
   render() {
     const { lat, lng } = this.state.userLocation;
+    const imgPicture = {
+      width: "50px"
+    };
     // console.log("This is persons",this.state.persons)
     return (
       <GoogleMap
@@ -274,8 +275,19 @@ export class MapContainer extends Component {
             }}
           >
             <div>
-              <h3>{this.state.selectedPerson.firstName}</h3>
+              <img
+                className="rounded-circle"
+                src={this.state.selectedPerson.avatarURL}
+                style={imgPicture}
+              />
+              <h5>{this.state.selectedPerson.firstName}</h5>
               <p>{this.state.selectedPerson.hometown}</p>
+              <button type="submit" className="btn btn-primary btn-sm">
+                Profile
+              </button>
+              <button type="submit" className="btn btn-primary btn-sm">
+                Chat
+              </button>
             </div>
           </InfoWindow>
         )}
