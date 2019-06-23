@@ -10,6 +10,7 @@ import {
   InfoWindow,
   Circle
 } from "react-google-maps";
+import mapStyles from "./mapStyles";
 
 // export const WrappedMap = withScriptjs(withGoogleMap(Map));
 // console.log("This is Map:", this.props.clientList)
@@ -93,6 +94,7 @@ export class MapContainer extends Component {
           lat: lat,
           lng: lng
         }}
+        defaultOptions={{ styles: mapStyles }}
       >
         <Circle
           defaultCenter={{
