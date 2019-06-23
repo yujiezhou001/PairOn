@@ -61,13 +61,13 @@ class Profile extends React.Component {
 
   handleOnSubmit(e) {
     e.preventDefault();
-    axios.post("/users/9").then(({ data }) => {
-      console.log(data);
+    axios.post(this.props.match.url).then(({ data }) => {
+      console.log(data, this.props.match.url);
     });
   }
 
   checkCurrentId(currentId) {
-    return currentId == Number(this.state.idUrl);
+    return currentId == Number(this.props.match.params.id);
   }
 
   render() {
