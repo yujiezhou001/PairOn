@@ -65,12 +65,12 @@ class App extends Component {
 
           <Route
             path="/"
-            component={() => <Home clientList={this.state.clientList} />}
+            render={() => <Home clientList={this.state.clientList} />}
           />
-          <Route path="/chat/" component={Chat} />
-          <Route path="/login" exact component={Login} />
-          <Route path="/register" exact component={Register} />
-          <Route path="/users/id" component={Profile} />
+          <Route path="/chat/" render={() => <Chat />} />
+          <Route path="/login" render={() => <Login />} />
+          <Route path="/register" render={() => <Register />} />
+          <Route path="/users/id" render={() => <Profile />} />
         </Router>
       </div>
     );

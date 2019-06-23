@@ -115,7 +115,7 @@ class Profile extends React.Component {
               />
             </div>
             <div className="form-group">
-              <label for="inputPassword4">New password</label>
+              <label htmlFor="inputPassword4">New password</label>
               <input
                 type="password"
                 className="form-control"

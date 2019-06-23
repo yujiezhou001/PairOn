@@ -32,7 +32,7 @@ class Login extends React.Component {
       <div>
         <form onSubmit={this.handleOnSubmit}>
           <div className="form-group">
-            <label for="inputEmail4">Email</label>
+            <label htmlFor="inputEmail4">Email</label>
             <input
               type="email"
               className="form-control"
@@ -41,7 +41,7 @@ class Login extends React.Component {
             />
           </div>
           <div className="form-group">
-            <label for="inputPassword4">Password</label>
+            <label htmlFor="inputPassword4">Password</label>
             <input
               type="password"
               className="form-control"
