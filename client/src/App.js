@@ -69,12 +69,12 @@ class App extends Component {
               </li>
             </ul>
           </nav>
-          {/* <Route
+          <Route
             path="/"
             render={props => <Home {...props} clientList={this.state.clientList}
              updateCurrentLocation={this.updateCurrentLocation}
               currentLocation={this.state.currentUser.currentLocation} />}
-          /> */}
+          />
           <Route path="/chat/" render={() => <Chat />} />
           <Route path="/login" render={() => <Login />} />
           <Route path="/register" render={() => <Register />} />

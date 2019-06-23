@@ -87,7 +87,7 @@ class Profile extends React.Component {
 
     let filterById2 = filter[this.props.match.params.id]
       
-    console.log(findById.id)
+    console.log(filterById2)
 
     const isAccountUser = this.checkCurrentId(this.state.currentUser.id);
     let button;
