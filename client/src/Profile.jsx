@@ -74,9 +74,9 @@ class Profile extends React.Component {
     const imgPicture = {
       width: "100px"
     };
-    let list = this.props.clientList
-    let exe =  this.props.list.clientList
-    console.log(exe)
+    let list = this.props.theList.clientList
+    
+    console.log(list)
 
     const isAccountUser = this.checkCurrentId(this.state.currentUser.id);
     let button;

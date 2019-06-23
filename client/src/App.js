@@ -71,7 +71,7 @@ class App extends Component {
           <Route path="/chat/" component={Chat} />
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
-          <Route path="/users/:id" component={() =>(<Profile list={this.state.clientList} />)} />
+          <Route path="/users/:id" component={() =>(<Profile theList={this.state.clientList} />)} />
         </Router>
       </div>
     );
