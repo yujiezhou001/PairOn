@@ -113,6 +113,10 @@ export class MapContainer extends Component {
               lng: person.currentLocation.lng
             }}
             onClick={() => this.setState({ selectedPerson: person })}
+            icon={{
+              url: `/waving-icon-18.jpg`,
+              scaledSize: new window.google.maps.Size(40, 40)
+            }}
           />
         ))}
         {this.state.selectedPerson && (
