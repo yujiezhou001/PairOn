@@ -27,9 +27,7 @@ class App extends Component {
 
   handleOnMessage = event => {
     const usersObj = JSON.parse(event.data);
-    this.setState({
-      clientList: usersObj
-    });
+    this.setState(usersObj);
   }
 
   componentDidMount() {

@@ -28,8 +28,6 @@ class Home extends React.Component {
     })
   }
   render() {
-    const userObj  = this.props.clientList
-    console.log("This is Home:", userObj)
     return (
       <div>
       <h2>Home</h2>;
@@ -41,7 +39,7 @@ class Home extends React.Component {
               loadingElement={<div style={{ height: `100%` }} />}
               containerElement={<div style={{ height: `100%` }} />}
               mapElement={<div style={{ height: `100%` }} />}
-              clientList={this.userObj}
+              clientList={this.props.clientList}
             />
         </div>
       </div>
