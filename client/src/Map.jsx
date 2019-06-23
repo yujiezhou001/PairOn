@@ -33,7 +33,7 @@ export class MapContainer extends Component {
   geoSuccess = position => {
     // console.log(position.coords.latitude, position.coords.longitude);
     let tempObj = {lat: position.coords.latitude, lng: position.coords.longitude};
-    // this.props.updateCurrentLocation(tempObj)
+    this.props.updateCurrentLocation(tempObj)
 
     this.setState({
       geoReady: true,
@@ -71,7 +71,7 @@ export class MapContainer extends Component {
   }
     // const updatedLocation = this.props.currentUser.currentLocation
   render() {
-    const { lat, lng } = this.state.currentLocation;
+    const { lat, lng } = this.props.currentLocation;
     const imgPicture = {
       width: "50px"
     };

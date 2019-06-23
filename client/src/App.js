@@ -29,6 +29,7 @@ class App extends Component {
   updateCurrentLocation = (locationObject) => {
     this.setState({currentUser: {currentLocation: locationObject}})
     console.log("successfully passed to parent state", locationObject)
+    // this.socket.send(JSON.stringify(locationObject))
   }
 
   handleOnMessage = event => {
@@ -67,10 +68,9 @@ class App extends Component {
               </li>
             </ul>
           </nav>
-
           <Route
             path="/"
-            component={() => <Home clientList={this.state.clientList}
+            render={props => <Home {...props} clientList={this.state.clientList}
              updateCurrentLocation={this.updateCurrentLocation}
               currentLocation={this.state.currentUser.currentLocation} />}
           />
