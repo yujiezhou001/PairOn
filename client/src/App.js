@@ -74,10 +74,10 @@ class App extends Component {
              updateCurrentLocation={this.updateCurrentLocation}
               currentLocation={this.state.currentUser.currentLocation} />}
           />
-          <Route path="/chat/" component={Chat} />
-          <Route path="/login" exact component={Login} />
-          <Route path="/register" exact component={Register} />
-          <Route path="/users/id" component={Profile} />
+          <Route path="/chat/" render={() => <Chat />} />
+          <Route path="/login" render={() => <Login />} />
+          <Route path="/register" render={() => <Register />} />
+          <Route path="/users/id" render={() => <Profile />} />
         </Router>
       </div>
     );
