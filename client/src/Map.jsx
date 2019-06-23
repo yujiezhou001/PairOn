@@ -20,11 +20,8 @@ export class MapContainer extends Component {
 
     this.state = {
       selectedPerson: null,
-<<<<<<< HEAD
+
       currentLocation: {
-=======
-      userLocation: {
->>>>>>> master
         lat: 0,
         lng: 0
       },
@@ -44,13 +41,22 @@ export class MapContainer extends Component {
         lng: position.coords.longitude
       }
     });
-    this.props.updateCurrentLocation(this.state.currentLocation(lat, lgn))
+    //this.props.updateCurrentLocation(this.state.currentLocation(lat, lgn))
     console.log(this.state.currentLocation);
   };
 
   geoFailure = err => {
     this.setState({ geoError: err.message });
   };
+
+
+  handleOnClick = event =>{
+    if (event.onClick) {
+      this.props.updateExperiences(event.onClick)
+      this.setState({currentUser: event.onClick})
+    }
+  };
+
 
   componentDidMount() {
     let geoOptions = {
@@ -152,6 +158,24 @@ export class MapContainer extends Component {
             </div>
           </InfoWindow>
         )}
+         <button onClick= {this.handleOnClick} className="btn btn-primary btn-sm">
+                Drinks
+              </button>
+          <button onClick= {this.handleOnClick} className="btn btn-primary btn-sm">
+                Food
+              </button>
+          <button onClick= {this.handleOnClick} className="btn btn-primary btn-sm">
+                Culture
+              </button>
+                   <button onClick= {this.handleOnClick} className="btn btn-primary btn-sm">
+                Events
+              </button>
+          <button onClick= {this.handleOnClick} className="btn btn-primary btn-sm">
+                Sports
+              </button>
+          <button onClick= {this.handleOnClick} className="btn btn-primary btn-sm">
+                Unique
+              </button>
       </GoogleMap>
     );
   }

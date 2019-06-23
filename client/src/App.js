@@ -27,9 +27,25 @@ class App extends Component {
   }
 
   updateCurrentLocation = (lat, lng) => {
-    this.setState({currentUser: {currentLocation}})
+   // this.setState({currentUser: {currentLocation}})
     //console.log(locationObject)
   }
+
+  updateExperiences = (experience) => {
+    //this.setSate(experiences: experience)
+    const experienceObj = {
+      type: "experiencePick"
+      experience: this.state.currentUser.experiences
+    }
+     this.Socket.send(JSON.stringify(experienceObj));
+  }
+
+  // handleOnClick = event =>{
+  //   if (event.onClick) {
+  //     this.props.updateExperiences(event.onClick)
+  //     this.setState({currentUser: event.onClick})
+  //   }
+  // }
 
   handleOnMessage = event => {
     const usersObj = JSON.parse(event.data);
@@ -68,22 +84,12 @@ class App extends Component {
             </ul>
           </nav>
 
-<<<<<<< HEAD
-          <Route path="/" component={() => (<Home clientList={this.state.clientList} updateCurrentLocation={this.state.updateCurrentLocation} />)}/>
+          <Route path="/" component={() => (<Home clientList={this.state.clientList} updateCurrentLocation={this.updateCurrentLocation} updateExperiences={this.updateExperiences} handleOnClick={this.state.handleOnClick}/>)}/>
           <Route path="/chat/" component={Chat} />
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
           <Route path="/users/id" component={Profile} />
-=======
-          <Route
-            path="/"
-            render={() => <Home clientList={this.state.clientList} />}
-          />
-          <Route path="/chat/" render={() => <Chat />} />
-          <Route path="/login" render={() => <Login />} />
-          <Route path="/register" render={() => <Register />} />
-          <Route path="/users/id" render={() => <Profile />} />
->>>>>>> master
+
         </Router>
       </div>
     );
