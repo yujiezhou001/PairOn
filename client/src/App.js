@@ -46,6 +46,7 @@ class App extends Component {
   }
 
   render() {
+    
     return (
       <div>
         <Router>
@@ -77,8 +78,10 @@ class App extends Component {
           <Route path="/chat/" render={() => <Chat />} />
           <Route path="/login" render={() => <Login />} />
           <Route path="/register" render={() => <Register />} />
-          <Route path="/users/id" render={() => <Profile />} />
-        </Router>
+          <Route
+           path="/users/:id"
+           render={props => <Profile {...props} clientList={this.state.clientList} />}
+         />        </Router>
       </div>
     );
   }

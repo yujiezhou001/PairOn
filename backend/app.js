@@ -122,7 +122,7 @@ wss.on("connection", ws => {
     .from("users")
     .where("id", "<", 10)
     .then(results => {
-      let i = 1;
+      let i = 0;
       results.forEach(userObj => {
         clientList.push({
           id: i,
