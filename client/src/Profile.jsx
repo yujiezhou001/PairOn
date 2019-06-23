@@ -75,7 +75,8 @@ class Profile extends React.Component {
       width: "100px"
     };
     let list = this.props.clientList
-    console.log(list)
+    let exe =  this.props.list.clientList
+    console.log(exe)
 
     const isAccountUser = this.checkCurrentId(this.state.currentUser.id);
     let button;

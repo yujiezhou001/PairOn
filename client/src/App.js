@@ -31,7 +31,7 @@ class App extends Component {
     this.setState({
       clientList: usersObj
     });
-    console.log(this.state.clientList.clientList[0].currentUser.firstName)
+    console.log(this.state.clientList.clientList[0].firstName)
   
   }
 
@@ -71,7 +71,7 @@ class App extends Component {
           <Route path="/chat/" component={Chat} />
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
-          <Route path="/users/:id" component={() =>(<Profile clientList={this.state.clientList} />)} />
+          <Route path="/users/:id" component={() =>(<Profile list={this.state.clientList} />)} />
         </Router>
       </div>
     );
