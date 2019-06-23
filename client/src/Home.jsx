@@ -40,7 +40,8 @@ class Home extends React.Component {
               containerElement={<div style={{ height: `100%` }} />}
               mapElement={<div style={{ height: `100%` }} />}
               clientList={this.props.clientList}
-
+              updateCurrentLocation={this.props.updateCurrentLocation}
+              currentLocation={this.props.currentLocation}
             />
         </div>
       </div>

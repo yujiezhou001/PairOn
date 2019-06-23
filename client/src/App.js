@@ -26,6 +26,12 @@ class App extends Component {
     };
   }
 
+  updateCurrentLocation = (locationObject) => {
+    this.setState({currentUser: {currentLocation: locationObject}})
+    console.log("successfully passed to parent state", locationObject)
+    // this.socket.send(JSON.stringify(locationObject))
+  }
+
   handleOnMessage = event => {
     const usersObj = JSON.parse(event.data);
     this.setState(usersObj);
@@ -62,10 +68,11 @@ class App extends Component {
               </li>
             </ul>
           </nav>
-
           <Route
             path="/"
-            render={() => <Home clientList={this.state.clientList} />}
+            render={props => <Home {...props} clientList={this.state.clientList}
+             updateCurrentLocation={this.updateCurrentLocation}
+              currentLocation={this.state.currentUser.currentLocation} />}
           />
           <Route path="/chat/" render={() => <Chat />} />
           <Route path="/login" render={() => <Login />} />
