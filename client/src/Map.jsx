@@ -17,13 +17,8 @@ export class MapContainer extends Component {
     super(props);
 
     this.state = {
-      selectedPerson: {
-        firstName: "Marie-Anne",
-        hometown: "Laval",
-        currentLocation:{ lat: 45.5246127,
-                          lng: -73.5987241}
-      },
-      userLocation: {
+      selectedPerson: null,
+      currentLocation: {
         lat: 0,
         lng: 0
       },
@@ -181,13 +176,13 @@ export class MapContainer extends Component {
 
     this.setState({
       geoReady: true,
-      userLocation: {
+      currentLocation: {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       }
     });
-
-    console.log(this.state.userLocation);
+    this.props.updateCurrentLocation(this.state.currentLocation(lat, lgn))
+    console.log(this.state.currentLocation);
   };
 
   geoFailure = err => {
@@ -233,7 +228,7 @@ export class MapContainer extends Component {
 
 
   render() {
-    const { lat, lng } = this.state.userLocation;
+    const { lat, lng } = this.state.currentLocation;
     // console.log("This is persons",this.state.persons)
     return (
       <GoogleMap
