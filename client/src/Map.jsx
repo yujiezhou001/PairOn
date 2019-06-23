@@ -7,7 +7,8 @@ import {
   withScriptjs,
   GoogleMap,
   Marker,
-  InfoWindow
+  InfoWindow,
+  Circle
 } from "react-google-maps";
 
 // export const WrappedMap = withScriptjs(withGoogleMap(Map));
@@ -17,11 +18,7 @@ export class MapContainer extends Component {
     super(props);
 
     this.state = {
-      selectedPerson: {
-        firstName: "Marie-Anne",
-        hometown: "Laval",
-        currentLocation: { lat: 45.5246127, lng: -73.5987241 }
-      },
+      selectedPerson: null,
       userLocation: {
         lat: 0,
         lng: 0
@@ -71,6 +68,14 @@ export class MapContainer extends Component {
     const imgPicture = {
       width: "50px"
     };
+    const circleOptions = {
+      strokeColor: "#FF0000",
+      strokeOpacity: 0.2,
+      strokeWeight: 2,
+      fillColor: "#FF0000",
+      fillOpacity: 0.08
+    };
+
     // console.log("This is persons",this.state.persons)
     return (
       <GoogleMap
@@ -83,12 +88,20 @@ export class MapContainer extends Component {
             map.panTo({ lat, lng });
           }
         }}
-        defaultZoom={16}
+        defaultZoom={15}
         defaultCenter={{
           lat: lat,
           lng: lng
         }}
       >
+        <Circle
+          defaultCenter={{
+            lat: 45.5275387,
+            lng: -73.5986187
+          }}
+          radius={1000}
+          options={circleOptions}
+        />
         {this.state.persons.map((person, index) => (
           <Marker
             key={index}
