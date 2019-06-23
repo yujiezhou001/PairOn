@@ -131,11 +131,11 @@ wss.on('connection', (ws) => {
       results.forEach(userObj => {
         clientList.push({
           id: i,
-          firstName: userObj.first_name, 
-          hometown: userObj.hometown, 
-          experiences: fakeExperience[i], 
-          avatarURL: userObj.avatar_url, 
-          currentLocation: generateRandomPoint(ourLocation, 100), 
+          firstName: userObj.first_name,
+          hometown: userObj.hometown,
+          experiences: fakeExperience[i],
+          avatarURL: userObj.avatar_url,
+          currentLocation: generateRandomPoint(ourLocation, 100),
           aboutMe: userObj.about_me }
         );
         i++;
@@ -153,7 +153,7 @@ wss.on('connection', (ws) => {
       .then(result => {
         clientList.push({
           id: realUserId,
-          firstName: result.first_name, 
+          firstName: result.first_name,
           lastName: result.last_name,
           email: result.email,
           password: result.password,
