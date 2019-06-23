@@ -127,16 +127,17 @@ wss.on('connection', (ws) => {
     .from("users")
     .where('id', '<',10)
     .then(results => {
-      let i = 0;
+      let i = 1;
       results.forEach(userObj => {
         clientList.push({
+          id: i,
           firstName: userObj.first_name,
           hometown: userObj.hometown,
           experiences: fakeExperience[i],
           avatarURL: userObj.avatar_url,
           currentLocation: generateRandomPoint(ourLocation, 100),
-          aboutMe: userObj.about_me
-        });
+          aboutMe: userObj.about_me }
+        );
         i++;
         //console.log(results);
       })
@@ -150,7 +151,9 @@ wss.on('connection', (ws) => {
       .from("users")
       .where('id', realUserId)
       .then(result => {
-        clientList.push({firstName: result.first_name,
+        clientList.push({
+          id: realUserId,
+          firstName: result.first_name,
           lastName: result.last_name,
           email: result.email,
           password: result.password,
