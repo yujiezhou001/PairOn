@@ -6,7 +6,8 @@ class Profile extends React.Component {
     super(props);
     this.state = {
       isToggleOn: false,
-      // idUrl: this.props.match.params.id,
+      idUrl: this.props.match.params.id,
+      persons: this.props.clientList,
       currentUser: {
         id: 4,
         avatarURL:
@@ -74,11 +75,19 @@ class Profile extends React.Component {
     const imgPicture = {
       width: "100px"
     };
-    let list = this.props.clientList.map(e=>
-      e.id 
-    )
-    
-    console.log(list)
+
+    let filter = this.props.clientList
+
+    let findById = this.props.clientList.find(e=>{
+      if (e.id === Number(this.props.match.params.id)){
+
+        return  e
+      }      
+    })
+
+    let filterById2 = filter[this.props.match.params.id]
+      
+    console.log(findById.id)
 
     const isAccountUser = this.checkCurrentId(this.state.currentUser.id);
     let button;
