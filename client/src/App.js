@@ -34,7 +34,7 @@ class App extends Component {
   handleOnMessage = event => {
     const usersObj = JSON.parse(event.data);
     this.setState(usersObj);
-  }
+  };
 
   componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001");
@@ -68,11 +68,22 @@ class App extends Component {
             </ul>
           </nav>
 
+<<<<<<< HEAD
           <Route path="/" component={() => (<Home clientList={this.state.clientList} updateCurrentLocation={this.state.updateCurrentLocation} />)}/>
           <Route path="/chat/" component={Chat} />
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
           <Route path="/users/id" component={Profile} />
+=======
+          <Route
+            path="/"
+            render={() => <Home clientList={this.state.clientList} />}
+          />
+          <Route path="/chat/" render={() => <Chat />} />
+          <Route path="/login" render={() => <Login />} />
+          <Route path="/register" render={() => <Register />} />
+          <Route path="/users/id" render={() => <Profile />} />
+>>>>>>> master
         </Router>
       </div>
     );

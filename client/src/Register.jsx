@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 
-
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -33,7 +32,7 @@ class Register extends React.Component {
       <div>
         <form onSubmit={this.handleOnSubmit}>
           <div className="form-group">
-            <label for="inputAddress">First name</label>
+            <label htmlFor="inputAddress">First name</label>
             <input
               type="text"
               className="form-control"
@@ -42,7 +41,7 @@ class Register extends React.Component {
             />
           </div>
           <div className="form-group">
-            <label for="inputAddress2">Last name</label>
+            <label htmlFor="inputAddress2">Last name</label>
             <input
               type="text"
               className="form-control"
@@ -51,7 +50,7 @@ class Register extends React.Component {
             />
           </div>
           <div className="form-group">
-            <label for="inputAddress2">Hometown</label>
+            <label htmlFor="inputAddress2">Hometown</label>
             <input
               type="text"
               className="form-control"
@@ -60,7 +59,7 @@ class Register extends React.Component {
             />
           </div>
           <div className="form-group">
-            <label for="inputEmail4">Email</label>
+            <label htmlFor="inputEmail4">Email</label>
             <input
               type="email"
               className="form-control"
@@ -69,7 +68,7 @@ class Register extends React.Component {
             />
           </div>
           <div className="form-group">
-            <label for="inputPassword4">Password</label>
+            <label htmlFor="inputPassword4">Password</label>
             <input
               type="password"
               className="form-control"
