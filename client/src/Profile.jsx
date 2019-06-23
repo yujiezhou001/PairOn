@@ -74,7 +74,9 @@ class Profile extends React.Component {
     const imgPicture = {
       width: "100px"
     };
-    let list = this.props.theList.clientList
+    let list = this.props.clientList.map(e=>
+      e.id 
+    )
     
     console.log(list)
 

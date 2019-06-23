@@ -28,11 +28,7 @@ class App extends Component {
 
   handleOnMessage = event => {
     const usersObj = JSON.parse(event.data);
-    this.setState({
-      clientList: usersObj
-    });
-    console.log(this.state.clientList.clientList[0].firstName)
-  
+    this.setState(usersObj);
   }
 
   componentDidMount() {
@@ -67,11 +63,11 @@ class App extends Component {
               </li>
             </ul>
           </nav>
-          {/* <Route path="/" component={() => (<Home clientList={this.state.clientList} />)}/> */}
+          {/* <Route path="/" component={() => (<Home clientList={this.state.clientList} />)}/>  */}
           <Route path="/chat/" component={Chat} />
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
-          <Route path="/users/:id" component={() =>(<Profile theList={this.state.clientList} />)} />
+          <Route path="/users/:id" component={() =>(<Profile clientList={this.state.clientList} />)} />
         </Router>
       </div>
     );
