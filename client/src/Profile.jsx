@@ -1,13 +1,12 @@
 import React from "react";
 import axios from "axios";
-
 //@@@ voir si j ai vraiment besoin de mettre le url id dans le state
 class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isToggleOn: false,
-      idUrl: this.props.match.params.id,
+      // idUrl: this.props.match.params.id,
       currentUser: {
         id: 4,
         avatarURL:
@@ -75,6 +74,8 @@ class Profile extends React.Component {
     const imgPicture = {
       width: "100px"
     };
+    let list = this.props.clientList
+    console.log(list)
 
     const isAccountUser = this.checkCurrentId(this.state.currentUser.id);
     let button;

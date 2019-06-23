@@ -30,6 +30,8 @@ class App extends Component {
     this.setState({
       clientList: usersObj
     });
+    console.log(this.state.clientList.clientList[0].currentUser.firstName)
+  
   }
 
   componentDidMount() {
@@ -41,6 +43,7 @@ class App extends Component {
   }
 
   render() {
+    
     return (
       <div>
         <Router>
@@ -63,12 +66,11 @@ class App extends Component {
               </li>
             </ul>
           </nav>
-
-          <Route path="/" component={() => (<Home clientList={this.state.clientList} />)}/>
+          {/* <Route path="/" component={() => (<Home clientList={this.state.clientList} />)}/> */}
           <Route path="/chat/" component={Chat} />
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
-          <Route path="/users/id" component={Profile} />
+          <Route path="/users/:id" component={() =>(<Profile clientList={this.state.clientList} />)} />
         </Router>
       </div>
     );
