@@ -26,10 +26,16 @@ class App extends Component {
     };
   }
 
+  updateCurrentLocation = (locationObject) => {
+    this.setState({currentUser: {currentLocation: locationObject}})
+    console.log("successfully passed to parent state", locationObject)
+    // this.socket.send(JSON.stringify(locationObject))
+  }
+
   handleOnMessage = event => {
     const usersObj = JSON.parse(event.data);
     this.setState(usersObj);
-  }
+  };
 
   componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001");
@@ -63,12 +69,19 @@ class App extends Component {
               </li>
             </ul>
           </nav>
-          {/* <Route path="/" component={() => (<Home clientList={this.state.clientList} />)}/>  */}
-          <Route path="/chat/" component={Chat} />
-          <Route path="/login" exact component={Login} />
-          <Route path="/register" exact component={Register} />
-          <Route path="/users/:id" component={() =>(<Profile clientList={this.state.clientList} />)} />
-        </Router>
+          <Route
+            path="/"
+            render={props => <Home {...props} clientList={this.state.clientList}
+             updateCurrentLocation={this.updateCurrentLocation}
+              currentLocation={this.state.currentUser.currentLocation} />}
+          />
+          <Route path="/chat/" render={() => <Chat />} />
+          <Route path="/login" render={() => <Login />} />
+          <Route path="/register" render={() => <Register />} />
+          <Route
+           path="/users/:id"
+           render={props => <Profile {...props} clientList={this.state.clientList} />}
+         />        </Router>
       </div>
     );
   }

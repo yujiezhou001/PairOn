@@ -112,7 +112,7 @@ class Profile extends React.Component {
           <div className="edit-account">
             <form onSubmit={this.handleOnSubmit}>
               <div className="form-group">
-                <label for="exampleFormControlTextarea1">About me</label>
+                <label hmtlFor="exampleFormControlTextarea1">About me</label>
                 <textarea
                   className="form-control"
                   id="exampleFormControlTextarea1"
@@ -123,7 +123,7 @@ class Profile extends React.Component {
                 />
               </div>
               <div className="form-group">
-                <label for="inputAddress">First name</label>
+                <label hmtlFor="inputAddress">First name</label>
                 <input
                   type="text"
                   className="form-control"
@@ -132,7 +132,7 @@ class Profile extends React.Component {
                 />
               </div>
               <div className="form-group">
-                <label for="inputAddress2">Last name</label>
+                <label hmtlFor="inputAddress2">Last name</label>
                 <input
                   type="text"
                   className="form-control"
@@ -141,7 +141,7 @@ class Profile extends React.Component {
                 />
               </div>
               <div className="form-group">
-                <label for="inputAddress2">Hometown</label>
+                <label hmtlFor="inputAddress2">Hometown</label>
                 <input
                   type="text"
                   className="form-control"
@@ -150,7 +150,7 @@ class Profile extends React.Component {
                 />
               </div>
               <div className="form-group">
-                <label for="inputEmail4">Email</label>
+                <label hmtlFor="inputEmail4">Email</label>
                 <input
                   type="email"
                   className="form-control"
@@ -159,7 +159,7 @@ class Profile extends React.Component {
                 />
               </div>
               <div className="form-group">
-                <label for="inputPassword4">Old password</label>
+                <label hmtlFor="inputPassword4">Old password</label>
                 <input
                   type="password"
                   className="form-control"
@@ -168,7 +168,7 @@ class Profile extends React.Component {
                 />
               </div>
               <div className="form-group">
-                <label for="inputPassword4">New password</label>
+                <label hmtlFor="inputPassword4">New password</label>
                 <input
                   type="password"
                   className="form-control"
