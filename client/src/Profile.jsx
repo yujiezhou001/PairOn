@@ -1,13 +1,11 @@
 import React from "react";
 import axios from "axios";
-//@@@ voir si j ai vraiment besoin de mettre le url id dans le state
+//@@@ creer plusieur component fix for the current user
 class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isToggleOn: false,
-      idUrl: this.props.match.params.id,
-      persons: this.props.clientList,
       currentUser: {
         id: 4,
         avatarURL:
@@ -19,21 +17,7 @@ class Profile extends React.Component {
         password: "patate",
         aboutMe:
           "Fam actually scenester microdosing church-key pinterest synth copper mug enamel pin narwhal YOLO helvetica 8-bit cardigan. Sartorial selvage hashtag, cliche pug yr artisan iceland scenester art party live-edge. Try-hard synth vaporware austin."
-      },
-      clientList: [
-        {
-          id: 1,
-          first_name: "Mathieu",
-          about_me:
-            "Fam actually scenester microdosing church-key pinterest synth copper mug enamel pin narwhal YOLO helvetica 8-bit cardigan. Sartorial selvage hashtag, cliche pug yr artisan iceland scenester art party live-edge. Try-hard synth vaporware austin."
-        },
-        {
-          id: 2,
-          first_name: "Eric",
-          about_me:
-            "Fam actually scenester microdosing church-key pinterest synth copper mug enamel pin narwhal YOLO helvetica 8-bit cardigan. Sartorial selvage hashtag, cliche pug yr artisan iceland scenester art party live-edge. Try-hard synth vaporware austin."
-        }
-      ]
+      }
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -76,18 +60,9 @@ class Profile extends React.Component {
       width: "100px"
     };
 
-    let filter = this.props.clientList
-
-    let findById = this.props.clientList.find(e=>{
-      if (e.id === Number(this.props.match.params.id)){
-
-        return  e
-      }      
-    })
-
-    let filterById2 = filter[this.props.match.params.id]
-      
-    console.log(filterById2)
+    const user = this.props.clientList.find(
+      userObj => userObj.id === Number(this.props.match.params.id)
+    );
 
     const isAccountUser = this.checkCurrentId(this.state.currentUser.id);
     let button;
@@ -114,9 +89,22 @@ class Profile extends React.Component {
       );
     }
 
+    const personalProfile = user && (
+      <div>
+        <img
+          className="rounded-circle"
+          src={user.avatarURL}
+          style={imgPicture}
+        />
+        <h3>{user.firstName}</h3>
+        <p>{user.hometown}</p>
+        <h4>About me</h4>
+        <p>{user.aboutMe}</p>
+      </div>
+    );
+
     return (
       <div>
-        
         {this.state.isToggleOn ? (
           <div className="edit-account">
             <form onSubmit={this.handleOnSubmit}>
@@ -191,20 +179,11 @@ class Profile extends React.Component {
             </form>
           </div>
         ) : (
-        <div className="persone-profile">
-          <img
-            className="rounded-circle"
-            src={this.state.currentUser.avatarURL}
-            style={imgPicture}
-          />
-          <h3>{this.state.currentUser.firstName}</h3>
-          <p>{this.state.currentUser.hometown}</p>
-          <h4>About me</h4>
-          <p>{this.state.currentUser.aboutMe}</p>
-          {button}
-        </div> 
-        )  
-        }     
+          <div>
+            {personalProfile}
+            {button}
+          </div>
+        )}
       </div>
     );
   }
