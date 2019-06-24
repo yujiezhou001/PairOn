@@ -18,7 +18,7 @@ class App extends Component {
         hometown: null,
         experiences: "All",
         avatarURL: null,
-        currentLocation: { lat: null, lng: null },
+        currentLocation: { lat: 0, lng: 0 },
         aboutMe: null
       },
       clientList: [], // full of currentUser objects sent from WebSocket
@@ -28,8 +28,18 @@ class App extends Component {
 
   updateCurrentLocation = locationObject => {
     this.setState({ currentUser: { currentLocation: locationObject } });
+    this.socket.send(JSON.stringify(locationObject));
     console.log("successfully passed to parent state", locationObject);
     // this.socket.send(JSON.stringify(locationObject))
+  };
+
+  addMessage = newMessage => {
+    const messageObject = {
+      username: this.state.currentUser.firstName,
+      content: newMessage,
+      type: "outgoingMessage"
+    };
+    this.socket.send(JSON.stringify(messageObject));
   };
 
   handleOnMessage = event => {
@@ -69,6 +79,7 @@ class App extends Component {
             </ul>
           </nav>
           <Route
+            exact
             path="/"
             render={props => (
               <Home
@@ -79,7 +90,13 @@ class App extends Component {
               />
             )}
           />
-          <Route path="/chat/" render={() => <Chat />} />
+          <Route
+            exact
+            path="/chat"
+            render={props => (
+              <Chat {...props} clientList={this.state.clientList} />
+            )}
+          />
           <Route path="/login" render={() => <Login />} />
           <Route path="/register" render={() => <Register />} />
           <Route path="/users/id" render={() => <Profile />} />

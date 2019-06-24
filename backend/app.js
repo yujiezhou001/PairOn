@@ -111,9 +111,25 @@ const fakeExperience = [
   "Culture"
 ];
 
+// Create broadcast function to send data to all clients
+// wss.broadcast = function broadcast(message) {
+//   wss.clients.forEach(function each(client) {
+//     client.send(message);
+//   });
+// };
+
 wss.on("connection", ws => {
   console.log("Client connected");
   // once login authentication working - wrap all this code in "Usercredentials valid?"
+
+  // ws.on("message", function incoming(message) {
+  //   const locationObject = JSON.parse(message);
+
+  //   let ourLocation = locationObject;
+
+  //   console.log("THIS IS MY LOC FROM BACKEND!:", ourLocation);
+
+  // wss.broadcast(JSON.stringify(locationObject));
 
   let clientList = [];
 
