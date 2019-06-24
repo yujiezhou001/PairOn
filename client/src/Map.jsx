@@ -144,7 +144,7 @@ export class MapContainer extends Component {
               <h5>{this.state.selectedPerson.firstName}</h5>
               <p>{this.state.selectedPerson.hometown}</p>
               <button type="submit" className="btn btn-primary btn-sm">
-                Profile
+                
               </button>
               <button type="submit" className="btn btn-primary btn-sm">
                 Chat
