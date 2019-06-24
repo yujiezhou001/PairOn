@@ -18,7 +18,7 @@ class App extends Component {
         hometown: null,
         experiences: "All",
         avatarURL: null,
-        currentLocation: { lat: null, lng: null },
+        currentLocation: { lat: 0, lng: 0 },
         aboutMe: null
       },
       clientList: [], // full of currentUser objects sent from WebSocket
@@ -70,6 +70,7 @@ class App extends Component {
             </ul>
           </nav>
           <Route
+            exact
             path="/"
             render={props => <Home {...props} clientList={this.state.clientList}
              updateCurrentLocation={this.updateCurrentLocation}
