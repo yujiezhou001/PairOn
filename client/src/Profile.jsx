@@ -1,49 +1,30 @@
 import React from "react";
 import axios from "axios";
-//@@@ voir si j ai vraiment besoin de mettre le url id dans le state
+//@@@ creer plusieur component fix for the current user
 class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isToggleOn: false,
-      idUrl: this.props.match.params.id,
-      persons: this.props.clientList,
-      currentUser: null,
-        // id: 4,
-        // avatarURL:
-        //   "https://pbs.twimg.com/profile_images/834493671785525249/XdLjsJX_.jpg",
-        // firstName: "Chatal",
-        // lastName: "Tremblay",
-        // hometown: "Laval, Canada",
-        // email: "Chantal.t@gmail.com",
-        // password: "patate",
-        // aboutMe:
-        //   "Fam actually scenester microdosing church-key pinterest synth copper mug enamel pin narwhal YOLO helvetica 8-bit cardigan. Sartorial selvage hashtag, cliche pug yr artisan iceland scenester art party live-edge. Try-hard synth vaporware austin."
-      
-      clientList: [
-        {
-          id: 1,
-          first_name: "Mathieu",
-          about_me:
-            "Fam actually scenester microdosing church-key pinterest synth copper mug enamel pin narwhal YOLO helvetica 8-bit cardigan. Sartorial selvage hashtag, cliche pug yr artisan iceland scenester art party live-edge. Try-hard synth vaporware austin."
-        },
-        {
-          id: 2,
-          first_name: "Eric",
-          about_me:
-            "Fam actually scenester microdosing church-key pinterest synth copper mug enamel pin narwhal YOLO helvetica 8-bit cardigan. Sartorial selvage hashtag, cliche pug yr artisan iceland scenester art party live-edge. Try-hard synth vaporware austin."
-        }
-      ]
+      currentUser: {
+        id: 4,
+        avatarURL:
+          "https://pbs.twimg.com/profile_images/834493671785525249/XdLjsJX_.jpg",
+        firstName: "Chatal",
+        lastName: "Tremblay",
+        hometown: "Laval, Canada",
+        email: "Chantal.t@gmail.com",
+        password: "patate",
+        aboutMe:
+          "Fam actually scenester microdosing church-key pinterest synth copper mug enamel pin narwhal YOLO helvetica 8-bit cardigan. Sartorial selvage hashtag, cliche pug yr artisan iceland scenester art party live-edge. Try-hard synth vaporware austin."
+      }
     };
 
     this.handleClick = this.handleClick.bind(this);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
-    this.setCurrentUser = this.setCurrentUser.bind(this);
   }
 
   componentDidMount() {
-    this.setCurrentUser()
-
     /**
      * Inside this is where you should initialize your component
      * with some data coming from an api call, ...
@@ -74,57 +55,57 @@ class Profile extends React.Component {
     return currentId == Number(this.props.match.params.id);
   }
 
-  setCurrentUser() {
-    let findById = this.props.clientList.find(e=>{
-      console.log(e.id)
-      //return e.id === Number(this.props.match.params.id)
-    })
-    console.log(findById, this.props.match.params.id)
-    this.setState({currentUser: findById})
-
-  }
-
   render() {
     const imgPicture = {
       width: "100px"
     };
 
-    // let filter = this.props.clientList
+    const user = this.props.clientList.find(
+      userObj => userObj.id === Number(this.props.match.params.id)
+    );
 
+    const isAccountUser = this.checkCurrentId(this.state.currentUser.id);
+    let button;
+    if (isAccountUser) {
+      button = (
+        <div>
+          <div className="p-3 mb-2 bg-light border border-info">
+            <p>First name: {this.state.currentUser.firstName}</p>
+            <p>Last name: {this.state.currentUser.lastName}</p>
+            <p>Hometown: {this.state.currentUser.hometown}</p>
+            <p>Email: {this.state.currentUser.email}</p>
+            <p>Password: ******************</p>
+          </div>
+          <button onClick={this.handleClick} className="btn btn-primary">
+            Edit
+          </button>
+        </div>
+      );
+    } else {
+      button = (
+        <a className="btn btn-primary" href="../../chat" role="button">
+          Message
+        </a>
+      );
+    }
 
-    // let filterById2 = filter[this.props.match.params.id]
-      
-    
-
-    // const isAccountUser = this.checkCurrentId(this.state.currentUser.id);
-    // let button;
-    // if (isAccountUser) {
-    //   button = (
-    //     <div>
-    //       <div className="p-3 mb-2 bg-light border border-info">
-    //         <p>First name: {this.state.currentUser.firstName}</p>
-    //         <p>Last name: {this.state.currentUser.lastName}</p>
-    //         <p>Hometown: {this.state.currentUser.hometown}</p>
-    //         <p>Email: {this.state.currentUser.email}</p>
-    //         <p>Password: ******************</p>
-    //       </div>
-    //       <button onClick={this.handleClick} className="btn btn-primary">
-    //         Edit
-    //       </button>
-    //     </div>
-    //   );
-    // } else {
-    //   button = (
-    //     <a className="btn btn-primary" href="../../chat" role="button">
-    //       Message
-    //     </a>
-    //   );
-    // }
+    const personalProfile = user && (
+      <div>
+        <img
+          className="rounded-circle"
+          src={user.avatarURL}
+          style={imgPicture}
+        />
+        <h3>{user.firstName}</h3>
+        <p>{user.hometown}</p>
+        <h4>About me</h4>
+        <p>{user.aboutMe}</p>
+      </div>
+    );
 
     return (
       <div>
-        
-        {/* {this.state.isToggleOn ? (
+        {this.state.isToggleOn ? (
           <div className="edit-account">
             <form onSubmit={this.handleOnSubmit}>
               <div className="form-group">
@@ -198,20 +179,11 @@ class Profile extends React.Component {
             </form>
           </div>
         ) : (
-        <div className="persone-profile">
-          <img
-            className="rounded-circle"
-            src={this.state.currentUser.avatarURL}
-            style={imgPicture}
-          />
-          <h3>{this.state.currentUser.firstName}</h3>
-          <p>{this.state.currentUser.hometown}</p>
-          <h4>About me</h4>
-          <p>{this.state.currentUser.aboutMe}</p>
-          {button}
-        </div> 
-        )  
-        }      */}
+          <div>
+            {personalProfile}
+            {button}
+          </div>
+        )}
       </div>
     );
   }

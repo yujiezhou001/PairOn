@@ -70,6 +70,7 @@ class App extends Component {
             </ul>
           </nav>
           <Route
+            exact
             path="/"
             render={props => <Home {...props} clientList={this.state.clientList}
              updateCurrentLocation={this.updateCurrentLocation}

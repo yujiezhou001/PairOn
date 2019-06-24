@@ -120,7 +120,7 @@ wss.on("connection", ws => {
   knex
     .select("*")
     .from("users")
-    .where("id", "<", 10)
+    .where("id", "<", 11)
     .then(results => {
       let i = 0;
       results.forEach(userObj => {
@@ -146,17 +146,18 @@ wss.on("connection", ws => {
         .from("users")
         .where("id", realUserId)
         .then(result => {
+          const [user] = result;
           clientList.push({
             id: realUserId,
-            firstName: result.first_name,
-            lastName: result.last_name,
-            email: result.email,
-            password: result.password,
-            hometown: result.hometown,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            email: user.email,
+            password: user.password,
+            hometown: user.hometown,
             experiences: "All",
-            avatarURL: result.avatar_url,
+            avatarURL: user.avatar_url,
             currentLocation: ourLocation,
-            aboutMe: result.about_me
+            aboutMe: user.about_me
           });
         })
         .finally(results => {
