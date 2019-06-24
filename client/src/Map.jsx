@@ -32,8 +32,11 @@ export class MapContainer extends Component {
 
   geoSuccess = position => {
     // console.log(position.coords.latitude, position.coords.longitude);
-    let tempObj = {lat: position.coords.latitude, lng: position.coords.longitude};
-    this.props.updateCurrentLocation(tempObj)
+    let tempObj = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
+    this.props.updateCurrentLocation(tempObj);
 
     this.setState({
       geoReady: true,
@@ -41,14 +44,11 @@ export class MapContainer extends Component {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       }
-
     });
     // this.props.updateCurrentLocation(tempObj)
     console.log("This is from local state:", this.state.currentLocation);
-    console.log("This is from parent state:", this.props.currentLocation)
+    console.log("This is from parent state:", this.props.currentLocation);
   };
-
- 
 
   geoFailure = err => {
     this.setState({ geoError: err.message });
@@ -69,7 +69,7 @@ export class MapContainer extends Component {
       geoOptions
     );
   }
-    // const updatedLocation = this.props.currentUser.currentLocation
+  // const updatedLocation = this.props.currentUser.currentLocation
   render() {
     const { lat, lng } = this.props.currentLocation;
     const imgPicture = {
@@ -142,10 +142,15 @@ export class MapContainer extends Component {
                 style={imgPicture}
               />
               <h5>{this.state.selectedPerson.firstName}</h5>
+
               <p>{this.state.selectedPerson.hometown}</p>
-              <button type="submit" className="btn btn-primary btn-sm">
-                
-              </button>
+              <a
+                className="btn btn-primary btn-sm"
+                href={`../../users/${this.state.selectedPerson.id}`}
+                role="button"
+              >
+                Profile
+              </a>
               <button type="submit" className="btn btn-primary btn-sm">
                 Chat
               </button>
