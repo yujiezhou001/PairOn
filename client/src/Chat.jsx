@@ -4,17 +4,24 @@ import { ChatBar } from "./ChatBar";
 import { MessageList } from "./MessageList";
 
 const navStyle = {
-  background: "violet",
+  background: "#b3f2ef",
   height: "80px",
   borderBottom: "1px solid black",
   left: "0",
+  padding: "10px",
   // padding: "0 10px"
   // position: "fixed",
   right: 0,
   top: 0,
   display: "flex",
   justifyContent: "flex-start",
-  alignItems: "center"
+  alignItems: "bottom"
+};
+
+const userStyle = {
+  display: "flex",
+  flexDirection: "column",
+  padding: "10px"
 };
 
 const messagesStyle = {
@@ -26,27 +33,12 @@ const messagesStyle = {
 
 const imgPicture = {
   width: "55px",
-  margin: "10px"
+  margin: "0 10px"
 };
 
 class Chat extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      chatPartner: {
-        id: 4,
-        firstName: "Rebecca",
-        lastName: "Gold",
-        email: "rebecca.gold@mail.mcgill.ca",
-        password: "1234",
-        hometown: "Montreal",
-        experiences: "All",
-        avatarURL:
-          "https://s3.amazonaws.com/uifaces/faces/twitter/GavicoInd/128.jpg",
-        aboutMe: "Blablabla"
-      },
-      messages: []
-    };
   }
 
   // componentDidMount() {
@@ -56,23 +48,33 @@ class Chat extends Component {
   // }
 
   render() {
+    const user = this.props.clientList.find(
+      userObj => userObj.id === Number(this.props.match.params.id)
+    );
+
     return (
       <div>
-        <div style={navStyle}>
-          <a href="/" className="previous">
-            &laquo; Back
-          </a>
-          <img
-            className="rounded-circle"
-            src={this.state.chatPartner.avatarURL}
-            style={imgPicture}
-          />
-          <h4>
-            {this.state.chatPartner.firstName}
-            <br />
-          </h4>
-          <p>({this.state.chatPartner.hometown})</p>
-        </div>
+        {user && (
+          <div style={navStyle}>
+            <a href="/" className="btn btn-primary" role="button">
+              &laquo; Back
+            </a>
+            <a href="/users/">
+              <img
+                className="rounded-circle"
+                src={user.avatarURL}
+                style={imgPicture}
+              />
+            </a>
+            <div style={userStyle}>
+              <h4>
+                {user.firstName}
+                <br />
+              </h4>
+              <p>{user.hometown}</p>
+            </div>
+          </div>
+        )}
         <div>
           <div style={messagesStyle}>
             <MessageList messages={this.props.messages} />
