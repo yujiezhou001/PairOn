@@ -1,5 +1,13 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const bodyParser = require("body-parser");
+const flash=require("connect-flash");
+const app = express();
+app.use(flash());
+const router = express.Router();
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+const passport = require('passport')
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -18,11 +26,32 @@ router.post('/register', function(req, res, next) {
   })
 });
 
-router.post('/login', function(req, res, next) {
-  res.json({
-    test: "you hit login"
-  })
-});
+
+// router.post('/login',
+//   passport.authenticate('local', 
+//     { 
+//       successRedirect: '/', 
+//       failureRedirect: '/login' 
+//     }
+//   )
+// );
+
+app.post('/login',
+  passport.authenticate('local'),
+  function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    console.log('email validate')
+    res.send("success")
+  });
+
+// router.post('/login', function(req, res, next) {
+//   // res.send({
+//   //   email: req.body.username,
+//   //   password: req.body.password,
+//   //   test: "you hit login"
+//   // })
+// });
 
 router.post('/users/:id', function(req, res, next) {
   res.json({

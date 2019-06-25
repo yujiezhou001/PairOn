@@ -34,6 +34,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
+// app.use(express.session({ secret: 'keyboard cat' }));
+app.use(passport.initialize());
+// app.use(passport.session());
 
 app.use(passport.initialize());
 //app.use(passport.session());
@@ -57,54 +60,75 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-// Passport.use
+// User Authentication
+
 passport.use(new LocalStrategy({
-  usernameField: 'email',
-  passwordField: 'password'
+    usernameField: 'username',
+    passwordField: 'password'
   },
+
   function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
+    knex('users')
+    .select("*")
+    .where(
+      "email", username
+    )
+    .then((err, user) => {
       if (err) { return done(err); }
       if (!user) {
-        return done(null, false, { message: "Incorrect username." });
+        return done(null, false, { message: 'Incorrect email.' });
       }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: "Incorrect password." });
-      }
+      console.log(user)
       return done(null, user);
     });
-  })
-);
+    // User.findOne({ username: username }, function (err, user) {
+    //   if (err) { return done(err); }
+    //   if (!user) {
+    //     return done(null, false, { message: 'Incorrect email.' });
+    //   }
+    //   if (!user.validPassword(password)) {
+    //     return done(null, false, { message: 'Incorrect password.' });
+    //   }
+    //   console.log({user})
+    //   return done(null, user);
+    // });
+  }
+));
+app.post('/login',
+  passport.authenticate('local'),
+  function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    console.log('email validate')
+    res.send("success")
+  });
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
 
-//Sessions - should we or is this with session implementation?
-// passport.serializeUser(function(user, done) {
-//   done(null, user.id);
-// });
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
 
-// passport.deserializeUser(function(id, done) {
-//   User.findById(id, function(err, user) {
-//     done(err, user);
-//   });
-// });
-
-//THIS IS the passport.authenticate()
 // app.post('/login',
 //   passport.authenticate('local'),
 //   function(req, res) {
 //     // If this function gets called, authentication was successful.
 //     // `req.user` contains the authenticated user.
-//     res.redirect('/users/' + req.user.username);
+//     res.redirect('/users/' + req.user.id);
 //   });
-app.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: "Invalid username or password."
-  })
-);
 
-//Express Server
+// app.post('/login',
+//   passport.authenticate('local', { successRedirect: '/',
+//                                    failureRedirect: '/login',
+//                                    failureFlash: 'Invalid username or password.'})
+//   );
+
+
+
+//Socket Server
 const PORT = 3001;
 server.listen(PORT, () => {
   console.log(`Server running at port ${PORT}`);
@@ -172,6 +196,10 @@ const fakeExperience = [
 wss.on("connection", ws => {
   console.log("Client connected");
   // once login authentication working - wrap all this code in "Usercredentials valid?"
+  ws.on('message', function incoming(message) {
+  const messageObj = JSON.parse(message);
+  console.log("This is from received message:", messageObj)
+  });
 
   const clientList = [];
 
@@ -180,8 +208,8 @@ wss.on("connection", ws => {
     .from("users")
     .where("id", "<", 10) // when login is implement : where (type = "fake")
     .then(results => {
-      let i = 0;
-      results.forEach(userObj => {
+      let i = 1;
+      results.forEach((userObj) => {
         clientList.push({
           id: i,
           firstName: userObj.first_name,

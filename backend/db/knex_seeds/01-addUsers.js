@@ -26,6 +26,8 @@ const listOfAboutMe = [
 {text: 'Comedy lover. Looking for new friends to go to comedy shows with.'}
 ]
 
+
+
 const createFakeUser = (randomNumber) => ({
   first_name: faker.name.firstName(),
   last_name: faker.name.lastName(),
@@ -35,7 +37,8 @@ const createFakeUser = (randomNumber) => ({
   hometown: listOfHomeTowns[randomNumber].name,
   hometown_latitude: listOfHomeTowns[randomNumber].lat,
   hometown_longitude: listOfHomeTowns[randomNumber].long,
-  about_me: listOfAboutMe[randomNumber].text
+  about_me: listOfAboutMe[randomNumber].text,
+  type: "fake"
 })
 
 exports.seed = function(knex, Promise) {
