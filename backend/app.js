@@ -65,6 +65,13 @@ const wss = new SocketServer.Server({ server });
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 
+// Create broadcast function to send data to all clients
+wss.broadcast = function broadcast(message) {
+  wss.clients.forEach(function each(client) {
+    client.send(message);
+  });
+};
+
 // Function that generates random geolation around our location.
 function generateRandomPoint(center, radius) {
   var x0 = center.lng;
@@ -95,7 +102,6 @@ function generateRandomPoints(center, radius, count) {
 }
 
 const ourLocation = { lat: 45.5269919, lng: -73.5967626 };
-// const clientList = {};
 const id = uuidv4();
 const geolocations = generateRandomPoints(ourLocation, 100, 20);
 
@@ -111,27 +117,11 @@ const fakeExperience = [
   "Culture"
 ];
 
-// Create broadcast function to send data to all clients
-// wss.broadcast = function broadcast(message) {
-//   wss.clients.forEach(function each(client) {
-//     client.send(message);
-//   });
-// };
-
 wss.on("connection", ws => {
   console.log("Client connected");
   // once login authentication working - wrap all this code in "Usercredentials valid?"
 
-  // ws.on("message", function incoming(message) {
-  //   const locationObject = JSON.parse(message);
-
-  //   let ourLocation = locationObject;
-
-  //   console.log("THIS IS MY LOC FROM BACKEND!:", ourLocation);
-
-  // wss.broadcast(JSON.stringify(locationObject));
-
-  let clientList = [];
+  const clientList = [];
 
   knex
     .select("*")
@@ -147,12 +137,12 @@ wss.on("connection", ws => {
           experiences: fakeExperience[i],
           avatarURL: userObj.avatar_url,
           currentLocation: generateRandomPoint(ourLocation, 100),
-          aboutMe: userObj.about_me
+          aboutMe: userObj.about_me,
+          type: "incomingClientList"
         });
         i++;
         //console.log(results);
       });
-      console.log(clientList[0].currentLocation);
     })
     .then(results => {
       const realUserId = 10; // Once login authentication implemented this value comes from the Cookie.
@@ -162,24 +152,46 @@ wss.on("connection", ws => {
         .from("users")
         .where("id", realUserId)
         .then(result => {
+          //const user = result[0]
+          [user] = result;
           clientList.push({
             id: realUserId,
-            firstName: result.first_name,
-            lastName: result.last_name,
-            email: result.email,
-            password: result.password,
-            hometown: result.hometown,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            email: user.email,
+            password: user.password,
+            hometown: user.hometown,
             experiences: "All",
-            avatarURL: result.avatar_url,
+            avatarURL: user.avatar_url,
             currentLocation: ourLocation,
-            aboutMe: result.about_me
+            aboutMe: user.about_me,
+            type: "incomingClientList"
           });
         })
         .finally(results => {
           wss.clients.forEach(function each(client) {
             client.send(JSON.stringify({ clientList }));
+            console.log("CLIENT LIST SENT TO FRONT-END", clientList);
           });
         });
+
+      ws.on("message", function incoming(message) {
+        const messageObj = JSON.parse(message);
+        messageObj.id = uuidv4();
+
+        console.log("This is from received message:", messageObj);
+
+        if (messageObj.type === "outgoingMessage") {
+          messageObj.type = "incomingMessage";
+          // } else if (messageObject.type === "outgoingUserLoc") {
+          //   messageObject.type = "incomingUserLoc";
+        } else if (messageObj.type === "outgoingClientList") {
+          messageObj.type = "incomingClientList";
+        }
+
+        console.log("MESSAGE RCD IN BACKEND:", messageObj);
+        wss.broadcast(JSON.stringify(messageObj));
+      });
 
       // Set up a callback for when a client closes the socket. This usually means they closed their browser.
     });

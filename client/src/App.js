@@ -14,7 +14,7 @@ class App extends Component {
     this.state = {
       currentUser: {
         id: null,
-        firstName: null,
+        firstName: "Chantal",
         hometown: null,
         experiences: "All",
         avatarURL: null,
@@ -28,8 +28,14 @@ class App extends Component {
 
   updateCurrentLocation = locationObject => {
     this.setState({ currentUser: { currentLocation: locationObject } });
-    this.socket.send(JSON.stringify(locationObject));
-    console.log("successfully passed to parent state", locationObject);
+
+    const locObject = {
+      currentUser: this.state.currentUser,
+      type: "outgoingUserLoc"
+    };
+
+    this.socket.send(JSON.stringify(locObject));
+    console.log("successfully passed to parent state", locObject);
     // this.socket.send(JSON.stringify(locationObject))
   };
 
@@ -39,20 +45,45 @@ class App extends Component {
       content: newMessage,
       type: "outgoingMessage"
     };
+
+    // this.setState({
+    //   chatMessages: [
+    //     { user: messageObject.username, content: messageObject.content }
+    //   ]
+    // });
+    console.log("SEND", newMessage, "TO BACKEND!!!!");
+    console.log(messageObject);
     this.socket.send(JSON.stringify(messageObject));
   };
 
-  handleOnMessage = event => {
-    const usersObj = JSON.parse(event.data);
-    this.setState(usersObj);
-  };
+  // handleOnMessage = event => {
+  //   const usersObj = JSON.parse(event.data);
+  //   this.setState(usersObj);
+  // };
 
   componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001");
     this.socket.onopen = function() {
       console.log("Connected to server");
     };
-    this.socket.onmessage = this.handleOnMessage;
+
+    // this.socket.onmessage = this.handleOnMessage;
+
+    this.socket.onmessage = event => {
+      let data = JSON.parse(event.data);
+
+      if (data.type === "incomingMessage") {
+        this.setState({ chatMessages: [...this.state.chatMessages, data] });
+        console.log("MESSAGE BROADCAST BACK TO ME!", data);
+        // } else if (data.type === "incomingUserLoc") {
+        //   this.setState({
+        //     currentUser: { name: data.username, userColor: data.color }
+        //   });
+      } else {
+        console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
+        this.setState(data);
+      }
+    };
   }
 
   render() {
@@ -94,7 +125,12 @@ class App extends Component {
             exact
             path="/chat"
             render={props => (
-              <Chat {...props} clientList={this.state.clientList} />
+              <Chat
+                {...props}
+                clientList={this.state.clientList}
+                addMessage={this.addMessage}
+                messages={this.state.chatMessages}
+              />
             )}
           />
           <Route path="/login" render={() => <Login />} />

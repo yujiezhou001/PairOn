@@ -1,5 +1,7 @@
-import React from "react";
+import React, { Component } from "react";
 import axios from "axios";
+import { ChatBar } from "./ChatBar";
+import { MessageList } from "./MessageList";
 
 const navStyle = {
   background: "violet",
@@ -27,7 +29,7 @@ const imgPicture = {
   margin: "10px"
 };
 
-class Chat extends React.Component {
+class Chat extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,17 +49,17 @@ class Chat extends React.Component {
     };
   }
 
-  componentDidMount() {
-    axios.post("/chat").then(({ data }) => {
-      console.log(data);
-    });
-  }
+  // componentDidMount() {
+  //   axios.post("/chat").then(({ data }) => {
+  //     console.log(data);
+  //   });
+  // }
 
   render() {
     return (
       <div>
         <div style={navStyle}>
-          <a href="#" className="previous">
+          <a href="/" className="previous">
             &laquo; Back
           </a>
           <img
@@ -73,15 +75,9 @@ class Chat extends React.Component {
         </div>
         <div>
           <div style={messagesStyle}>
-            <div>display messages here</div>
+            <MessageList messages={this.props.messages} />
           </div>
-          <input
-            className="chatbar-message"
-            name="content"
-            placeholder="Type a message and hit ENTER"
-            onKeyDown={this.handleKeyDown}
-            onChange={this.handleChange}
-          />
+          <ChatBar addMessage={this.props.addMessage} />
         </div>
       </div>
     );
