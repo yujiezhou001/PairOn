@@ -59,7 +59,7 @@ class Chat extends Component {
             <a href="/" className="btn btn-primary" role="button">
               &laquo; Back
             </a>
-            <a href="/users/">
+            <a href={`/users/${JSON.stringify(user.id)}`}>
               <img
                 className="rounded-circle"
                 src={user.avatarURL}
