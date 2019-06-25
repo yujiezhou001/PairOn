@@ -108,7 +108,8 @@ class App extends Component {
               updateCurrentLocation={this.updateCurrentLocation}
               currentLocation={this.state.currentUser.currentLocation}
               updateExperiences={this.updateExperiences}
-              handleOnClick={this.state.handleOnClick} />}
+              handleOnClick={this.state.handleOnClick}
+              currentExperiences={this.state.currentUser.experiences} />}
           />
           <Route path="/chat/" render={() => <Chat />} />
           <Route path="/login" render={() => <Login />} />

@@ -19,9 +19,6 @@ class Home extends React.Component {
     this.state = {};
   }
 
-
-
-
   componentDidMount() {
     axios.get('/').then(({data}) => {
       // console.log(data);
@@ -43,6 +40,7 @@ class Home extends React.Component {
               updateCurrentLocation={this.props.updateCurrentLocation}
               currentLocation={this.props.currentLocation}
               updateExperiences={this.props.updateExperiences}
+              currentExperiences={this.props.currentExperiences}
             />
         </div>
       </div>
