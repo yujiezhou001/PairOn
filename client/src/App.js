@@ -123,7 +123,7 @@ class App extends Component {
           />
           <Route
             exact
-            path="/chat"
+            path="/chat/:id"
             render={props => (
               <Chat
                 {...props}
@@ -135,7 +135,7 @@ class App extends Component {
           />
           <Route path="/login" render={() => <Login />} />
           <Route path="/register" render={() => <Register />} />
-          <Route path="/users/id" render={() => <Profile />} />
+          <Route path="/users/:id" render={() => <Profile />} />
         </Router>
       </div>
     );
