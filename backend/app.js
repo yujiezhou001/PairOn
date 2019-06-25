@@ -227,26 +227,26 @@ wss.on("connection", ws => {
           });
         });
 
-      ws.on("message", function incoming(message) {
-        const messageObj = JSON.parse(message);
-        messageObj.id = uuidv4();
+    //   ws.on("message", function incoming(message) {
+    //     const messageObj = JSON.parse(message);
+    //     messageObj.id = uuidv4();
 
-        console.log("This is from received message:", messageObj);
+    //     console.log("This is from received message:", messageObj);
 
-        if (messageObj.type === "outgoingMessage") {
-          messageObj.type = "incomingMessage";
-          // } else if (messageObject.type === "outgoingUserLoc") {
-          //   messageObject.type = "incomingUserLoc";
-        } else if (messageObj.type === "outgoingClientList") {
-          messageObj.type = "incomingClientList";
-        }
+    //     if (messageObj.type === "outgoingMessage") {
+    //       messageObj.type = "incomingMessage";
+    //       // } else if (messageObject.type === "outgoingUserLoc") {
+    //       //   messageObject.type = "incomingUserLoc";
+    //     } else if (messageObj.type === "outgoingClientList") {
+    //       messageObj.type = "incomingClientList";
+    //     }
 
-        console.log("MESSAGE RCD IN BACKEND:", messageObj);
-        wss.broadcast(JSON.stringify(messageObj));
-      });
+    //     console.log("MESSAGE RCD IN BACKEND:", messageObj);
+    //     wss.broadcast(JSON.stringify(messageObj));
+    //   });
 
-      // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-    });
+    //   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
+    // });
 
   //receiving experience change + sending it back to all users
   ws.on("message", function incoming(message) {

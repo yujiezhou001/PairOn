@@ -14,7 +14,7 @@ class App extends Component {
     this.state = {
       currentUser: {
         id: null,
-        firstName: "Chantal",
+        firstName: null,
         hometown: null,
         experiences: "All",
         avatarURL: null,
@@ -51,27 +51,28 @@ class App extends Component {
     this.socket.send(JSON.stringify(experienceObj));
   };
 
-  addMessage = newMessage => {
-    const messageObject = {
-      username: this.state.currentUser.firstName,
-      content: newMessage,
-      type: "outgoingMessage"
-    };
+  // addMessage = newMessage => {
+  //   const messageObject = {
+  //     username: this.state.currentUser.firstName,
+  //     content: newMessage,
+  //     type: "outgoingMessage"
+  //   };
 
-    // this.setState({
-    //   chatMessages: [
-    //     { user: messageObject.username, content: messageObject.content }
-    //   ]
-    // });
-    console.log("SEND", newMessage, "TO BACKEND!!!!");
-    console.log(messageObject);
-    this.socket.send(JSON.stringify(messageObject));
-  };
-
-  // handleOnMessage = event => {
-  //   const usersObj = JSON.parse(event.data);
-  //   this.setState(usersObj);
+  //   // this.setState({
+  //   //   chatMessages: [
+  //   //     { user: messageObject.username, content: messageObject.content }
+  //   //   ]
+  //   // });
+  //   console.log("SEND", newMessage, "TO BACKEND!!!!");
+  //   console.log(messageObject);
+  //   this.socket.send(JSON.stringify(messageObject));
   // };
+
+  handleOnMessage = event => {
+    const usersObj = JSON.parse(event.data);
+    this.setState(usersObj);
+    console.log(usersObj);
+  };
 
   componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001");
@@ -79,23 +80,23 @@ class App extends Component {
       console.log("Connected to server");
     };
 
-    // this.socket.onmessage = this.handleOnMessage;
+    this.socket.onmessage = this.handleOnMessage;
 
-    this.socket.onmessage = event => {
-      let data = JSON.parse(event.data);
+    // this.socket.onmessage = event => {
+    //   let data = JSON.parse(event.data);
 
-      if (data.type === "incomingMessage") {
-        this.setState({ chatMessages: [...this.state.chatMessages, data] });
-        console.log("MESSAGE BROADCAST BACK TO ME!", data);
-        // } else if (data.type === "incomingUserLoc") {
-        //   this.setState({
-        //     currentUser: { name: data.username, userColor: data.color }
-        //   });
-      } else {
-        console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
-        this.setState(data);
-      }
-    };
+    //   if (data.type === "incomingMessage") {
+    //     this.setState({ chatMessages: [...this.state.chatMessages, data] });
+    //     console.log("MESSAGE BROADCAST BACK TO ME!", data);
+    //     // } else if (data.type === "incomingUserLoc") {
+    //     //   this.setState({
+    //     //     currentUser: { name: data.username, userColor: data.color }
+    //     //   });
+    //   } else {
+    //     console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
+    //     this.setState(data);
+    //   }
+    // };
   }
 
   render() {
