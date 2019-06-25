@@ -9,10 +9,12 @@
     "@fortawesome/react-fontawesome": "^0.1.4",
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
+    "node-sass": "^4.12.0",
     "passport": "^0.4.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-google-maps": "^9.4.5",
+    "react-horizontal-scrolling-menu": "^0.6.12",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1"
   },

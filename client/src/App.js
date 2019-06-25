@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
-import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Chat } from "./Chat";
 import { Register } from "./Register";
 import { Login } from "./Login";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
+import BtnProfile from "./components/BtnProfile.jsx";
 
 class App extends Component {
   constructor(props) {
@@ -25,20 +25,24 @@ class App extends Component {
       chatMessages: []
     };
   }
+  btnAbsolutR = {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    zIndex: "300"
+  };
 
-
-
-  updateExperiences = (experience) => {
+  updateExperiences = experience => {
     let currentUser = this.state.currentUser;
     currentUser.experiences = experience;
-    this.setState(currentUser)
+    this.setState(currentUser);
     const experienceObj = {
       type: "experiencePick",
       id: this.state.currentUser.id,
       experiences: experience
-    }
+    };
     this.socket.send(JSON.stringify(experienceObj));
-  }
+  };
 
   // handleOnClick = event =>{
   //   if (event.onClick) {
@@ -47,17 +51,16 @@ class App extends Component {
   //   }
   // }
 
-  updateCurrentLocation = (locationObject) => {
-    this.setState({currentUser: {currentLocation: locationObject}})
-    console.log("successfully passed to parent state", locationObject)
+  updateCurrentLocation = locationObject => {
+    this.setState({ currentUser: { currentLocation: locationObject } });
+    console.log("successfully passed to parent state", locationObject);
     // this.socket.send(JSON.stringify(locationObject))
-  }
-
+  };
 
   handleOnMessage = event => {
     const usersObj = JSON.parse(event.data);
     this.setState(usersObj);
-    console.log(usersObj)
+    console.log(usersObj);
   };
 
   componentDidMount() {
@@ -69,11 +72,12 @@ class App extends Component {
   }
 
   render() {
-
     return (
       <div>
+          <BtnProfile btnAbsolutR={this.btnAbsolutR}/>        
+          {/* <BtnProfile /> */}
         <Router>
-          <nav>
+          {/* <nav>
             <ul>
               <li>
                 <Link to="/">Home</Link>
@@ -91,27 +95,31 @@ class App extends Component {
                 <Link to="/chat/">Chat</Link>
               </li>
             </ul>
-          </nav>
-
+          </nav> */}
           <Route
             exact
             path="/"
-            render={props => <Home {...props}
-              clientList={this.state.clientList}
-              updateCurrentLocation={this.updateCurrentLocation}
-              currentLocation={this.state.currentUser.currentLocation}
-              updateExperiences={this.updateExperiences}
-              handleOnClick={this.state.handleOnClick} />}
+            render={props => (
+              <Home
+                {...props}
+                clientList={this.state.clientList}
+                updateCurrentLocation={this.updateCurrentLocation}
+                currentLocation={this.state.currentUser.currentLocation}
+                updateExperiences={this.updateExperiences}
+                handleOnClick={this.state.handleOnClick}
+              />
+            )}
           />
           <Route path="/chat/" render={() => <Chat />} />
           <Route path="/login" render={() => <Login />} />
           <Route path="/register" render={() => <Register />} />
-
           <Route
-           path="/users/:id"
-           render={props => <Profile {...props} clientList={this.state.clientList} />}
-         />        </Router>
-
+            path="/users/:id"
+            render={props => (
+              <Profile {...props} clientList={this.state.clientList} />
+            )}
+          />{" "}
+        </Router>
       </div>
     );
   }

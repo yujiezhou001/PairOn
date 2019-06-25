@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.gm-style-mtc, .gm-fullscreen-control{
+  display: none;
+}
+
+@import "./components/App.scss";
+@import "./components/_HorizontalScroll.scss";

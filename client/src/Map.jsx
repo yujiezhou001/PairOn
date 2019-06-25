@@ -11,6 +11,7 @@ import {
   Circle
 } from "react-google-maps";
 import mapStyles from "./mapStyles";
+import HorizontalScroll from "./components/HorizontalScroll.jsx";
 
 // export const WrappedMap = withScriptjs(withGoogleMap(Map));
 // console.log("This is Map:", this.props.clientList)
@@ -93,127 +94,144 @@ export class MapContainer extends Component {
       fillColor: "#FF0000",
       fillOpacity: 0.08
     };
+    const btnProfile = {
+      position: "absolute",
+      top: 0,
+      right: 0
+    };
+
+    const btnsMood = {
+      position: "absolute",
+      bottom: 0,
+      right: 0
+    };
 
     // console.log("This is persons",this.state.persons)
     return (
-      <GoogleMap
-        ref={map => {
-          this.map = map;
-          if (map && lat && lng) {
-            // console.log(bounds);
-            // const bounds = new google.maps.LatLngBounds({ lat, lng });
-            //map.fitBounds(bounds);
-            map.panTo({ lat, lng });
-          }
-        }}
-        defaultZoom={15}
-        defaultCenter={{
-          lat: lat,
-          lng: lng
-        }}
-        defaultOptions={{ styles: mapStyles }}
-      >
-        <Circle
-          defaultCenter={{
-            lat: 45.5275387,
-            lng: -73.5986187
+      <div>
+
+        <GoogleMap
+          ref={map => {
+            this.map = map;
+            if (map && lat && lng) {
+              // console.log(bounds);
+              // const bounds = new google.maps.LatLngBounds({ lat, lng });
+              //map.fitBounds(bounds);
+              map.panTo({ lat, lng });
+            }
           }}
-          radius={1000}
-          options={circleOptions}
-        />
-        {this.state.persons.map((person, index) => (
-          <Marker
-            key={index}
-            id={index}
-            position={{
-              lat: person.currentLocation.lat,
-              lng: person.currentLocation.lng
+          defaultZoom={15}
+          defaultCenter={{
+            lat: lat,
+            lng: lng
+          }}
+          defaultOptions={{ styles: mapStyles }}
+        >
+          <Circle
+            defaultCenter={{
+              lat: 45.5275387,
+              lng: -73.5986187
             }}
-            onClick={() => this.setState({ selectedPerson: person })}
-            icon={{
-              url: `/waving-icon-18.jpg`,
-              scaledSize: new window.google.maps.Size(40, 40)
-            }}
+            radius={1000}
+            options={circleOptions}
           />
-        ))}
-        {this.state.selectedPerson && (
-          <InfoWindow
-            onCloseClick={() => {
-              this.setState({ selectedPerson: null });
-            }}
-            position={{
-              lat: this.state.selectedPerson.currentLocation.lat,
-              lng: this.state.selectedPerson.currentLocation.lng
-            }}
-          >
-            <div>
-              <img
-                className="rounded-circle"
-                src={this.state.selectedPerson.avatarURL}
-                style={imgPicture}
-              />
-              <h5>{this.state.selectedPerson.firstName}</h5>
-              <p>{this.state.selectedPerson.hometown}</p>
-              <a
-                className="btn btn-primary btn-sm"
-                href={`../../users/${this.state.selectedPerson.id}`}
-                role="button"
-              >
-                Profile
-              </a>
-              <a
-                className="btn btn-primary btn-sm"
-                href={`../../chat/${this.state.selectedPerson.id}`}
-                role="button"
-              >
-                Chat
-              </a>
-            </div>
-          </InfoWindow>
-        )}
-        <button
-          onClick={this.handleOnClick}
-          value="Drinks"
-          className="btn btn-primary btn-sm"
-        >
-          Drinks
-        </button>
-        <button
-          onClick={this.handleOnClick}
-          value="Food"
-          className="btn btn-primary btn-sm"
-        >
-          Food
-        </button>
-        <button
-          onClick={this.handleOnClick}
-          value="Culture"
-          className="btn btn-primary btn-sm"
-        >
-          Culture
-        </button>
-        <button
-          onClick={this.handleOnClick}
-          value="Events"
-          className="btn btn-primary btn-sm"
-        >
-          Events
-        </button>
-        <button
-          onClick={this.handleOnClick}
-          value="Sports"
-          className="btn btn-primary btn-sm"
-        >
-          Sports
-        </button>
-        <button
-          onClick={this.handleOnClick}
-          value="Unique"
-          className="btn btn-primary btn-sm"
-        >
-          Unique
-        </button>
-      </GoogleMap>
+          {this.state.persons.map((person, index) => (
+            <Marker
+              key={index}
+              id={index}
+              position={{
+                lat: person.currentLocation.lat,
+                lng: person.currentLocation.lng
+              }}
+              onClick={() => this.setState({ selectedPerson: person })}
+              icon={{
+                url: `/waving-icon-18.jpg`,
+                scaledSize: new window.google.maps.Size(40, 40)
+              }}
+            />
+          ))}
+          {this.state.selectedPerson && (
+            <InfoWindow
+              onCloseClick={() => {
+                this.setState({ selectedPerson: null });
+              }}
+              position={{
+                lat: this.state.selectedPerson.currentLocation.lat,
+                lng: this.state.selectedPerson.currentLocation.lng
+              }}
+            >
+              <div>
+                <img
+                  className="rounded-circle"
+                  src={this.state.selectedPerson.avatarURL}
+                  style={imgPicture}
+                />
+                <h5>{this.state.selectedPerson.firstName}</h5>
+                <p>{this.state.selectedPerson.hometown}</p>
+                <a
+                  className="btn btn-primary btn-sm"
+                  href={`../../users/${this.state.selectedPerson.id}`}
+                  role="button"
+                >
+                  Profile
+                </a>
+                <a
+                  className="btn btn-primary btn-sm"
+                  href={`../../chat/${this.state.selectedPerson.id}`}
+                  role="button"
+                >
+                  Chat
+                </a>
+              </div>
+            </InfoWindow>
+          )}
+          <HorizontalScroll />
+          <div style={btnsMood}>
+            <button
+              onClick={this.handleOnClick}
+              value="Drinks"
+              className="btn btn-primary btn-sm"
+            >
+              Drinks
+            </button>
+            <button
+              onClick={this.handleOnClick}
+              value="Food"
+              className="btn btn-primary btn-sm"
+            >
+              Food
+            </button>
+            <button
+              onClick={this.handleOnClick}
+              value="Culture"
+              className="btn btn-primary btn-sm"
+            >
+              Culture
+            </button>
+            <button
+              onClick={this.handleOnClick}
+              value="Events"
+              className="btn btn-primary btn-sm"
+            >
+              Events
+            </button>
+            <button
+              onClick={this.handleOnClick}
+              value="Sports"
+              className="btn btn-primary btn-sm"
+            >
+              Sports
+            </button>
+            <button
+              onClick={this.handleOnClick}
+              value="Unique"
+              className="btn btn-primary btn-sm"
+            >
+              Unique
+            </button>
+          </div>
+        </GoogleMap>
+      </div>
     );
   }
 }
