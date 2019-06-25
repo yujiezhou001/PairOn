@@ -36,7 +36,7 @@ export class MapContainer extends Component {
       lat: position.coords.latitude,
       lng: position.coords.longitude
     };
-    // this.props.updateCurrentLocation(tempObj)
+    this.props.updateCurrentLocation(tempObj);
 
     this.setState({
       geoReady: true,
