@@ -207,6 +207,8 @@ export class MapContainer extends Component {
           </InfoWindow>
         )}
 
+        <HorizontalScroll />
+
          <button onClick={this.handleOnClick} value="Drinks" className="btn btn-primary btn-sm">
                 Drinks
           </button>
