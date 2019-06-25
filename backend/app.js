@@ -161,11 +161,11 @@ const geolocations = generateRandomPoints(ourLocation, 100, 20);
 const fakeExperience = [
   "All",
   "Food",
-  "Drink",
+  "Drinks",
   "All",
   "All",
   "Culture",
-  "Drink",
+  "Drinks",
   "Food",
   "Culture"
 ];
