@@ -79,7 +79,7 @@ class App extends Component {
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/users/id">Profile</Link>
+                <Link to="/users/:id">Profile</Link>
               </li>
               <li>
                 <Link to="/login/">Login</Link>
@@ -92,13 +92,6 @@ class App extends Component {
               </li>
             </ul>
           </nav>
-
-
-          // <Route path="/" component={() => (<Home clientList={this.state.clientList} updateCurrentLocation={this.updateCurrentLocation} updateExperiences={this.updateExperiences} handleOnClick={this.state.handleOnClick}/>)}/>
-          // <Route path="/chat/" component={Chat} />
-          // <Route path="/login" exact component={Login} />
-          // <Route path="/register" exact component={Register} />
-          // <Route path="/users/id" component={Profile} />
 
           <Route
             exact
@@ -114,9 +107,10 @@ class App extends Component {
           <Route path="/login" render={() => <Login />} />
           <Route path="/register" render={() => <Register />} />
 
-          <Route path="/users/id" render={() => <Profile />} />
-
-        </Router>
+          <Route
+           path="/users/:id"
+           render={props => <Profile {...props} clientList={this.state.clientList} />}
+         />        </Router>
 
       </div>
     );
