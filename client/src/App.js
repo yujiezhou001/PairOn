@@ -39,6 +39,18 @@ class App extends Component {
     // this.socket.send(JSON.stringify(locationObject))
   };
 
+  updateExperiences = experience => {
+    let currentUser = this.state.currentUser;
+    currentUser.experiences = experience;
+    this.setState(currentUser);
+    const experienceObj = {
+      type: "experiencePick",
+      id: this.state.currentUser.id,
+      experiences: experience
+    };
+    this.socket.send(JSON.stringify(experienceObj));
+  };
+
   addMessage = newMessage => {
     const messageObject = {
       username: this.state.currentUser.firstName,
