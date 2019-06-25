@@ -10,6 +10,8 @@ const knexConfig = require("./knexfile");
 const knex = require("knex")(knexConfig["development"]);
 const http = require("http");
 require("dotenv").config();
+const passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
 
 // express server
 const app = express();
@@ -32,6 +34,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
+// app.use(express.session({ secret: 'keyboard cat' }));
+app.use(passport.initialize());
+// app.use(passport.session());
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -52,7 +57,54 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-//Express Server
+// User Authentication
+
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+  },
+  
+  function(username, password, done) {
+    User.findOne({ username: username }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect email.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+app.post('/login',
+  passport.authenticate('local'),
+  function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    res.redirect('/users/' + req.user.id);
+  });
+
+app.post('/login',
+  passport.authenticate('local', { successRedirect: '/',
+                                   failureRedirect: '/login',
+                                   failureFlash: 'Invalid username or password.'})
+  );
+
+
+
+//Socket Server
 const PORT = 3001;
 server.listen(PORT, () => {
   console.log(`Server running at port ${PORT}`);
@@ -95,7 +147,6 @@ function generateRandomPoints(center, radius, count) {
 }
 
 const ourLocation = { lat: 45.5269919, lng: -73.5967626 };
-// const clientList = {};
 const id = uuidv4();
 const geolocations = generateRandomPoints(ourLocation, 100, 20);
 
@@ -114,8 +165,12 @@ const fakeExperience = [
 wss.on("connection", ws => {
   console.log("Client connected");
   // once login authentication working - wrap all this code in "Usercredentials valid?"
+  ws.on('message', function incoming(message) {
+  const messageObj = JSON.parse(message);
+  console.log("This is from received message:", messageObj)
+  });
 
-  let clientList = [];
+  const clientList = [];
 
   knex
     .select("*")
@@ -123,7 +178,7 @@ wss.on("connection", ws => {
     .where("id", "<", 10)
     .then(results => {
       let i = 1;
-      results.forEach(userObj => {
+      results.forEach((userObj) => {
         clientList.push({
           id: i,
           firstName: userObj.first_name,
@@ -136,7 +191,6 @@ wss.on("connection", ws => {
         i++;
         //console.log(results);
       });
-      console.log(clientList[0].currentLocation);
     })
     .then(results => {
       const realUserId = 10; // Once login authentication implemented this value comes from the Cookie.
@@ -146,17 +200,19 @@ wss.on("connection", ws => {
         .from("users")
         .where("id", realUserId)
         .then(result => {
+          //const user = result[0]
+          [user] = result
           clientList.push({
             id: realUserId,
-            firstName: result.first_name,
-            lastName: result.last_name,
-            email: result.email,
-            password: result.password,
-            hometown: result.hometown,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            email: user.email,
+            password: user.password,
+            hometown: user.hometown,
             experiences: "All",
-            avatarURL: result.avatar_url,
+            avatarURL: user.avatar_url,
             currentLocation: ourLocation,
-            aboutMe: result.about_me
+            aboutMe: user.about_me
           });
         })
         .finally(results => {
