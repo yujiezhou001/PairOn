@@ -56,22 +56,22 @@ class App extends Component {
     this.socket.send(JSON.stringify(experienceObj));
   };
 
-  // addMessage = newMessage => {
-  //   const messageObject = {
-  //     username: this.state.currentUser.firstName,
-  //     content: newMessage,
-  //     type: "outgoingMessage"
-  //   };
+  addMessage = newMessage => {
+    const messageObject = {
+      username: this.state.currentUser.firstName,
+      content: newMessage,
+      type: "outgoingMessage"
+    };
 
-  //   // this.setState({
-  //   //   chatMessages: [
-  //   //     { user: messageObject.username, content: messageObject.content }
-  //   //   ]
-  //   // });
-  //   console.log("SEND", newMessage, "TO BACKEND!!!!");
-  //   console.log(messageObject);
-  //   this.socket.send(JSON.stringify(messageObject));
-  // };
+    this.setState({
+      chatMessages: [
+        { user: messageObject.username, content: messageObject.content }
+      ]
+    });
+    console.log("SEND", newMessage, "TO BACKEND!!!!");
+    console.log(messageObject);
+    this.socket.send(JSON.stringify(messageObject));
+  };
 
   handleOnMessage = event => {
     const usersObj = JSON.parse(event.data);
@@ -87,8 +87,8 @@ class App extends Component {
 
     this.socket.onmessage = this.handleOnMessage;
 
-    // this.socket.onmessage = event => {
-    //   let data = JSON.parse(event.data);
+    this.socket.onmessage = event => {
+      let data = JSON.parse(event.data);
 
 
       if (data.type === "incomingMessage") {
@@ -107,7 +107,7 @@ class App extends Component {
       }
     };
 
-
+}
 
   render() {
     return (
