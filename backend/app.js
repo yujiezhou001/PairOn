@@ -60,7 +60,10 @@ app.use(function(err, req, res, next) {
 });
 
 // Passport.use
-passport.use(new LocalStrategy(
+passport.use(new LocalStrategy({
+  usernameField: 'email',
+  passwordField: 'password'
+  },
   function(username, password, done) {
     User.findOne({ username: username }, function (err, user) {
       if (err) { return done(err); }
