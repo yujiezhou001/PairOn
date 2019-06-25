@@ -24,7 +24,7 @@ class Home extends React.Component {
 
   componentDidMount() {
     axios.get('/').then(({data}) => {
-      console.log(data);
+      // console.log(data);
     })
   }
   render() {
@@ -42,6 +42,7 @@ class Home extends React.Component {
               clientList={this.props.clientList}
               updateCurrentLocation={this.props.updateCurrentLocation}
               currentLocation={this.props.currentLocation}
+              updateExperiences={this.props.updateExperiences}
             />
         </div>
       </div>

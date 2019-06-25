@@ -13,7 +13,7 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {
-        id: null,
+        id: 10,
         firstName: null,
         hometown: null,
         experiences: "All",
@@ -26,15 +26,38 @@ class App extends Component {
     };
   }
 
+
+
+  updateExperiences = (experience) => {
+    let currentUser = this.state.currentUser;
+    currentUser.experiences = experience;
+    this.setState(currentUser)
+    const experienceObj = {
+      type: "experiencePick",
+      id: this.state.currentUser.id,
+      experiences: experience
+    }
+    this.socket.send(JSON.stringify(experienceObj));
+  }
+
+  // handleOnClick = event =>{
+  //   if (event.onClick) {
+  //     this.props.updateExperiences(event.onClick)
+  //     this.setState({currentUser: event.onClick})
+  //   }
+  // }
+
   updateCurrentLocation = (locationObject) => {
     this.setState({currentUser: {currentLocation: locationObject}})
     console.log("successfully passed to parent state", locationObject)
     // this.socket.send(JSON.stringify(locationObject))
   }
 
+
   handleOnMessage = event => {
     const usersObj = JSON.parse(event.data);
     this.setState(usersObj);
+    console.log(usersObj)
   };
 
   componentDidMount() {
@@ -46,7 +69,7 @@ class App extends Component {
   }
 
   render() {
-    
+
     return (
       <div>
         <Router>
@@ -69,20 +92,32 @@ class App extends Component {
               </li>
             </ul>
           </nav>
+
+
+          // <Route path="/" component={() => (<Home clientList={this.state.clientList} updateCurrentLocation={this.updateCurrentLocation} updateExperiences={this.updateExperiences} handleOnClick={this.state.handleOnClick}/>)}/>
+          // <Route path="/chat/" component={Chat} />
+          // <Route path="/login" exact component={Login} />
+          // <Route path="/register" exact component={Register} />
+          // <Route path="/users/id" component={Profile} />
+
           <Route
             exact
             path="/"
-            render={props => <Home {...props} clientList={this.state.clientList}
-             updateCurrentLocation={this.updateCurrentLocation}
-              currentLocation={this.state.currentUser.currentLocation} />}
+            render={props => <Home {...props}
+              clientList={this.state.clientList}
+              updateCurrentLocation={this.updateCurrentLocation}
+              currentLocation={this.state.currentUser.currentLocation}
+              updateExperiences={this.updateExperiences}
+              handleOnClick={this.state.handleOnClick} />}
           />
           <Route path="/chat/" render={() => <Chat />} />
           <Route path="/login" render={() => <Login />} />
           <Route path="/register" render={() => <Register />} />
-          <Route
-           path="/users/:id"
-           render={props => <Profile {...props} clientList={this.state.clientList} />}
-         />        </Router>
+
+          <Route path="/users/id" render={() => <Profile />} />
+
+        </Router>
+
       </div>
     );
   }

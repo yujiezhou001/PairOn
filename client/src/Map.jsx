@@ -33,7 +33,7 @@ export class MapContainer extends Component {
   geoSuccess = position => {
     // console.log(position.coords.latitude, position.coords.longitude);
     let tempObj = {lat: position.coords.latitude, lng: position.coords.longitude};
-    this.props.updateCurrentLocation(tempObj)
+    // this.props.updateCurrentLocation(tempObj)
 
     this.setState({
       geoReady: true,
@@ -41,18 +41,26 @@ export class MapContainer extends Component {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       }
-
     });
     // this.props.updateCurrentLocation(tempObj)
     console.log("This is from local state:", this.state.currentLocation);
-    console.log("This is from parent state:", this.props.currentLocation)
+    console.log("This is from parent state:", this.props.currentLocation);
   };
 
- 
+
 
   geoFailure = err => {
     this.setState({ geoError: err.message });
   };
+
+
+  handleOnClick = event =>{
+    // if (event.onClick) {
+      this.props.updateExperiences(event.currentTarget.value)
+      // this.setState({currentUser: event.currentTarget.value})
+    // }
+  };
+
 
   componentDidMount() {
     let geoOptions = {
@@ -71,7 +79,14 @@ export class MapContainer extends Component {
   }
     // const updatedLocation = this.props.currentUser.currentLocation
   render() {
-    const { lat, lng } = this.props.currentLocation;
+
+
+    //const { lat, lng } = this.props.currentLocation;
+
+    const lat= 45.5275387;
+    const lng= -73.5986187;
+
+
     const imgPicture = {
       width: "50px"
     };
@@ -82,6 +97,7 @@ export class MapContainer extends Component {
       fillColor: "#FF0000",
       fillOpacity: 0.08
     };
+
 
     // console.log("This is persons",this.state.persons)
     return (
@@ -152,6 +168,24 @@ export class MapContainer extends Component {
             </div>
           </InfoWindow>
         )}
+         <button onClick={this.handleOnClick} value="Drinks" className="btn btn-primary btn-sm">
+                Drinks
+          </button>
+          <button onClick={this.handleOnClick} value="Food" className="btn btn-primary btn-sm">
+                Food
+          </button>
+          <button onClick={this.handleOnClick} value="Culture" className="btn btn-primary btn-sm">
+                Culture
+          </button>
+           <button onClick={this.handleOnClick} value="Events" className="btn btn-primary btn-sm">
+                Events
+          </button>
+          <button onClick={this.handleOnClick} value="Sports" className="btn btn-primary btn-sm">
+                Sports
+          </button>
+          <button onClick={this.handleOnClick} value="Unique" className="btn btn-primary btn-sm">
+                Unique
+          </button>
       </GoogleMap>
     );
   }
