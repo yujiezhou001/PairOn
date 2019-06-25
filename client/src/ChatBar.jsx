@@ -30,7 +30,7 @@ export class ChatBar extends Component {
     return (
       <footer className="chatbar">
         <input
-          className="chatbar-message"
+          className="form-control"
           name="content"
           placeholder="Type a message and hit ENTER"
           onKeyDown={this.handleKeyDown}
