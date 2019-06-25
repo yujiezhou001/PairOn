@@ -13,12 +13,12 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {
-        id: null,
+        id: 10,
         firstName: null,
         hometown: null,
         experiences: "All",
         avatarURL: null,
-        currentLocation: { lat: null, lng: null },
+        currentLocation: { lat: 0, lng: 0 },
         aboutMe: null
       },
       clientList: [], // full of currentUser objects sent from WebSocket
@@ -29,12 +29,15 @@ class App extends Component {
 
 
   updateExperiences = (experience) => {
-    //this.setSate(experiences: experience)
+    let currentUser = this.state.currentUser;
+    currentUser.experiences = experience;
+    this.setState(currentUser)
     const experienceObj = {
-      type: "experiencePick"
-      experience: this.state.currentUser.experiences
+      type: "experiencePick",
+      id: this.state.currentUser.id,
+      experiences: experience
     }
-     this.Socket.send(JSON.stringify(experienceObj));
+    this.socket.send(JSON.stringify(experienceObj));
   }
 
   // handleOnClick = event =>{
@@ -54,6 +57,7 @@ class App extends Component {
   handleOnMessage = event => {
     const usersObj = JSON.parse(event.data);
     this.setState(usersObj);
+    console.log(usersObj)
   };
 
   componentDidMount() {
@@ -100,7 +104,9 @@ class App extends Component {
             render={props => <Home {...props}
               clientList={this.state.clientList}
               updateCurrentLocation={this.updateCurrentLocation}
-              currentLocation={this.state.currentUser.currentLocation} />}
+              currentLocation={this.state.currentUser.currentLocation}
+              updateExperiences={this.updateExperiences}
+              handleOnClick={this.state.handleOnClick} />}
           />
           <Route path="/chat/" render={() => <Chat />} />
           <Route path="/login" render={() => <Login />} />

@@ -24,7 +24,7 @@ class Home extends React.Component {
 
   componentDidMount() {
     axios.get('/').then(({data}) => {
-      console.log(data);
+      // console.log(data);
     })
   }
   render() {
@@ -41,9 +41,8 @@ class Home extends React.Component {
               mapElement={<div style={{ height: `100%` }} />}
               clientList={this.props.clientList}
               updateCurrentLocation={this.props.updateCurrentLocation}
-              updateExperiences={this.props.updateExperiences}
               currentLocation={this.props.currentLocation}
-
+              updateExperiences={this.props.updateExperiences}
             />
         </div>
       </div>
