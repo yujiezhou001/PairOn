@@ -69,6 +69,7 @@ class App extends Component {
   }
 
   render() {
+
     return (
       <div>
         <Router>
@@ -100,6 +101,7 @@ class App extends Component {
           // <Route path="/users/id" component={Profile} />
 
           <Route
+            exact
             path="/"
             render={props => <Home {...props}
               clientList={this.state.clientList}
@@ -111,9 +113,11 @@ class App extends Component {
           <Route path="/chat/" render={() => <Chat />} />
           <Route path="/login" render={() => <Login />} />
           <Route path="/register" render={() => <Register />} />
+
           <Route path="/users/id" render={() => <Profile />} />
 
         </Router>
+
       </div>
     );
   }

@@ -178,7 +178,7 @@ wss.on("connection", ws => {
     .from("users")
     .where("id", "<", 10) // when login is implement : where (type = "fake")
     .then(results => {
-      let i = 1;
+      let i = 0;
       results.forEach(userObj => {
         clientList.push({
           id: i,
@@ -206,8 +206,6 @@ wss.on("connection", ws => {
         .then(result => {
           // equivalent to const user = result[0]
           const [user] = result;
-
-
           clientList.push({
             id: realUserId,
             firstName: user.first_name,
