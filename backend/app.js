@@ -60,24 +60,45 @@ app.use(function(err, req, res, next) {
 // User Authentication
 
 passport.use(new LocalStrategy({
-    usernameField: 'email',
+    usernameField: 'username',
     passwordField: 'password'
   },
-  
+
   function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
+    knex('users')
+    .select("*")
+    .where(
+      "email", username
+    )
+    .then((err, user) => {
       if (err) { return done(err); }
       if (!user) {
         return done(null, false, { message: 'Incorrect email.' });
       }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
+      console.log(user)
       return done(null, user);
     });
+    // User.findOne({ username: username }, function (err, user) {
+    //   if (err) { return done(err); }
+    //   if (!user) {
+    //     return done(null, false, { message: 'Incorrect email.' });
+    //   }
+    //   if (!user.validPassword(password)) {
+    //     return done(null, false, { message: 'Incorrect password.' });
+    //   }
+    //   console.log({user})
+    //   return done(null, user);
+    // });
   }
 ));
-
+app.post('/login',
+  passport.authenticate('local'),
+  function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    console.log('email validate')
+    res.send("success")
+  });
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -88,19 +109,19 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-app.post('/login',
-  passport.authenticate('local'),
-  function(req, res) {
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    res.redirect('/users/' + req.user.id);
-  });
+// app.post('/login',
+//   passport.authenticate('local'),
+//   function(req, res) {
+//     // If this function gets called, authentication was successful.
+//     // `req.user` contains the authenticated user.
+//     res.redirect('/users/' + req.user.id);
+//   });
 
-app.post('/login',
-  passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/login',
-                                   failureFlash: 'Invalid username or password.'})
-  );
+// app.post('/login',
+//   passport.authenticate('local', { successRedirect: '/',
+//                                    failureRedirect: '/login',
+//                                    failureFlash: 'Invalid username or password.'})
+//   );
 
 
 

@@ -3,7 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Chat } from "./Chat";
-import { Register } from "./Register";
+import { Register } from "./Register"; 
 import { Login } from "./Login";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
@@ -18,8 +18,9 @@ class App extends Component {
         hometown: null,
         experiences: "All",
         avatarURL: null,
-        currentLocation: { lat: null, lng: null },
-        aboutMe: null
+        currentLocation: { lat: 0, lng: 0 },
+        aboutMe: null,
+        type: "live"
       },
       clientList: [], // full of currentUser objects sent from WebSocket
       chatMessages: []
@@ -27,14 +28,23 @@ class App extends Component {
   }
 
   updateCurrentLocation = (locationObject) => {
+    const messageObj = {
+      id: null,
+      firstName: null,
+      hometown: null,
+      experiences: "All",
+      avatarURL: null,
+      currentLocation: locationObject,
+      aboutMe: null
+    }
     this.setState({currentUser: {currentLocation: locationObject}})
     console.log("successfully passed to parent state", locationObject)
-    // this.socket.send(JSON.stringify(locationObject))
+    this.socket.send(JSON.stringify(messageObj))
   }
 
   handleOnMessage = event => {
-    const usersObj = JSON.parse(event.data);
-    this.setState(usersObj);
+    const clientObj = JSON.parse(event.data);
+    this.setState(clientObj);
   };
 
   componentDidMount() {
@@ -72,7 +82,7 @@ class App extends Component {
             path="/"
             render={props => <Home {...props} clientList={this.state.clientList}
              updateCurrentLocation={this.updateCurrentLocation}
-              currentLocation={this.state.currentUser.currentLocation} />}
+            currentLocation={this.state.currentUser.currentLocation} />}
           />
           <Route path="/chat/" component={Chat} />
           <Route path="/login" exact component={Login} />
