@@ -14,7 +14,7 @@ class App extends Component {
     this.state = {
       currentUser: {
         id: null,
-        firstName: "Chantal",
+        firstName: null,
         hometown: null,
         experiences: "All",
         avatarURL: null,
