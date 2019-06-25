@@ -96,7 +96,7 @@ class App extends Component {
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/users/id">Profile</Link>
+                <Link to="/users/:id">Profile</Link>
               </li>
               <li>
                 <Link to="/login/">Login</Link>
@@ -118,6 +118,8 @@ class App extends Component {
                 clientList={this.state.clientList}
                 updateCurrentLocation={this.updateCurrentLocation}
                 currentLocation={this.state.currentUser.currentLocation}
+                updateExperiences={this.updateExperiences}
+                handleOnClick={this.state.handleOnClick}
               />
             )}
           />
@@ -135,7 +137,12 @@ class App extends Component {
           />
           <Route path="/login" render={() => <Login />} />
           <Route path="/register" render={() => <Register />} />
-          <Route path="/users/:id" render={() => <Profile />} />
+          <Route
+            path="/users/:id"
+            render={props => (
+              <Profile {...props} clientList={this.state.clientList} />
+            )}
+          />
         </Router>
       </div>
     );

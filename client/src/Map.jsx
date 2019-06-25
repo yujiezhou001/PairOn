@@ -54,6 +54,13 @@ export class MapContainer extends Component {
     this.setState({ geoError: err.message });
   };
 
+  handleOnClick = event => {
+    // if (event.onClick) {
+    this.props.updateExperiences(event.currentTarget.value);
+    // this.setState({currentUser: event.currentTarget.value})
+    // }
+  };
+
   componentDidMount() {
     let geoOptions = {
       enableHighAccuracy: true,
@@ -71,7 +78,11 @@ export class MapContainer extends Component {
   }
   // const updatedLocation = this.props.currentUser.currentLocation
   render() {
-    const { lat, lng } = this.props.currentLocation;
+    //const { lat, lng } = this.props.currentLocation;
+
+    const lat = 45.5275387;
+    const lng = -73.5986187;
+
     const imgPicture = {
       width: "50px"
     };
@@ -143,15 +154,65 @@ export class MapContainer extends Component {
               />
               <h5>{this.state.selectedPerson.firstName}</h5>
               <p>{this.state.selectedPerson.hometown}</p>
-              <button type="submit" className="btn btn-primary btn-sm">
+              <a
+                className="btn btn-primary btn-sm"
+                href={`../../users/${this.state.selectedPerson.id}`}
+                role="button"
+              >
                 Profile
-              </button>
-              <button type="submit" className="btn btn-primary btn-sm">
+              </a>
+              <a
+                className="btn btn-primary btn-sm"
+                href={`../../chat/${this.state.selectedPerson.id}`}
+                role="button"
+              >
                 Chat
-              </button>
+              </a>
             </div>
           </InfoWindow>
         )}
+        <button
+          onClick={this.handleOnClick}
+          value="Drinks"
+          className="btn btn-primary btn-sm"
+        >
+          Drinks
+        </button>
+        <button
+          onClick={this.handleOnClick}
+          value="Food"
+          className="btn btn-primary btn-sm"
+        >
+          Food
+        </button>
+        <button
+          onClick={this.handleOnClick}
+          value="Culture"
+          className="btn btn-primary btn-sm"
+        >
+          Culture
+        </button>
+        <button
+          onClick={this.handleOnClick}
+          value="Events"
+          className="btn btn-primary btn-sm"
+        >
+          Events
+        </button>
+        <button
+          onClick={this.handleOnClick}
+          value="Sports"
+          className="btn btn-primary btn-sm"
+        >
+          Sports
+        </button>
+        <button
+          onClick={this.handleOnClick}
+          value="Unique"
+          className="btn btn-primary btn-sm"
+        >
+          Unique
+        </button>
       </GoogleMap>
     );
   }
