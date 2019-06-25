@@ -1,5 +1,10 @@
 import React from "react";
 import axios from "axios";
+
+
+const imgPicture = {
+      width: "100px"
+    };
 //@@@ creer plusieur component fix for the current user
 class Profile extends React.Component {
   constructor(props) {
@@ -56,9 +61,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    const imgPicture = {
-      width: "100px"
-    };
+    
 
     const user = this.props.clientList.find(
       userObj => userObj.id === Number(this.props.match.params.id)

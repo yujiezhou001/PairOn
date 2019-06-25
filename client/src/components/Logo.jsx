@@ -4,6 +4,12 @@ const logoImage = {
   width: '80px'
 };
 
+// const gifAnim = {
+//   width: '80px',
+//   height: '80px',
+//   backgroundImage: 'url(http://animaticons.co/wp-content/uploads/animat-wm/animat-map-256x256-color-wm.gif)'
+// }
+
 const Logo = props => {
   return (
     <div>

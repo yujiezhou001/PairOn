@@ -7,6 +7,7 @@ import { Register } from "./Register";
 import { Login } from "./Login";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
+import Logo from "./components/Logo";
 
 class App extends Component {
   constructor(props) {
@@ -26,11 +27,11 @@ class App extends Component {
     };
   }
 
-  updateCurrentLocation = (locationObject) => {
-    this.setState({currentUser: {currentLocation: locationObject}})
-    console.log("successfully passed to parent state", locationObject)
+  updateCurrentLocation = locationObject => {
+    this.setState({ currentUser: { currentLocation: locationObject } });
+    console.log("successfully passed to parent state", locationObject);
     // this.socket.send(JSON.stringify(locationObject))
-  }
+  };
 
   handleOnMessage = event => {
     const usersObj = JSON.parse(event.data);
@@ -46,11 +47,10 @@ class App extends Component {
   }
 
   render() {
-    
     return (
       <div>
         <Router>
-          <nav>
+          {/* <nav>         
             <ul>
               <li>
                 <Link to="/">Home</Link>
@@ -68,21 +68,30 @@ class App extends Component {
                 <Link to="/chat/">Chat</Link>
               </li>
             </ul>
-          </nav>
+          </nav> */}
           <Route
             exact
             path="/"
-            render={props => <Home {...props} clientList={this.state.clientList}
-             updateCurrentLocation={this.updateCurrentLocation}
-              currentLocation={this.state.currentUser.currentLocation} />}
+            render={props => (
+              <Home
+                {...props}
+                clientList={this.state.clientList}
+                updateCurrentLocation={this.updateCurrentLocation}
+                currentLocation={this.state.currentUser.currentLocation}
+              />
+            )}
           />
           <Route path="/chat/" render={() => <Chat />} />
           <Route path="/login" render={() => <Login />} />
           <Route path="/register" render={() => <Register />} />
           <Route
-           path="/users/:id"
-           render={props => <Profile {...props} clientList={this.state.clientList} />}
-         />        </Router>
+            path="/users/:id"
+            render={props => (
+              <Profile {...props} clientList={this.state.clientList} />
+            )}
+          />
+        </Router>
+        
       </div>
     );
   }
