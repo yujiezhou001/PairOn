@@ -83,7 +83,7 @@ class Profile extends React.Component {
       );
     } else {
       button = (
-        <a className="btn btn-primary" href="../../chat" role="button">
+        <a className="btn btn-primary" href="/" role="button">
           Message
         </a>
       );

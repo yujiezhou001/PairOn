@@ -10,8 +10,8 @@ const knexConfig = require("./knexfile");
 const knex = require("knex")(knexConfig["development"]);
 const http = require("http");
 require("dotenv").config();
-const passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy;
+const passport = require("passport"),
+  LocalStrategy = require("passport-local").Strategy;
 
 // express server
 const app = express();
@@ -29,8 +29,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-
-
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -68,15 +66,15 @@ passport.use(new LocalStrategy({
     User.findOne({ username: username }, function (err, user) {
       if (err) { return done(err); }
       if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
+        return done(null, false, { message: "Incorrect username." });
       }
       if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
+        return done(null, false, { message: "Incorrect password." });
       }
       return done(null, user);
     });
-  }
-));
+  })
+);
 
 //Sessions - should we or is this with session implementation?
 // passport.serializeUser(function(user, done) {
@@ -89,7 +87,6 @@ passport.use(new LocalStrategy({
 //   });
 // });
 
-
 //THIS IS the passport.authenticate()
 // app.post('/login',
 //   passport.authenticate('local'),
@@ -98,13 +95,14 @@ passport.use(new LocalStrategy({
 //     // `req.user` contains the authenticated user.
 //     res.redirect('/users/' + req.user.username);
 //   });
-app.post('/login',
-  passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/login',
-                                   failureFlash: 'Invalid username or password.' })
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash: "Invalid username or password."
+  })
 );
-
-
 
 //Express Server
 const PORT = 3001;
@@ -112,17 +110,19 @@ server.listen(PORT, () => {
   console.log(`Server running at port ${PORT}`);
 });
 
-
-
 const uuidv4 = require("uuid/v4");
 const wss = new SocketServer.Server({ server });
-
-
-
 
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
+
+// Create broadcast function to send data to all clients
+wss.broadcast = function broadcast(message) {
+  wss.clients.forEach(function each(client) {
+    client.send(message);
+  });
+};
 
 // Function that generates random geolation around our location.
 function generateRandomPoint(center, radius) {
@@ -154,7 +154,6 @@ function generateRandomPoints(center, radius, count) {
 }
 
 const ourLocation = { lat: 45.5269919, lng: -73.5967626 };
-// const clientList = {};
 const id = uuidv4();
 const geolocations = generateRandomPoints(ourLocation, 100, 20);
 
@@ -174,7 +173,7 @@ wss.on("connection", ws => {
   console.log("Client connected");
   // once login authentication working - wrap all this code in "Usercredentials valid?"
 
-  let clientList = [];
+  const clientList = [];
 
   knex
     .select("*")
@@ -190,14 +189,12 @@ wss.on("connection", ws => {
           experiences: fakeExperience[i],
           avatarURL: userObj.avatar_url,
           currentLocation: generateRandomPoint(ourLocation, 100),
-          aboutMe: userObj.about_me
+          aboutMe: userObj.about_me,
+          type: "incomingClientList"
         });
         i++;
         //console.log(results);
       });
-
-
-      // console.log(clientList[0].currentLocation);
     })
     .then(results => {
       const realUserId = 10; // Once login authentication implemented this value comes from the JWT.
@@ -207,8 +204,8 @@ wss.on("connection", ws => {
         .from("users")
         .where("id", realUserId)
         .then(result => {
-          // equivalent to const user = result[0]
-          const [user] = result;
+          //const user = result[0]
+          [user] = result;
           clientList.push({
             id: realUserId,
             firstName: user.first_name,
@@ -219,43 +216,63 @@ wss.on("connection", ws => {
             experiences: "All",
             avatarURL: user.avatar_url,
             currentLocation: ourLocation,
-            aboutMe: user.about_me
+            aboutMe: user.about_me,
+            type: "incomingClientList"
           });
         })
         .finally(results => {
           wss.clients.forEach(function each(client) {
             client.send(JSON.stringify({ clientList }));
+            console.log("CLIENT LIST SENT TO FRONT-END", clientList);
           });
         });
+
+      ws.on("message", function incoming(message) {
+        const messageObj = JSON.parse(message);
+        messageObj.id = uuidv4();
+
+        console.log("This is from received message:", messageObj);
+
+        if (messageObj.type === "outgoingMessage") {
+          messageObj.type = "incomingMessage";
+          // } else if (messageObject.type === "outgoingUserLoc") {
+          //   messageObject.type = "incomingUserLoc";
+        } else if (messageObj.type === "outgoingClientList") {
+          messageObj.type = "incomingClientList";
+        }
+
+        console.log("MESSAGE RCD IN BACKEND:", messageObj);
+        wss.broadcast(JSON.stringify(messageObj));
+      });
 
       // Set up a callback for when a client closes the socket. This usually means they closed their browser.
     });
 
-    //receiving experience change + sending it back to all users
-  ws.on('message', function incoming(message) {
-    let messageObj = JSON.parse(message)
+  //receiving experience change + sending it back to all users
+  ws.on("message", function incoming(message) {
+    let messageObj = JSON.parse(message);
     // console.log(messageObj)
 
-    switch(messageObj.type){
+    switch (messageObj.type) {
       case "experiencePick":
         clientList.forEach(function(client) {
-          if (client.id === messageObj.id){
-            client.experiences = messageObj.experiences
-             console.log(messageObj)
+          if (client.id === messageObj.id) {
+            client.experiences = messageObj.experiences;
+            console.log(messageObj);
           }
-        })
+        });
 
-        wss.clients.forEach(function each(client){
-          client.send(JSON.stringify({clientList}));
-        })
-      break;
+        wss.clients.forEach(function each(client) {
+          client.send(JSON.stringify({ clientList }));
+        });
+        break;
 
       // case "updatedLocation":
       //   wss.clients.forEach(function each(client){
       //     client.send(JSON.stringify(messageObject));
       //   })
       // break;
-      }
-    })
+    }
+  });
   ws.on("close", () => console.log("Client disconnected"));
 });

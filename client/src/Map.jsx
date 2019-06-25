@@ -32,8 +32,11 @@ export class MapContainer extends Component {
 
   geoSuccess = position => {
     // console.log(position.coords.latitude, position.coords.longitude);
-    let tempObj = {lat: position.coords.latitude, lng: position.coords.longitude};
-    // this.props.updateCurrentLocation(tempObj)
+    let tempObj = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    };
+    this.props.updateCurrentLocation(tempObj);
 
     this.setState({
       geoReady: true,
@@ -47,20 +50,16 @@ export class MapContainer extends Component {
     console.log("This is from parent state:", this.props.currentLocation);
   };
 
-
-
   geoFailure = err => {
     this.setState({ geoError: err.message });
   };
 
-
-  handleOnClick = event =>{
+  handleOnClick = event => {
     // if (event.onClick) {
-      this.props.updateExperiences(event.currentTarget.value)
-      // this.setState({currentUser: event.currentTarget.value})
+    this.props.updateExperiences(event.currentTarget.value);
+    // this.setState({currentUser: event.currentTarget.value})
     // }
   };
-
 
   componentDidMount() {
     let geoOptions = {
@@ -77,15 +76,12 @@ export class MapContainer extends Component {
       geoOptions
     );
   }
-    // const updatedLocation = this.props.currentUser.currentLocation
+  // const updatedLocation = this.props.currentUser.currentLocation
   render() {
-
-
     //const { lat, lng } = this.props.currentLocation;
 
-    const lat= 45.5275387;
-    const lng= -73.5986187;
-
+    const lat = 45.5275387;
+    const lng = -73.5986187;
 
     const imgPicture = {
       width: "50px"
@@ -97,7 +93,6 @@ export class MapContainer extends Component {
       fillColor: "#FF0000",
       fillOpacity: 0.08
     };
-
 
     // console.log("This is persons",this.state.persons)
     return (
@@ -182,14 +177,20 @@ export class MapContainer extends Component {
 
               <p>{this.state.selectedPerson.hometown}</p>
 
-              <button type="submit" className="btn btn-primary btn-sm">
+               <a
+                className="btn btn-primary btn-sm"
+                href={`../../users/${this.state.selectedPerson.id}`}
+                role="button"
+              >
                 Profile
-              </button>
-
-              <button type="submit" className="btn btn-primary btn-sm">
+              </a>
+              <a
+                className="btn btn-primary btn-sm"
+                href={`../../chat/${this.state.selectedPerson.id}`}
+                role="button"
+              >
                 Chat
-              </button>
-
+              </a>
             </div>
           </InfoWindow>
         )}
@@ -221,7 +222,6 @@ export class MapContainer extends Component {
           <button onClick={this.handleOnClick} value="All" className="btn btn-primary btn-sm">
                 All
           </button>
-
       </GoogleMap>
     );
   }

@@ -13,8 +13,8 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {
-        id: 10,
-        firstName: null,
+        id: null,
+        firstName: "Chantal",
         hometown: null,
         experiences: "All",
         avatarURL: null,
@@ -26,50 +26,79 @@ class App extends Component {
     };
   }
 
+  updateCurrentLocation = locationObject => {
+    this.setState({ currentUser: { currentLocation: locationObject } });
 
+    const locObject = {
+      currentUser: this.state.currentUser,
+      type: "outgoingUserLoc"
+    };
 
-  updateExperiences = (experience) => {
+    this.socket.send(JSON.stringify(locObject));
+    console.log("successfully passed to parent state", locObject);
+    // this.socket.send(JSON.stringify(locationObject))
+  };
+
+  updateExperiences = experience => {
     let currentUser = this.state.currentUser;
     currentUser.experiences = experience;
-    this.setState(currentUser)
+    this.setState(currentUser);
     const experienceObj = {
       type: "experiencePick",
       id: this.state.currentUser.id,
       experiences: experience
-    }
+    };
     this.socket.send(JSON.stringify(experienceObj));
-  }
-
-  // handleOnClick = event =>{
-  //   if (event.onClick) {
-  //     this.props.updateExperiences(event.onClick)
-  //     this.setState({currentUser: event.onClick})
-  //   }
-  // }
-
-  updateCurrentLocation = (locationObject) => {
-    this.setState({currentUser: {currentLocation: locationObject}})
-    console.log("successfully passed to parent state", locationObject)
-    // this.socket.send(JSON.stringify(locationObject))
-  }
-
-
-  handleOnMessage = event => {
-    const usersObj = JSON.parse(event.data);
-    this.setState(usersObj);
-    console.log(usersObj)
   };
+
+  addMessage = newMessage => {
+    const messageObject = {
+      username: this.state.currentUser.firstName,
+      content: newMessage,
+      type: "outgoingMessage"
+    };
+
+    // this.setState({
+    //   chatMessages: [
+    //     { user: messageObject.username, content: messageObject.content }
+    //   ]
+    // });
+    console.log("SEND", newMessage, "TO BACKEND!!!!");
+    console.log(messageObject);
+    this.socket.send(JSON.stringify(messageObject));
+  };
+
+  // handleOnMessage = event => {
+  //   const usersObj = JSON.parse(event.data);
+  //   this.setState(usersObj);
+  // };
 
   componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001");
     this.socket.onopen = function() {
       console.log("Connected to server");
     };
-    this.socket.onmessage = this.handleOnMessage;
+
+    // this.socket.onmessage = this.handleOnMessage;
+
+    this.socket.onmessage = event => {
+      let data = JSON.parse(event.data);
+
+      if (data.type === "incomingMessage") {
+        this.setState({ chatMessages: [...this.state.chatMessages, data] });
+        console.log("MESSAGE BROADCAST BACK TO ME!", data);
+        // } else if (data.type === "incomingUserLoc") {
+        //   this.setState({
+        //     currentUser: { name: data.username, userColor: data.color }
+        //   });
+      } else {
+        console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
+        this.setState(data);
+      }
+    };
   }
 
   render() {
-
     return (
       <div>
         <Router>
@@ -79,7 +108,7 @@ class App extends Component {
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/users/id">Profile</Link>
+                <Link to="/users/:id">Profile</Link>
               </li>
               <li>
                 <Link to="/login/">Login</Link>
@@ -92,33 +121,42 @@ class App extends Component {
               </li>
             </ul>
           </nav>
-
-
-          // <Route path="/" component={() => (<Home clientList={this.state.clientList} updateCurrentLocation={this.updateCurrentLocation} updateExperiences={this.updateExperiences} handleOnClick={this.state.handleOnClick}/>)}/>
-          // <Route path="/chat/" component={Chat} />
-          // <Route path="/login" exact component={Login} />
-          // <Route path="/register" exact component={Register} />
-          // <Route path="/users/id" component={Profile} />
-
           <Route
             exact
             path="/"
-            render={props => <Home {...props}
-              clientList={this.state.clientList}
-              updateCurrentLocation={this.updateCurrentLocation}
-              currentLocation={this.state.currentUser.currentLocation}
-              updateExperiences={this.updateExperiences}
-              handleOnClick={this.state.handleOnClick}
-              currentExperiences={this.state.currentUser.experiences} />}
+            render={props => (
+              <Home
+                {...props}
+                clientList={this.state.clientList}
+                updateCurrentLocation={this.updateCurrentLocation}
+                currentLocation={this.state.currentUser.currentLocation}
+                updateExperiences={this.updateExperiences}
+                handleOnClick={this.state.handleOnClick}
+                currentExperiences={this.state.currentUser.experiences}
+              />
+            )}
           />
-          <Route path="/chat/" render={() => <Chat />} />
+          <Route
+            exact
+            path="/chat/:id"
+            render={props => (
+              <Chat
+                {...props}
+                clientList={this.state.clientList}
+                addMessage={this.addMessage}
+                messages={this.state.chatMessages}
+              />
+            )}
+          />
           <Route path="/login" render={() => <Login />} />
           <Route path="/register" render={() => <Register />} />
-
-          <Route path="/users/id" render={() => <Profile />} />
-
+          <Route
+            path="/users/:id"
+            render={props => (
+              <Profile {...props} clientList={this.state.clientList} />
+            )}
+          />
         </Router>
-
       </div>
     );
   }
