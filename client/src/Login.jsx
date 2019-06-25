@@ -23,7 +23,7 @@ class Login extends React.Component {
   handleOnSubmit(e) {
     e.preventDefault();
     axios.post("/login").then(({ data }) => {
-      console.log(data);
+      // console.log(data);
     });
   }
 

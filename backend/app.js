@@ -58,12 +58,13 @@ app.use(function(err, req, res, next) {
 });
 
 // Passport.use
-passport.use(
-  new LocalStrategy(function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
-      if (err) {
-        return done(err);
-      }
+passport.use(new LocalStrategy({
+  usernameField: 'email',
+  passwordField: 'password'
+  },
+  function(username, password, done) {
+    User.findOne({ username: username }, function (err, user) {
+      if (err) { return done(err); }
       if (!user) {
         return done(null, false, { message: "Incorrect username." });
       }
@@ -159,11 +160,11 @@ const geolocations = generateRandomPoints(ourLocation, 100, 20);
 const fakeExperience = [
   "All",
   "Food",
-  "Drink",
+  "Drinks",
   "All",
   "All",
   "Culture",
-  "Drink",
+  "Drinks",
   "Food",
   "Culture"
 ];

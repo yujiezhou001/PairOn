@@ -140,6 +140,7 @@ class App extends Component {
                 currentLocation={this.state.currentUser.currentLocation}
                 updateExperiences={this.updateExperiences}
                 handleOnClick={this.state.handleOnClick}
+                currentExperiences={this.state.currentUser.experiences}
               />
             )}
           />
