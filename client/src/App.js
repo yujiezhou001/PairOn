@@ -18,7 +18,7 @@ class App extends Component {
         hometown: null,
         experiences: "All",
         avatarURL: null,
-        currentLocation: { lat: 0, lng: 0 },
+        currentLocation: { lat: null, lng: null },
         aboutMe: null
       },
       clientList: [], // full of currentUser objects sent from WebSocket
@@ -27,15 +27,20 @@ class App extends Component {
   }
 
   updateCurrentLocation = locationObject => {
-    this.setState({ currentUser: { currentLocation: locationObject } });
+    let currentUser = this.state.currentUser;
+    currentUser.currentLocation = locationObject;
+    this.setState(currentUser);
+
+    // this.setState({ currentUser: { currentLocation: locationObject } });
 
     const locObject = {
-      currentUser: this.state.currentUser,
-      type: "outgoingUserLoc"
+      type: "outgoingCurrUserInfo",
+      myLocation: this.state.currentUser.currentLocation,
+      id: this.state.currentUser.id
     };
 
     this.socket.send(JSON.stringify(locObject));
-    console.log("successfully passed to parent state", locObject);
+    console.log("USER OBJ SENT TO BACKEND", locObject);
     // this.socket.send(JSON.stringify(locationObject))
   };
 
@@ -86,11 +91,14 @@ class App extends Component {
 
       if (data.type === "incomingMessage") {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
-        console.log("MESSAGE BROADCAST BACK TO ME!", data);
+        console.log("CHAT BROADCAST BACK TO ME!", data);
         // } else if (data.type === "incomingUserLoc") {
         //   this.setState({
         //     currentUser: { name: data.username, userColor: data.color }
         //   });
+      } else if (data.type === "experiencePick") {
+        this.setState({ currentUser: { experiences: data.experiences } });
+        console.log("EXPERIENCE FROM BACKEND:", this.state);
       } else {
         console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
         this.setState(data);

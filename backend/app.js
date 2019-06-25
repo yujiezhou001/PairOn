@@ -152,7 +152,7 @@ function generateRandomPoints(center, radius, count) {
   return points;
 }
 
-const ourLocation = { lat: 45.5269919, lng: -73.5967626 };
+const ourLocation = { lat: 0, lng: 0 };
 const id = uuidv4();
 const geolocations = generateRandomPoints(ourLocation, 100, 20);
 
@@ -222,7 +222,7 @@ wss.on("connection", ws => {
         .finally(results => {
           wss.clients.forEach(function each(client) {
             client.send(JSON.stringify({ clientList }));
-            console.log("CLIENT LIST SENT TO FRONT-END", clientList);
+            console.log("CLIENT LIST SENT TO FRONT-END", wss.clients);
           });
         });
 
@@ -232,46 +232,84 @@ wss.on("connection", ws => {
 
         console.log("This is from received message:", messageObj);
 
-        if (messageObj.type === "outgoingMessage") {
-          messageObj.type = "incomingMessage";
-          // } else if (messageObject.type === "outgoingUserLoc") {
-          //   messageObject.type = "incomingUserLoc";
-        } else if (messageObj.type === "outgoingClientList") {
-          messageObj.type = "incomingClientList";
+        switch (messageObj.type) {
+          case "outgoingMessage":
+            messageObj.type = "incomingMessage";
+            wss.broadcast(JSON.stringify(messageObj));
+            break;
+          case "outgoingClientList":
+            messageObj.type = "incomingClientList";
+            wss.broadcast(JSON.stringify(messageObj));
+            break;
+          case "outgoingCurrUserInfo":
+            ourLocation.lat = messageObj.myLocation.lat;
+            ourLocation.lng = messageObj.myLocation.lng;
+            // wss.broadcast(JSON.stringify(messageObj));
+            console.log("BACKEND - MY LOC OBJ", messageObj);
+            break;
+          case "experiencePick":
+            clientList.forEach(function(client) {
+              if (client.id === messageObj.id) {
+                client.experiences = messageObj.experiences;
+                // console.log("EXP PICK - FR BACKEND:", messageObj);
+              }
+            });
+            wss.broadcast(JSON.stringify(messageObj));
+            break;
         }
-
-        console.log("MESSAGE RCD IN BACKEND:", messageObj);
-        wss.broadcast(JSON.stringify(messageObj));
       });
 
+      // if (messageObj.type === "outgoingMessage") {
+      //   messageObj.type = "incomingMessage";
+      // } else if (messageObj.type === "outgoingClientList") {
+      //   messageObj.type = "incomingClientList";
+      // } else if (messageObj.type === "outgoingCurrUserInfo") {
+      //   console.log(messageObj.currentLocation);
+      //   ourLocation.lat = messageObj.myLocation.lat;
+      //   ourLocation.lng = messageObj.myLocation.lng;
+
+      //   console.log("OUR LOCATION:", ourLocation);
+      // } else if (messageObj.type === "experiencePick") {
+      //   clientList.forEach(function(client) {
+      //     if (client.id === messageObj.id) {
+      //       client.experiences = messageObj.experiences;
+      //       console.log("EXP PICK - FR BACKEND:", messageObj);
+      //     }
+      //   });
+      // }
+
+      // console.log("MESSAGE RCD IN BACKEND:", messageObj);
+      // wss.broadcast(JSON.stringify(messageObj));
+
       // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-    });
 
-  //receiving experience change + sending it back to all users
-  ws.on("message", function incoming(message) {
-    let messageObj = JSON.parse(message);
-    // console.log(messageObj)
+      //receiving experience change + sending it back to all users
+      // ws.on("message", function incoming(message) {
+      //   let messageObj = JSON.parse(message);
+      //   // console.log(messageObj)
 
-    switch (messageObj.type) {
-      case "experiencePick":
-        clientList.forEach(function(client) {
-          if (client.id === messageObj.id) {
-            client.experiences = messageObj.experiences;
-            console.log(messageObj);
-          }
-        });
+      //   switch (messageObj.type) {
+      //     case "experiencePick":
+      //       clientList.forEach(function(client) {
+      //         if (client.id === messageObj.id) {
+      //           client.experiences = messageObj.experiences;
+      //           console.log(messageObj);
+      //         }
+      //       });
 
-        wss.clients.forEach(function each(client) {
-          client.send(JSON.stringify({ clientList }));
-        });
-        break;
+      //       // SAME AS BROADCAST ABOVE
+      //       wss.clients.forEach(function each(client) {
+      //         client.send(JSON.stringify({ clientList }));
+      //       });
+      //       break;
 
       // case "updatedLocation":
       //   wss.clients.forEach(function each(client){
       //     client.send(JSON.stringify(messageObject));
       //   })
       // break;
-    }
-  });
-  ws.on("close", () => console.log("Client disconnected"));
+
+      // });
+      ws.on("close", () => console.log("Client disconnected"));
+    });
 });
