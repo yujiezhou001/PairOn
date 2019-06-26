@@ -109,7 +109,7 @@ class App extends Component {
       console.log("Connected to server");
     };
 
-    this.socket.onmessage = this.handleOnMessage;
+    // this.socket.onmessage = this.handleOnMessage;
 
     this.socket.onmessage = event => {
       let data = JSON.parse(event.data);

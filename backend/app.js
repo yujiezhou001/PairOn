@@ -198,9 +198,7 @@ wss.on("connection", ws => {
   const messageObj = JSON.parse(message);
   console.log("This is from received message:", messageObj)
   });
-
-  const clientList = [];
-
+const clientList = [];
   knex
     .select("*")
     .from("users")
@@ -214,7 +212,7 @@ wss.on("connection", ws => {
           hometown: userObj.hometown,
           experiences: fakeExperience[i],
           avatarURL: userObj.avatar_url,
-          currentLocation: generateRandomPoint(ourLocation, 100),
+          currentLocation: generateRandomPoint({lat:45.530336999999996, lng:-73.60290119999999}, 100),
           aboutMe: userObj.about_me,
           type: "incomingClientList"
         });
