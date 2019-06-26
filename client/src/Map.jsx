@@ -194,7 +194,7 @@ export class MapContainer extends Component {
             </div>
           </InfoWindow>
         )}
-
+        <div className="scroll-view-horizon">
          <button onClick={this.handleOnClick} value="Drinks" className="btn btn-primary btn-sm">
                 Drinks
           </button>
@@ -222,6 +222,7 @@ export class MapContainer extends Component {
           <button onClick={this.handleOnClick} value="All" className="btn btn-primary btn-sm">
                 All
           </button>
+          </div>
       </GoogleMap>
     );
   }

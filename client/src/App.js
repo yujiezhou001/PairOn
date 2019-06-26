@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
-import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Chat } from "./Chat";
 import { Register } from "./Register"; 
 import { Login } from "./Login";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
+import BtnProfile from "./components/BtnProfile.jsx";
 
 class App extends Component {
   constructor(props) {
@@ -25,7 +25,15 @@ class App extends Component {
       clientList: [], // full of currentUser objects sent from WebSocket
       chatMessages: []
     };
+    
   }
+
+  btnAbsolutR = {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    zIndex: "300"
+  };
 
   updateCurrentLocation = locationObject => {
     let currentUser = this.state.currentUser;
@@ -113,26 +121,8 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Router>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/users/:id">Profile</Link>
-              </li>
-              <li>
-                <Link to="/login/">Login</Link>
-              </li>
-              <li>
-                <Link to="/register/">Register</Link>
-              </li>
-              <li>
-                <Link to="/chat/">Chat</Link>
-              </li>
-            </ul>
-          </nav>
+        <BtnProfile btnAbsolutR={this.btnAbsolutR}/> 
+        <Router>          
           <Route
             exact
             path="/"
@@ -168,6 +158,25 @@ class App extends Component {
               <Profile {...props} clientList={this.state.clientList} />
             )}
           />
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/users/:id">Profile</Link>
+              </li>
+              <li>
+                <Link to="/login/">Login</Link>
+              </li>
+              <li>
+                <Link to="/register/">Register</Link>
+              </li>
+              <li>
+                <Link to="/chat/">Chat</Link>
+              </li>
+            </ul>
+          </nav>
         </Router>
       </div>
     );
