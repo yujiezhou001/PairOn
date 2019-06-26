@@ -12,10 +12,21 @@ const http = require("http");
 require("dotenv").config();
 const passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy;
+const cors = require("cors");
 
 // express server
 const app = express();
 //Websocket Server
+
+const corsOptions = {
+  origin: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  preflightContinue: true,
+  maxAge: 600,
+};
+app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
 
 const SocketServer = require("ws");
 var server = http.createServer(app);
@@ -68,40 +79,21 @@ passport.use(new LocalStrategy({
   },
 
   function(username, password, done) {
-    knex('users')
-    .select("*")
-    .where(
-      "email", username
-    )
-    .then((err, user) => {
+
+    User.findOne({ username: username }, function (err, user) {
       if (err) { return done(err); }
       if (!user) {
         return done(null, false, { message: 'Incorrect email.' });
       }
-      console.log(user)
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      console.log({user})
       return done(null, user);
     });
-    // User.findOne({ username: username }, function (err, user) {
-    //   if (err) { return done(err); }
-    //   if (!user) {
-    //     return done(null, false, { message: 'Incorrect email.' });
-    //   }
-    //   if (!user.validPassword(password)) {
-    //     return done(null, false, { message: 'Incorrect password.' });
-    //   }
-    //   console.log({user})
-    //   return done(null, user);
-    // });
   }
 ));
-app.post('/login',
-  passport.authenticate('local'),
-  function(req, res) {
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    console.log('email validate')
-    res.send("success")
-  });
+
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
