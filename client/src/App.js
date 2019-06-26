@@ -23,7 +23,8 @@ class App extends Component {
         type: "live"
       },
       clientList: [], // full of currentUser objects sent from WebSocket
-      chatMessages: []
+      chatMessages: [],
+      authorize: ""
     };
     
   }
@@ -84,6 +85,10 @@ class App extends Component {
     console.log(usersObj);
   };
 
+  handleOnAuthorize = data => {
+    this.setState({authorize: data})
+  }
+
   componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001");
     this.socket.onopen = function() {
@@ -143,7 +148,7 @@ class App extends Component {
               />
             )}
           />
-          <Route path="/login" render={() => <Login />} />
+          <Route path="/login" render={props => <Login {...props} authorize={this.handleOnAuthorize}/>} />
           <Route path="/register" render={() => <Register />} />
           <Route
             path="/users/:id"

@@ -72,6 +72,12 @@ app.use(function(err, req, res, next) {
 });
 
 // User Authentication
+// knex.select("*")
+// .from("users")
+// .where("email", username)
+// .then(user => console.log(user));
+// }
+// ))
 
 passport.use(new LocalStrategy({
     usernameField: 'username',
@@ -79,20 +85,19 @@ passport.use(new LocalStrategy({
   },
 
   function(username, password, done) {
-
-    User.findOne({ username: username }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect email.' });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      console.log({user})
+    knex.select("*").from('users').where("email", username).first()
+    .then((user) => {
+    if (!user) return done(null, false);
+    if (password !== user.password) {
+      return done(null, false);
+     } else {
       return done(null, user);
-    });
-  }
-));
+    }
+  })
+  .catch((err) => { return done(err); });
+}));
+
+
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -117,6 +122,8 @@ passport.deserializeUser(function(id, done) {
 //                                    failureRedirect: '/login',
 //                                    failureFlash: 'Invalid username or password.'})
 //   );
+
+
 
 //Socket Server
 const PORT = 3001;
@@ -186,9 +193,9 @@ const fakeExperience = [
 wss.on("connection", ws => {
   console.log("Client connected");
   // once login authentication working - wrap all this code in "Usercredentials valid?"
-  ws.on("message", function incoming(message) {
-    const messageObj = JSON.parse(message);
-    console.log("This is from received message:", messageObj);
+  ws.on('message', function incoming(message) {
+  const messageObj = JSON.parse(message);
+  console.log("This is from received message:", messageObj)
   });
 
   const clientList = [];
@@ -199,7 +206,7 @@ wss.on("connection", ws => {
     .where("id", "<", 10) // when login is implement : where (type = "fake")
     .then(results => {
       let i = 1;
-      results.forEach(userObj => {
+      results.forEach((userObj) => {
         clientList.push({
           id: i,
           firstName: userObj.first_name,
@@ -256,25 +263,25 @@ wss.on("connection", ws => {
             messageObj.type = "incomingMessage";
             wss.broadcast(JSON.stringify(messageObj));
             break;
-          // case "outgoingClientList":
-          //   messageObj.type = "incomingClientList";
-          //   wss.broadcast(JSON.stringify(messageObj));
-          //   break;
+          case "outgoingClientList":
+            messageObj.type = "incomingClientList";
+            wss.broadcast(JSON.stringify(messageObj));
+            break;
           case "outgoingCurrUserInfo":
             ourLocation.lat = messageObj.myLocation.lat;
             ourLocation.lng = messageObj.myLocation.lng;
             // wss.broadcast(JSON.stringify(messageObj));
             console.log("BACKEND - MY LOC OBJ", messageObj);
             break;
-          // case "experiencePick":
-          //   clientList.forEach(function(client) {
-          //     if (client.id === messageObj.id) {
-          //       client.experiences = messageObj.experiences;
-          //       console.log("EXP PICK - FR BACKEND:", messageObj);
-          //     }
-          //   });
-          //   // wss.broadcast(JSON.stringify(messageObj));
-          //   break;
+          case "experiencePick":
+            clientList.forEach(function(client) {
+              if (client.id === messageObj.id) {
+                client.experiences = messageObj.experiences;
+                // console.log("EXP PICK - FR BACKEND:", messageObj);
+              }
+            });
+            wss.broadcast(JSON.stringify(messageObj));
+            break;
         }
       });
 
