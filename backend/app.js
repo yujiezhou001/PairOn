@@ -273,8 +273,10 @@ wss.on("connection", ws => {
           case "outgoingMessage":
             messageObj.type = "incomingMessage";
 
+            // wss.broadcast(JSON.stringify(messageObj));
+
             // FIX!!!! THIS DOES NOT WORK -- SEE OBJECT FORMAT
-            console.log("THIS HERRR IS CLIENT:", ws);
+            console.log("THIS HERRR IS CLIENT:", wss.clients);
             wss.clients.forEach(function each(client) {
               if (messageObj.recipientId === client.id) {
                 client.send(JSON.stringify(messageObj));

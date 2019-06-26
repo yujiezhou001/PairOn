@@ -13,8 +13,8 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {
-        id: "10",
-        firstName: "Magnolia",
+        id: null,
+        firstName: null,
         hometown: null,
         experiences: "All",
         avatarURL: null,
@@ -87,9 +87,25 @@ class App extends Component {
   };
 
   handleOnMessage = event => {
-    const usersObj = JSON.parse(event.data);
-    this.setState(usersObj);
-    console.log(usersObj);
+    // const usersObj = JSON.parse(event.data);
+    // this.setState(usersObj);
+    // console.log(usersObj);
+
+    let data = JSON.parse(event.data);
+
+    if (data.type === "incomingMessage") {
+      this.setState({ chatMessages: [...this.state.chatMessages, data] });
+      console.log("CHAT BROADCAST BACK TO ME!", data);
+      // } else if (data.type === "incomingUserLoc") {
+      //   this.setState({
+      //     currentUser: { name: data.username, userColor: data.color }
+      //   });
+    } else if (data.type === "experiencePick") {
+      console.log("EXPERIENCE FROM BACKEND:", this.state);
+    } else {
+      console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
+      this.setState(data);
+    }
   };
 
   handleOnAuthorize = data => {
@@ -118,23 +134,23 @@ class App extends Component {
 
     this.socket.onmessage = this.handleOnMessage;
 
-    this.socket.onmessage = event => {
-      let data = JSON.parse(event.data);
+    // this.socket.onmessage = event => {
+    //   let data = JSON.parse(event.data);
 
-      if (data.type === "incomingMessage") {
-        this.setState({ chatMessages: [...this.state.chatMessages, data] });
-        console.log("CHAT BROADCAST BACK TO ME!", data);
-        // } else if (data.type === "incomingUserLoc") {
-        //   this.setState({
-        //     currentUser: { name: data.username, userColor: data.color }
-        //   });
-      } else if (data.type === "experiencePick") {
-        console.log("EXPERIENCE FROM BACKEND:", this.state);
-      } else {
-        console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
-        this.setState(data);
-      }
-    };
+    //   if (data.type === "incomingMessage") {
+    //     this.setState({ chatMessages: [...this.state.chatMessages, data] });
+    //     console.log("CHAT BROADCAST BACK TO ME!", data);
+    //     // } else if (data.type === "incomingUserLoc") {
+    //     //   this.setState({
+    //     //     currentUser: { name: data.username, userColor: data.color }
+    //     //   });
+    //   } else if (data.type === "experiencePick") {
+    //     console.log("EXPERIENCE FROM BACKEND:", this.state);
+    //   } else {
+    //     console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
+    //     this.setState(data);
+    //   }
+    // };
   }
 
   render() {
