@@ -194,6 +194,8 @@ const fakeExperience = [
 
 wss.on("connection", ws => {
   console.log("Client connected");
+  ws.id = uuidv4();
+
   // once login authentication working - wrap all this code in "Usercredentials valid?"
   ws.on("message", function incoming(message) {
     const messageObj = JSON.parse(message);
@@ -249,6 +251,7 @@ wss.on("connection", ws => {
           });
         })
         .finally(results => {
+          console.log("hiiiiii", wss.clients.size);
           wss.clients.forEach(function each(client) {
             client.send(JSON.stringify({ clientList }));
             // console.log("CLIENT LIST SENT TO FRONT-END", wss.clients[10]);
@@ -266,8 +269,8 @@ wss.on("connection", ws => {
             messageObj.type = "incomingMessage";
 
             // FIX!!!! THIS DOES NOT WORK -- SEE OBJECT FORMAT
+            console.log("THIS HERRR IS CLIENT:", ws);
             wss.clients.forEach(function each(client) {
-              console.log("THIS HERRR IS CLIENT:", client);
               if (messageObj.recipientId === client.id) {
                 client.send(JSON.stringify(messageObj));
               }
