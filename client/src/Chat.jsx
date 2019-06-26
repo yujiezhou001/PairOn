@@ -47,6 +47,10 @@ class Chat extends Component {
   //   });
   // }
 
+  componentDidMount() {
+    this.props.updateChatPartner(this.props.match.params.id);
+  }
+
   render() {
     const user = this.props.clientList.find(
       userObj => userObj.id === Number(this.props.match.params.id)

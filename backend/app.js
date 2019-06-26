@@ -201,6 +201,7 @@ wss.on("connection", ws => {
   });
 
   const clientList = [];
+  const currentUser = {};
 
   knex
     .select("*")
@@ -250,7 +251,7 @@ wss.on("connection", ws => {
         .finally(results => {
           wss.clients.forEach(function each(client) {
             client.send(JSON.stringify({ clientList }));
-            // console.log("CLIENT LIST SENT TO FRONT-END", wss.clients);
+            // console.log("CLIENT LIST SENT TO FRONT-END", wss.clients[10]);
           });
         });
 
@@ -263,7 +264,14 @@ wss.on("connection", ws => {
         switch (messageObj.type) {
           case "outgoingMessage":
             messageObj.type = "incomingMessage";
-            wss.broadcast(JSON.stringify(messageObj));
+
+            wss.clients.forEach(function each(client) {
+              console.log("THIS HERRR IS CLIENT:", client);
+              if (messageObj.recipientId === client.id) {
+                client.send(JSON.stringify(messageObj));
+              }
+            });
+
             break;
           // case "outgoingClientList":
           //   messageObj.type = "incomingClientList";
@@ -272,9 +280,18 @@ wss.on("connection", ws => {
           case "outgoingCurrUserInfo":
             ourLocation.lat = messageObj.myLocation.lat;
             ourLocation.lng = messageObj.myLocation.lng;
+
+            // messageObj.type = "incomingCurrUserInfo";
+            // const realUserObj = {
+            //   type: messageObj.type,
+            //   currentUser: currentUser,
+            //   id: messageObj.id
+            // };
+
             // wss.broadcast(JSON.stringify(messageObj));
-            console.log("BACKEND - MY LOC OBJ", messageObj);
+            // console.log("BACKEND - REAL USER OBJ", realUserObj);
             break;
+
           // case "experiencePick":
           //   clientList.forEach(function(client) {
           //     if (client.id === messageObj.id) {

@@ -13,8 +13,8 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {
-        id: null,
-        firstName: null,
+        id: "10",
+        firstName: "Magnolia",
         hometown: null,
         experiences: "All",
         avatarURL: null,
@@ -23,9 +23,9 @@ class App extends Component {
         type: "live"
       },
       clientList: [], // full of currentUser objects sent from WebSocket
-      chatMessages: []
+      chatMessages: [],
+      chatPartner: { id: null }
     };
-    
   }
 
   btnAbsolutR = {
@@ -64,11 +64,18 @@ class App extends Component {
       experiences: experience
     };
     this.socket.send(JSON.stringify(experienceObj));
+    console.log("EXP OBJ:", experienceObj);
+  };
+
+  updateChatPartner = userId => {
+    this.setState({ chatPartner: { id: userId } });
   };
 
   addMessage = newMessage => {
     const messageObject = {
       username: this.state.currentUser.firstName,
+      senderId: this.state.currentUser.id,
+      recipientId: this.state.chatPartner.id,
       content: newMessage,
       type: "outgoingMessage"
     };
@@ -114,8 +121,8 @@ class App extends Component {
   render() {
     return (
       <div>
-        <BtnProfile btnAbsolutR={this.btnAbsolutR}/> 
-        <Router>          
+        <BtnProfile btnAbsolutR={this.btnAbsolutR} />
+        <Router>
           <Route
             exact
             path="/"
@@ -140,6 +147,7 @@ class App extends Component {
                 clientList={this.state.clientList}
                 addMessage={this.addMessage}
                 messages={this.state.chatMessages}
+                updateChatPartner={this.updateChatPartner}
               />
             )}
           />
