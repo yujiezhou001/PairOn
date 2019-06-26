@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import logo from "./logo.svg";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Chat } from "./Chat";
-import { Register } from "./Register"; 
+import { Register } from "./Register";
 import { Login } from "./Login";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
@@ -38,9 +38,10 @@ class App extends Component {
   updateCurrentLocation = locationObject => {
     let currentUser = this.state.currentUser;
     currentUser.currentLocation = locationObject;
-    this.setState(currentUser);
+    console.log("THIS IS CURRENT USER - FE:", currentUser);
+    // this.setState(currentUser);
 
-    // this.setState({ currentUser: { currentLocation: locationObject } });
+    this.setState({ currentUser: currentUser });
 
     const locObject = {
       type: "outgoingCurrUserInfo",
@@ -56,7 +57,7 @@ class App extends Component {
   updateExperiences = experience => {
     let currentUser = this.state.currentUser;
     currentUser.experiences = experience;
-    this.setState(currentUser);
+    this.setState({ currentUser: currentUser });
     const experienceObj = {
       type: "experiencePick",
       id: this.state.currentUser.id,
@@ -72,11 +73,6 @@ class App extends Component {
       type: "outgoingMessage"
     };
 
-    this.setState({
-      chatMessages: [
-        { user: messageObject.username, content: messageObject.content }
-      ]
-    });
     console.log("SEND", newMessage, "TO BACKEND!!!!");
     console.log(messageObject);
     this.socket.send(JSON.stringify(messageObject));
@@ -99,7 +95,6 @@ class App extends Component {
     this.socket.onmessage = event => {
       let data = JSON.parse(event.data);
 
-
       if (data.type === "incomingMessage") {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
         console.log("CHAT BROADCAST BACK TO ME!", data);
@@ -108,15 +103,13 @@ class App extends Component {
         //     currentUser: { name: data.username, userColor: data.color }
         //   });
       } else if (data.type === "experiencePick") {
-        this.setState({ currentUser: { experiences: data.experiences } });
         console.log("EXPERIENCE FROM BACKEND:", this.state);
       } else {
         console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
         this.setState(data);
       }
     };
-
-}
+  }
 
   render() {
     return (
