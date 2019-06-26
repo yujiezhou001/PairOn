@@ -6,7 +6,8 @@ class Login extends React.Component {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      authorize: ''
     };
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -28,8 +29,11 @@ class Login extends React.Component {
   handleOnSubmit(e) {
     e.preventDefault();
     axios.post("/login", { username: this.state.username, password: this.state.password }).then(({ data }) => {
-      console.log(data);
-    });
+      this.setState({
+        authorize:data
+      });
+      this.props.authorize(data)
+    })
   }
 
   handleUsernameChange(e) {
@@ -45,6 +49,7 @@ class Login extends React.Component {
   }
 
   render() {
+    console.log(this.state.authorize)
     return (
       <div>
         <form onSubmit={this.handleOnSubmit}>

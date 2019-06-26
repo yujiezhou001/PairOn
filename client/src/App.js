@@ -24,7 +24,8 @@ class App extends Component {
       },
       clientList: [], // full of currentUser objects sent from WebSocket
       chatMessages: [],
-      chatPartner: { id: null }
+      chatPartner: { id: null },
+      authorize: false
     };
   }
 
@@ -91,6 +92,24 @@ class App extends Component {
     console.log(usersObj);
   };
 
+  handleOnAuthorize = data => {
+    const tempObj = {
+      id: data.userObj.id,
+      firstName: data.userObj.first_name,
+      lastName: data.userObj.last_name,
+      email: data.userObj.email,
+      password: data.userObj.password,
+      hometown: data.userObj.hometown,
+      experiences: "All",
+      avatarURL: data.userObj.avatar_url,
+      currentLocation: { lat: 0, lng: 0 },
+      aboutMe: data.userObj.about_me,
+      type: "live"
+    };
+    this.setState({ currentUser: tempObj });
+    this.setState({ authorize: data.authorize });
+  };
+
   componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001");
     this.socket.onopen = function() {
@@ -123,21 +142,23 @@ class App extends Component {
       <div>
         <BtnProfile btnAbsolutR={this.btnAbsolutR} />
         <Router>
-          <Route
-            exact
-            path="/"
-            render={props => (
-              <Home
-                {...props}
-                clientList={this.state.clientList}
-                updateCurrentLocation={this.updateCurrentLocation}
-                currentLocation={this.state.currentUser.currentLocation}
-                updateExperiences={this.updateExperiences}
-                handleOnClick={this.state.handleOnClick}
-                currentExperiences={this.state.currentUser.experiences}
-              />
-            )}
-          />
+          {this.state.authorize && (
+            <Route
+              exact
+              path="/"
+              render={props => (
+                <Home
+                  {...props}
+                  clientList={this.state.clientList}
+                  updateCurrentLocation={this.updateCurrentLocation}
+                  currentLocation={this.state.currentUser.currentLocation}
+                  updateExperiences={this.updateExperiences}
+                  handleOnClick={this.state.handleOnClick}
+                  currentExperiences={this.state.currentUser.experiences}
+                />
+              )}
+            />
+          )}
           <Route
             exact
             path="/chat/:id"
@@ -151,7 +172,14 @@ class App extends Component {
               />
             )}
           />
-          <Route path="/login" render={() => <Login />} />
+          {!this.state.authorize && (
+            <Route
+              path="/login"
+              render={props => (
+                <Login {...props} authorize={this.handleOnAuthorize} />
+              )}
+            />
+          )}
           <Route path="/register" render={() => <Register />} />
           <Route
             path="/users/:id"
@@ -167,9 +195,9 @@ class App extends Component {
               <li>
                 <Link to="/users/:id">Profile</Link>
               </li>
-              <li>
-                <Link to="/login/">Login</Link>
-              </li>
+              {!this.state.authorize && (
+                <li>{<Link to="/login/">Login</Link>}</li>
+              )}
               <li>
                 <Link to="/register/">Register</Link>
               </li>

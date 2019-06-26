@@ -12,10 +12,21 @@ const http = require("http");
 require("dotenv").config();
 const passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy;
+const cors = require("cors");
 
 // express server
 const app = express();
 //Websocket Server
+
+const corsOptions = {
+  origin: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  preflightContinue: true,
+  maxAge: 600
+};
+app.options("*", cors(corsOptions));
+app.use(cors(corsOptions));
 
 const SocketServer = require("ws");
 var server = http.createServer(app);
@@ -61,6 +72,12 @@ app.use(function(err, req, res, next) {
 });
 
 // User Authentication
+// knex.select("*")
+// .from("users")
+// .where("email", username)
+// .then(user => console.log(user));
+// }
+// ))
 
 passport.use(
   new LocalStrategy(
@@ -70,39 +87,27 @@ passport.use(
     },
 
     function(username, password, done) {
-      knex("users")
+      knex
         .select("*")
+        .from("users")
         .where("email", username)
-        .then((err, user) => {
-          if (err) {
-            return done(err);
+        .first()
+        .then(user => {
+          console.log("THIS IS DIRECTLY FROM CONSOLE LOG:", user);
+          if (!user) return done(null, false);
+          if (password !== user.password) {
+            return done(null, false);
+          } else {
+            return done(null, user);
           }
-          if (!user) {
-            return done(null, false, { message: "Incorrect email." });
-          }
-          console.log(user);
-          return done(null, user);
+        })
+        .catch(err => {
+          return done(err);
         });
-      // User.findOne({ username: username }, function (err, user) {
-      //   if (err) { return done(err); }
-      //   if (!user) {
-      //     return done(null, false, { message: 'Incorrect email.' });
-      //   }
-      //   if (!user.validPassword(password)) {
-      //     return done(null, false, { message: 'Incorrect password.' });
-      //   }
-      //   console.log({user})
-      //   return done(null, user);
-      // });
     }
   )
 );
-app.post("/login", passport.authenticate("local"), function(req, res) {
-  // If this function gets called, authentication was successful.
-  // `req.user` contains the authenticated user.
-  console.log("email validate");
-  res.send("success");
-});
+
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -277,10 +282,10 @@ wss.on("connection", ws => {
             });
 
             break;
-          // case "outgoingClientList":
-          //   messageObj.type = "incomingClientList";
-          //   wss.broadcast(JSON.stringify(messageObj));
-          //   break;
+          case "outgoingClientList":
+            messageObj.type = "incomingClientList";
+            wss.broadcast(JSON.stringify(messageObj));
+            break;
           case "outgoingCurrUserInfo":
             ourLocation.lat = messageObj.myLocation.lat;
             ourLocation.lng = messageObj.myLocation.lng;
@@ -295,16 +300,15 @@ wss.on("connection", ws => {
             // wss.broadcast(JSON.stringify(messageObj));
             // console.log("BACKEND - REAL USER OBJ", realUserObj);
             break;
-
-          // case "experiencePick":
-          //   clientList.forEach(function(client) {
-          //     if (client.id === messageObj.id) {
-          //       client.experiences = messageObj.experiences;
-          //       console.log("EXP PICK - FR BACKEND:", messageObj);
-          //     }
-          //   });
-          //   // wss.broadcast(JSON.stringify(messageObj));
-          //   break;
+          case "experiencePick":
+            clientList.forEach(function(client) {
+              if (client.id === messageObj.id) {
+                client.experiences = messageObj.experiences;
+                // console.log("EXP PICK - FR BACKEND:", messageObj);
+              }
+            });
+            wss.broadcast(JSON.stringify(messageObj));
+            break;
         }
       });
 
