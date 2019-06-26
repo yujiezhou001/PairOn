@@ -79,6 +79,8 @@ app.use(function(err, req, res, next) {
 // }
 // ))
 
+const clientList = [];
+
 passport.use(new LocalStrategy({
     usernameField: 'username',
     passwordField: 'password'
@@ -198,7 +200,7 @@ wss.on("connection", ws => {
   const messageObj = JSON.parse(message);
   console.log("This is from received message:", messageObj)
   });
-const clientList = [];
+
   knex
     .select("*")
     .from("users")
