@@ -87,6 +87,7 @@ passport.use(new LocalStrategy({
   function(username, password, done) {
     knex.select("*").from('users').where("email", username).first()
     .then((user) => {
+    console.log("THIS IS DIRECTLY FROM CONSOLE LOG:", user)
     if (!user) return done(null, false);
     if (password !== user.password) {
       return done(null, false);

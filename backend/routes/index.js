@@ -41,8 +41,7 @@ router.post('/login',
   function(req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
-    console.log('email validate')
-    res.send("success")
+    res.json({userObj: req.user, authorize: true})
   });
 
 // router.post('/login', function(req, res, next) {
