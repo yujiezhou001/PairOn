@@ -265,6 +265,7 @@ wss.on("connection", ws => {
           case "outgoingMessage":
             messageObj.type = "incomingMessage";
 
+            // FIX!!!! THIS DOES NOT WORK -- SEE OBJECT FORMAT
             wss.clients.forEach(function each(client) {
               console.log("THIS HERRR IS CLIENT:", client);
               if (messageObj.recipientId === client.id) {
