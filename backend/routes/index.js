@@ -1,11 +1,7 @@
 const express = require('express');
 const bodyParser = require("body-parser");
 const flash=require("connect-flash");
-const app = express();
-app.use(flash());
 const router = express.Router();
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 const passport = require('passport')
 
 
@@ -13,6 +9,10 @@ const passport = require('passport')
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+
+router.get('/current_user', (req, res) => {
+  res.json({userObj: req.user, authorize: true})
+})
 
 router.post('/chat', function(req, res, next) {
   res.json({
@@ -44,6 +44,12 @@ router.post('/login',
     res.json({userObj: req.user, authorize: true})
   });
 
+
+  router.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/');
+  });
+  
 // router.post('/login', function(req, res, next) {
 //   res.send({
 //     email: req.body.username,
