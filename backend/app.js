@@ -12,10 +12,21 @@ const http = require("http");
 require("dotenv").config();
 const passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy;
+const cors = require("cors");
 
 // express server
 const app = express();
 //Websocket Server
+
+const corsOptions = {
+  origin: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  preflightContinue: true,
+  maxAge: 600,
+};
+app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
 
 const SocketServer = require("ws");
 var server = http.createServer(app);
@@ -61,48 +72,34 @@ app.use(function(err, req, res, next) {
 });
 
 // User Authentication
+// knex.select("*")
+// .from("users")
+// .where("email", username)
+// .then(user => console.log(user));
+// }
+// ))
 
-passport.use(
-  new LocalStrategy(
-    {
-      usernameField: "username",
-      passwordField: "password"
-    },
+passport.use(new LocalStrategy({
+    usernameField: 'username',
+    passwordField: 'password'
+  },
 
-    function(username, password, done) {
-      knex("users")
-        .select("*")
-        .where("email", username)
-        .then((err, user) => {
-          if (err) {
-            return done(err);
-          }
-          if (!user) {
-            return done(null, false, { message: "Incorrect email." });
-          }
-          console.log(user);
-          return done(null, user);
-        });
-      // User.findOne({ username: username }, function (err, user) {
-      //   if (err) { return done(err); }
-      //   if (!user) {
-      //     return done(null, false, { message: 'Incorrect email.' });
-      //   }
-      //   if (!user.validPassword(password)) {
-      //     return done(null, false, { message: 'Incorrect password.' });
-      //   }
-      //   console.log({user})
-      //   return done(null, user);
-      // });
+  function(username, password, done) {
+    knex.select("*").from('users').where("email", username).first()
+    .then((user) => {
+    console.log("THIS IS DIRECTLY FROM CONSOLE LOG:", user)
+    if (!user) return done(null, false);
+    if (password !== user.password) {
+      return done(null, false);
+     } else {
+      return done(null, user);
     }
-  )
-);
-app.post("/login", passport.authenticate("local"), function(req, res) {
-  // If this function gets called, authentication was successful.
-  // `req.user` contains the authenticated user.
-  console.log("email validate");
-  res.send("success");
-});
+  })
+  .catch((err) => { return done(err); });
+}));
+
+
+
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -126,6 +123,8 @@ passport.deserializeUser(function(id, done) {
 //                                    failureRedirect: '/login',
 //                                    failureFlash: 'Invalid username or password.'})
 //   );
+
+
 
 //Socket Server
 const PORT = 3001;
@@ -195,9 +194,9 @@ const fakeExperience = [
 wss.on("connection", ws => {
   console.log("Client connected");
   // once login authentication working - wrap all this code in "Usercredentials valid?"
-  ws.on("message", function incoming(message) {
-    const messageObj = JSON.parse(message);
-    console.log("This is from received message:", messageObj);
+  ws.on('message', function incoming(message) {
+  const messageObj = JSON.parse(message);
+  console.log("This is from received message:", messageObj)
   });
 
   const clientList = [];
@@ -208,7 +207,7 @@ wss.on("connection", ws => {
     .where("id", "<", 10) // when login is implement : where (type = "fake")
     .then(results => {
       let i = 1;
-      results.forEach(userObj => {
+      results.forEach((userObj) => {
         clientList.push({
           id: i,
           firstName: userObj.first_name,
@@ -265,25 +264,25 @@ wss.on("connection", ws => {
             messageObj.type = "incomingMessage";
             wss.broadcast(JSON.stringify(messageObj));
             break;
-          // case "outgoingClientList":
-          //   messageObj.type = "incomingClientList";
-          //   wss.broadcast(JSON.stringify(messageObj));
-          //   break;
+          case "outgoingClientList":
+            messageObj.type = "incomingClientList";
+            wss.broadcast(JSON.stringify(messageObj));
+            break;
           case "outgoingCurrUserInfo":
             ourLocation.lat = messageObj.myLocation.lat;
             ourLocation.lng = messageObj.myLocation.lng;
             // wss.broadcast(JSON.stringify(messageObj));
             console.log("BACKEND - MY LOC OBJ", messageObj);
             break;
-          // case "experiencePick":
-          //   clientList.forEach(function(client) {
-          //     if (client.id === messageObj.id) {
-          //       client.experiences = messageObj.experiences;
-          //       console.log("EXP PICK - FR BACKEND:", messageObj);
-          //     }
-          //   });
-          //   // wss.broadcast(JSON.stringify(messageObj));
-          //   break;
+          case "experiencePick":
+            clientList.forEach(function(client) {
+              if (client.id === messageObj.id) {
+                client.experiences = messageObj.experiences;
+                // console.log("EXP PICK - FR BACKEND:", messageObj);
+              }
+            });
+            wss.broadcast(JSON.stringify(messageObj));
+            break;
         }
       });
 
