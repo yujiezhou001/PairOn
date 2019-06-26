@@ -36,21 +36,20 @@ router.post('/register', function(req, res, next) {
 //   )
 // );
 
-app.post('/login',
+router.post('/login',
   passport.authenticate('local'),
   function(req, res) {
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
-    console.log('email validate')
-    res.send("success")
+    res.json({userObj: req.user, authorize: true})
   });
 
 // router.post('/login', function(req, res, next) {
-//   // res.send({
-//   //   email: req.body.username,
-//   //   password: req.body.password,
-//   //   test: "you hit login"
-//   // })
+//   res.send({
+//     email: req.body.username,
+//     password: req.body.password,
+//     test: "you hit login"
+//   })
 // });
 
 router.post('/users/:id', function(req, res, next) {
