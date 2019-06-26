@@ -78,10 +78,10 @@ export class MapContainer extends Component {
   }
   // const updatedLocation = this.props.currentUser.currentLocation
   render() {
-    //const { lat, lng } = this.props.currentLocation;
+    const { lat, lng } = this.props.currentLocation;
 
-    const lat = 45.5275387;
-    const lng = -73.5986187;
+    // const lat = 45.5275387;
+    // const lng = -73.5986187;
 
     const imgPicture = {
       width: "50px"
@@ -96,9 +96,7 @@ export class MapContainer extends Component {
 
     // console.log("This is persons",this.state.persons)
     return (
-
       <GoogleMap
-
         ref={map => {
           this.map = map;
           if (map && lat && lng) {
@@ -115,9 +113,7 @@ export class MapContainer extends Component {
         }}
         defaultOptions={{ styles: mapStyles }}
       >
-
         <Circle
-
           defaultCenter={{
             lat: 45.5275387,
             lng: -73.5986187
@@ -127,34 +123,31 @@ export class MapContainer extends Component {
         />
 
         {this.state.persons.map((person, index) => {
-          if (this.props.currentExperiences === person.experiences || this.props.currentExperiences === "All" || person.experiences==="All") {
+          if (
+            this.props.currentExperiences === person.experiences ||
+            this.props.currentExperiences === "All" ||
+            person.experiences === "All"
+          ) {
             return (
               <Marker
-
                 key={index}
                 id={index}
                 position={{
                   lat: person.currentLocation.lat,
                   lng: person.currentLocation.lng
                 }}
-
                 onClick={() => this.setState({ selectedPerson: person })}
-
                 icon={{
                   url: `/waving-icon-18.jpg`,
                   scaledSize: new window.google.maps.Size(40, 40)
                 }}
-
               />
-            )
+            );
           }
-        }
-      )}
+        })}
 
         {this.state.selectedPerson && (
-
           <InfoWindow
-
             onCloseClick={() => {
               this.setState({ selectedPerson: null });
             }}
@@ -162,22 +155,19 @@ export class MapContainer extends Component {
               lat: this.state.selectedPerson.currentLocation.lat,
               lng: this.state.selectedPerson.currentLocation.lng
             }}
-
           >
             <div>
               <img
-
                 className="rounded-circle"
                 src={this.state.selectedPerson.avatarURL}
                 style={imgPicture}
-
               />
 
               <h5>{this.state.selectedPerson.firstName}</h5>
 
               <p>{this.state.selectedPerson.hometown}</p>
 
-               <a
+              <a
                 className="btn btn-primary btn-sm"
                 href={`../../users/${this.state.selectedPerson.id}`}
                 role="button"
@@ -195,33 +185,61 @@ export class MapContainer extends Component {
           </InfoWindow>
         )}
 
-         <button onClick={this.handleOnClick} value="Drinks" className="btn btn-primary btn-sm">
-                Drinks
-          </button>
+        <button
+          onClick={this.handleOnClick}
+          value="Drinks"
+          className="btn btn-primary btn-sm"
+        >
+          Drinks
+        </button>
 
-          <button onClick={this.handleOnClick} value="Food" className="btn btn-primary btn-sm">
-                Food
-          </button>
+        <button
+          onClick={this.handleOnClick}
+          value="Food"
+          className="btn btn-primary btn-sm"
+        >
+          Food
+        </button>
 
-          <button onClick={this.handleOnClick} value="Culture" className="btn btn-primary btn-sm">
-                Culture
-          </button>
+        <button
+          onClick={this.handleOnClick}
+          value="Culture"
+          className="btn btn-primary btn-sm"
+        >
+          Culture
+        </button>
 
-           <button onClick={this.handleOnClick} value="Events" className="btn btn-primary btn-sm">
-                Events
-          </button>
+        <button
+          onClick={this.handleOnClick}
+          value="Events"
+          className="btn btn-primary btn-sm"
+        >
+          Events
+        </button>
 
-          <button onClick={this.handleOnClick} value="Sports" className="btn btn-primary btn-sm">
-                Sports
-          </button>
+        <button
+          onClick={this.handleOnClick}
+          value="Sports"
+          className="btn btn-primary btn-sm"
+        >
+          Sports
+        </button>
 
-          <button onClick={this.handleOnClick} value="Unique" className="btn btn-primary btn-sm">
-                Unique
-          </button>
+        <button
+          onClick={this.handleOnClick}
+          value="Unique"
+          className="btn btn-primary btn-sm"
+        >
+          Unique
+        </button>
 
-          <button onClick={this.handleOnClick} value="All" className="btn btn-primary btn-sm">
-                All
-          </button>
+        <button
+          onClick={this.handleOnClick}
+          value="All"
+          className="btn btn-primary btn-sm"
+        >
+          All
+        </button>
       </GoogleMap>
     );
   }

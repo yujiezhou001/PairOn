@@ -30,9 +30,10 @@ class App extends Component {
   updateCurrentLocation = locationObject => {
     let currentUser = this.state.currentUser;
     currentUser.currentLocation = locationObject;
-    this.setState(currentUser);
+    console.log("THIS IS CURRENT USER - FE:", currentUser);
+    // this.setState(currentUser);
 
-    // this.setState({ currentUser: { currentLocation: locationObject } });
+    this.setState({ currentUser: currentUser });
 
     const locObject = {
       type: "outgoingCurrUserInfo",
@@ -48,7 +49,7 @@ class App extends Component {
   updateExperiences = experience => {
     let currentUser = this.state.currentUser;
     currentUser.experiences = experience;
-    this.setState(currentUser);
+    this.setState({ currentUser: currentUser });
     const experienceObj = {
       type: "experiencePick",
       id: this.state.currentUser.id,
@@ -94,7 +95,6 @@ class App extends Component {
         //     currentUser: { name: data.username, userColor: data.color }
         //   });
       } else if (data.type === "experiencePick") {
-        this.setState({ currentUser: { experiences: data.experiences } });
         console.log("EXPERIENCE FROM BACKEND:", this.state);
       } else {
         console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
