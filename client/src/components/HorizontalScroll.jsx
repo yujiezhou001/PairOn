@@ -41,7 +41,7 @@ class HorizontalScroll extends React.Component {
       return (
         <button
           onClick={this.props.handelExperience}
-          className={`btn btn-primary btn-lg menu-item ${selected ? 'active' : ''}`}
+          className={`btn btn-primary btn-lg menu-item ${text} ${selected ? 'active' : ''}`}
           value={text}
         >
           {text}
