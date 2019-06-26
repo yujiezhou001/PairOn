@@ -79,7 +79,6 @@ app.use(function(err, req, res, next) {
 // }
 // ))
 
-const clientList = [];
 
 passport.use(new LocalStrategy({
     usernameField: 'username',
@@ -193,6 +192,65 @@ const fakeExperience = [
   "Culture"
 ];
 
+
+const fakeLocations = [
+        {lat: 45.525063,
+          lng: -73.59943},
+
+        {lat: 45.5246127,
+         lng: -73.5987241},
+        {
+          lat: 45.52744,
+          lng: -73.59643
+        },
+        {
+          lat: 45.527255,
+          lng: -73.597953
+        },
+        {
+          lat: 45.5274897,
+          lng: -73.5984506
+        },
+        {
+          lat: 45.5311081,
+          lng: -73.5995769
+        },
+        {
+
+          lat: 45.5351011,
+          lng: -73.5995709
+        },
+        {
+          lat: 45.5241357,
+          lng: -73.5970109
+        },
+        {
+          lat: 45.5279216,
+          lng: -73.5965196
+        },
+        {
+          lat: 45.5277183,
+          lng: -73.5944831
+        },
+        {
+          lat: 45.5303865,
+          lng: -73.5988069
+        },
+        {
+
+          lat: 45.5263447,
+          lng: -73.5983598
+        },
+        {
+          lat: 45.5261267,
+          lng: -73.5972654
+        },
+        {
+          lat: 45.52714,
+          lng: -73.59613
+        }
+      ]
+
 wss.on("connection", ws => {
   console.log("Client connected");
   // once login authentication working - wrap all this code in "Usercredentials valid?"
@@ -200,6 +258,8 @@ wss.on("connection", ws => {
   const messageObj = JSON.parse(message);
   console.log("This is from received message:", messageObj)
   });
+
+const clientList = [];
 
   knex
     .select("*")
@@ -214,7 +274,7 @@ wss.on("connection", ws => {
           hometown: userObj.hometown,
           experiences: fakeExperience[i],
           avatarURL: userObj.avatar_url,
-          currentLocation: generateRandomPoint({lat:45.530336999999996, lng:-73.60290119999999}, 100),
+          currentLocation: fakeLocations[i],//generateRandomPoint({lat:45.530336999999996, lng:-73.60290119999999}, 100),
           aboutMe: userObj.about_me,
           type: "incomingClientList"
         });
