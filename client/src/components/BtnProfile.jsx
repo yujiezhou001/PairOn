@@ -3,13 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
 
 const btnProfile = {
-  width: "2em",
-  height: "2em"
+  width: "4em",
+  height: "4em",
+  color: "#000",  
 };
 
-function BtnProfile() {
+function BtnProfile(props) {
   return (
-    <a href="#" role="button">
+    <a href="/" role="button" style={props.btnAbsolutR} >
       <FontAwesomeIcon style={btnProfile} icon={faUserCircle} />
     </a>
   );

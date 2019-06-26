@@ -184,62 +184,63 @@ export class MapContainer extends Component {
             </div>
           </InfoWindow>
         )}
+        <div className="scroll-view-horizon">
+          <button
+            onClick={this.handleOnClick}
+            value="Drinks"
+            className="btn btn-primary btn-sm"
+          >
+            Drinks
+          </button>
 
-        <button
-          onClick={this.handleOnClick}
-          value="Drinks"
-          className="btn btn-primary btn-sm"
-        >
-          Drinks
-        </button>
+          <button
+            onClick={this.handleOnClick}
+            value="Food"
+            className="btn btn-primary btn-sm"
+          >
+            Food
+          </button>
 
-        <button
-          onClick={this.handleOnClick}
-          value="Food"
-          className="btn btn-primary btn-sm"
-        >
-          Food
-        </button>
+          <button
+            onClick={this.handleOnClick}
+            value="Culture"
+            className="btn btn-primary btn-sm"
+          >
+            Culture
+          </button>
 
-        <button
-          onClick={this.handleOnClick}
-          value="Culture"
-          className="btn btn-primary btn-sm"
-        >
-          Culture
-        </button>
+          <button
+            onClick={this.handleOnClick}
+            value="Events"
+            className="btn btn-primary btn-sm"
+          >
+            Events
+          </button>
 
-        <button
-          onClick={this.handleOnClick}
-          value="Events"
-          className="btn btn-primary btn-sm"
-        >
-          Events
-        </button>
+          <button
+            onClick={this.handleOnClick}
+            value="Sports"
+            className="btn btn-primary btn-sm"
+          >
+            Sports
+          </button>
 
-        <button
-          onClick={this.handleOnClick}
-          value="Sports"
-          className="btn btn-primary btn-sm"
-        >
-          Sports
-        </button>
+          <button
+            onClick={this.handleOnClick}
+            value="Unique"
+            className="btn btn-primary btn-sm"
+          >
+            Unique
+          </button>
 
-        <button
-          onClick={this.handleOnClick}
-          value="Unique"
-          className="btn btn-primary btn-sm"
-        >
-          Unique
-        </button>
-
-        <button
-          onClick={this.handleOnClick}
-          value="All"
-          className="btn btn-primary btn-sm"
-        >
-          All
-        </button>
+          <button
+            onClick={this.handleOnClick}
+            value="All"
+            className="btn btn-primary btn-sm"
+          >
+            All
+          </button>
+        </div>
       </GoogleMap>
     );
   }
