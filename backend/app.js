@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const bodyParser = require("body-parser");
 const indexRouter = require("./routes/index");
+const session = require("express-session");
 const usersRouter = require("./routes/users");
 const knexConfig = require("./knexfile");
 const knex = require("knex")(knexConfig["development"]);
@@ -36,21 +37,20 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(logger("dev"));
-app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
+//app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(bodyParser());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
-// app.use(express.session({ secret: 'keyboard cat' }));
+app.use(session({ secret: 'keyboard cat' }));
 app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.session());
 
-app.use(passport.initialize());
-//app.use(passport.session());
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -107,9 +107,9 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
+  knex.select("*").from('users').where("id", id).then((user)=> {
+    done(null, user[0]);
+  })
 });
 
 // app.post('/login',

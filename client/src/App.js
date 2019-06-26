@@ -80,9 +80,21 @@ class App extends Component {
   };
 
   handleOnMessage = event => {
-    const usersObj = JSON.parse(event.data);
-    this.setState(usersObj);
-    console.log(usersObj);
+    let data = JSON.parse(event.data);
+
+    if (data.type === "incomingMessage") {
+      this.setState({ chatMessages: [...this.state.chatMessages, data] });
+      console.log("CHAT BROADCAST BACK TO ME!", data);
+      // } else if (data.type === "incomingUserLoc") {
+      //   this.setState({
+      //     currentUser: { name: data.username, userColor: data.color }
+      //   });
+    } else if (data.type === "experiencePick") {
+      console.log("EXPERIENCE FROM BACKEND:", this.state);
+    } else {
+      console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
+      this.setState(data);
+    }
   };
 
   handleOnAuthorize = data => {
@@ -103,31 +115,26 @@ class App extends Component {
     this.setState({authorize: data.authorize})
   }
 
-  componentDidMount() {
-    this.socket = new WebSocket("ws://localhost:3001");
+  async componentDidMount() {
+
+    this.socket = new WebSocket("ws://localhost:3001/");
+
     this.socket.onopen = function() {
       console.log("Connected to server");
     };
+    this.socket.onmessage = (e) => {
+      console.log('WS EVENT', e);
+      this.handleOnMessage(e);
+    }
 
-    // this.socket.onmessage = this.handleOnMessage;
+    try {
+      const response = await fetch('http://localhost:3001/current_user', {credentials: 'include'});
+      const data = await response.json();
+      this.handleOnAuthorize(data);
+    } catch(e) {
+      // not logged in
+    }
 
-    this.socket.onmessage = event => {
-      let data = JSON.parse(event.data);
-
-      if (data.type === "incomingMessage") {
-        this.setState({ chatMessages: [...this.state.chatMessages, data] });
-        // console.log("CHAT BROADCAST BACK TO ME!", data);
-        // } else if (data.type === "incomingUserLoc") {
-        //   this.setState({
-        //     currentUser: { name: data.username, userColor: data.color }
-        //   });
-      } else if (data.type === "experiencePick") {
-        // console.log("EXPERIENCE FROM BACKEND:", this.state);
-      } else {
-        // console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
-        this.setState(data);
-      }
-    };
   }
 
   render() {
