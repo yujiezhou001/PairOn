@@ -25,7 +25,7 @@ class App extends Component {
       clientList: [], // full of currentUser objects sent from WebSocket
       chatMessages: []
     };
-    
+
   }
 
   btnAbsolutR = {
@@ -50,7 +50,7 @@ class App extends Component {
     };
 
     this.socket.send(JSON.stringify(locObject));
-    console.log("USER OBJ SENT TO BACKEND", locObject);
+    // console.log("USER OBJ SENT TO BACKEND", locObject);
     // this.socket.send(JSON.stringify(locationObject))
   };
 
@@ -73,8 +73,8 @@ class App extends Component {
       type: "outgoingMessage"
     };
 
-    console.log("SEND", newMessage, "TO BACKEND!!!!");
-    console.log(messageObject);
+    // console.log("SEND", newMessage, "TO BACKEND!!!!");
+    // console.log(messageObject);
     this.socket.send(JSON.stringify(messageObject));
   };
 
@@ -97,15 +97,15 @@ class App extends Component {
 
       if (data.type === "incomingMessage") {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
-        console.log("CHAT BROADCAST BACK TO ME!", data);
+        // console.log("CHAT BROADCAST BACK TO ME!", data);
         // } else if (data.type === "incomingUserLoc") {
         //   this.setState({
         //     currentUser: { name: data.username, userColor: data.color }
         //   });
       } else if (data.type === "experiencePick") {
-        console.log("EXPERIENCE FROM BACKEND:", this.state);
+        // console.log("EXPERIENCE FROM BACKEND:", this.state);
       } else {
-        console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
+        // console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
         this.setState(data);
       }
     };
@@ -114,8 +114,8 @@ class App extends Component {
   render() {
     return (
       <div>
-        <BtnProfile btnAbsolutR={this.btnAbsolutR}/> 
-        <Router>          
+        <BtnProfile btnAbsolutR={this.btnAbsolutR}/>
+        <Router>
           <Route
             exact
             path="/"

@@ -250,7 +250,7 @@ wss.on("connection", ws => {
         .finally(results => {
           wss.clients.forEach(function each(client) {
             client.send(JSON.stringify({ clientList }));
-            // console.log("CLIENT LIST SENT TO FRONT-END", wss.clients);
+            console.log("THIS:!!!! ",{clientList});
           });
         });
 
