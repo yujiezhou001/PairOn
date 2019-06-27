@@ -21,12 +21,12 @@ const app = express();
 
 const corsOptions = {
   origin: true,
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   preflightContinue: true,
-  maxAge: 600,
+  maxAge: 600
 };
-app.options('*', cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
 
 const SocketServer = require("ws");
@@ -47,10 +47,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
-app.use(session({ secret: 'keyboard cat' }));
+app.use(session({ secret: "keyboard cat" }));
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -79,36 +78,47 @@ app.use(function(err, req, res, next) {
 // }
 // ))
 
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: "username",
+      passwordField: "password"
+    },
 
-passport.use(new LocalStrategy({
-    usernameField: 'username',
-    passwordField: 'password'
-  },
-
-  function(username, password, done) {
-    knex.select("*").from('users').where("email", username).first()
-    .then((user) => {
-    console.log("THIS IS DIRECTLY FROM CONSOLE LOG:", user)
-    if (!user) return done(null, false);
-    if (password !== user.password) {
-      return done(null, false);
-     } else {
-      return done(null, user);
+    function(username, password, done) {
+      knex
+        .select("*")
+        .from("users")
+        .where("email", username)
+        .first()
+        .then(user => {
+          console.log("THIS IS DIRECTLY FROM CONSOLE LOG:", user);
+          if (!user) return done(null, false);
+          if (password !== user.password) {
+            return done(null, false);
+          } else {
+            return done(null, user);
+          }
+        })
+        .catch(err => {
+          return done(err);
+        });
     }
-  })
-  .catch((err) => { return done(err); });
-}));
-
-
+  )
+);
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-  knex.select("*").from('users').where("id", id).then((user)=> {
-    done(null, user[0]);
-  })
+  knex
+    .select("*")
+    .from("users")
+    .where("id", id)
+    .then(user => {
+      done(null, user[0]);
+    });
 });
 
 // app.post('/login',
@@ -124,8 +134,6 @@ passport.deserializeUser(function(id, done) {
 //                                    failureRedirect: '/login',
 //                                    failureFlash: 'Invalid username or password.'})
 //   );
-
-
 
 //Socket Server
 const PORT = 3001;
@@ -192,74 +200,69 @@ const fakeExperience = [
   "Culture"
 ];
 
-
 const fakeLocations = [
-        {lat: 45.525063,
-          lng: -73.59943},
+  { lat: 45.525063, lng: -73.59943 },
 
-        {lat: 45.5246127,
-         lng: -73.5987241},
-        {
-          lat: 45.52744,
-          lng: -73.59643
-        },
-        {
-          lat: 45.527255,
-          lng: -73.597953
-        },
-        {
-          lat: 45.5274897,
-          lng: -73.5984506
-        },
-        {
-          lat: 45.5311081,
-          lng: -73.5995769
-        },
-        {
-
-          lat: 45.5351011,
-          lng: -73.5995709
-        },
-        {
-          lat: 45.5241357,
-          lng: -73.5970109
-        },
-        {
-          lat: 45.5279216,
-          lng: -73.5965196
-        },
-        {
-          lat: 45.5277183,
-          lng: -73.5944831
-        },
-        {
-          lat: 45.5303865,
-          lng: -73.5988069
-        },
-        {
-
-          lat: 45.5263447,
-          lng: -73.5983598
-        },
-        {
-          lat: 45.5261267,
-          lng: -73.5972654
-        },
-        {
-          lat: 45.52714,
-          lng: -73.59613
-        }
-      ]
+  { lat: 45.5246127, lng: -73.5987241 },
+  {
+    lat: 45.52744,
+    lng: -73.59643
+  },
+  {
+    lat: 45.527255,
+    lng: -73.597953
+  },
+  {
+    lat: 45.5274897,
+    lng: -73.5984506
+  },
+  {
+    lat: 45.5311081,
+    lng: -73.5995769
+  },
+  {
+    lat: 45.5351011,
+    lng: -73.5995709
+  },
+  {
+    lat: 45.5241357,
+    lng: -73.5970109
+  },
+  {
+    lat: 45.5279216,
+    lng: -73.5965196
+  },
+  {
+    lat: 45.5277183,
+    lng: -73.5944831
+  },
+  {
+    lat: 45.5303865,
+    lng: -73.5988069
+  },
+  {
+    lat: 45.5263447,
+    lng: -73.5983598
+  },
+  {
+    lat: 45.5261267,
+    lng: -73.5972654
+  },
+  {
+    lat: 45.52714,
+    lng: -73.59613
+  }
+];
 
 wss.on("connection", ws => {
   console.log("Client connected");
   // once login authentication working - wrap all this code in "Usercredentials valid?"
-  ws.on('message', function incoming(message) {
-  const messageObj = JSON.parse(message);
-  console.log("This is from received message:", messageObj)
+  ws.on("message", function incoming(message) {
+    const messageObj = JSON.parse(message);
+    console.log("This is from received message:", messageObj);
   });
 
-const clientList = [];
+  const clientList = [];
 
   knex
     .select("*")
@@ -267,14 +270,14 @@ const clientList = [];
     .where("id", "<", 10) // when login is implement : where (type = "fake")
     .then(results => {
       let i = 1;
-      results.forEach((userObj) => {
+      results.forEach(userObj => {
         clientList.push({
           id: i,
           firstName: userObj.first_name,
           hometown: userObj.hometown,
           experiences: fakeExperience[i],
           avatarURL: userObj.avatar_url,
-          currentLocation: fakeLocations[i],//generateRandomPoint({lat:45.530336999999996, lng:-73.60290119999999}, 100),
+          currentLocation: fakeLocations[i], //generateRandomPoint({lat:45.530336999999996, lng:-73.60290119999999}, 100),
           aboutMe: userObj.about_me,
           type: "incomingClientList"
         });
@@ -309,7 +312,7 @@ const clientList = [];
         .finally(results => {
           wss.clients.forEach(function each(client) {
             client.send(JSON.stringify({ clientList }));
-            console.log("THIS:!!!! ",{clientList});
+            console.log("THIS:!!!! ", { clientList });
           });
         });
 

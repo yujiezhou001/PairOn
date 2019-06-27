@@ -10,6 +10,7 @@ import {
   InfoWindow,
   Circle
 } from "react-google-maps";
+import { Link } from "react-router-dom";
 import mapStyles from "./mapStyles";
 import HorizontalScroll from "./components/HorizontalScroll.jsx";
 
@@ -175,20 +176,17 @@ export class MapContainer extends Component {
 
               <p>{this.state.selectedPerson.hometown}</p>
 
-              <a
-                className="btn btn-primary btn-sm"
-                href={`../../users/${this.state.selectedPerson.id}`}
-                role="button"
-              >
-                Profile
-              </a>
-              <a
-                className="btn btn-primary btn-sm"
-                href={`../../chat/${this.state.selectedPerson.id}`}
-                role="button"
-              >
-                Chat
-              </a>
+              <Link to={`../../users/${this.state.selectedPerson.id}`}>
+                <button type="button" className="btn btn-primary btn-sm">
+                  Profile
+                </button>
+              </Link>
+
+              <Link to={`../../chat/${this.state.selectedPerson.id}`}>
+                <button type="button" className="btn btn-primary btn-sm">
+                  Chat
+                </button>
+              </Link>
             </div>
           </InfoWindow>
         )}
