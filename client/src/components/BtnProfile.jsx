@@ -25,9 +25,10 @@ const BtnProfile = props => {
           <FontAwesomeIcon style={btnProfile} icon={faUserCircle} />
         </button>
         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a className="dropdown-item" href={`/users/${props.CurrentUserId}`}>
-            My profile
-          </a>
+          <div className="dropdown-item">
+            <Link to={`/users/${props.CurrentUserId}`}>My Profile</Link>
+          </div>
+
           {autorized && (
             <button className="dropdown-item" onClick={props.fnlogout}>
               {" "}

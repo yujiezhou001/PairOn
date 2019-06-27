@@ -160,13 +160,13 @@ class App extends Component {
   render() {
     return (
       <div>
-        <BtnProfile
-          btnAbsolutR={this.btnAbsolutR}
-          autorized={this.state.authorize}
-          fnlogout={this.logout}
-          CurrentUserId={this.state.currentUser.id}
-        />
         <Router>
+          <BtnProfile
+            btnAbsolutR={this.btnAbsolutR}
+            autorized={this.state.authorize}
+            fnlogout={this.logout}
+            CurrentUserId={this.state.currentUser.id}
+          />
           {this.state.authorize && (
             <Route
               exact
