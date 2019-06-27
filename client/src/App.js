@@ -160,6 +160,7 @@ class App extends Component {
                 updateExperiences={this.updateExperiences}
                 handleOnClick={this.state.handleOnClick}
                 currentExperiences={this.state.currentUser.experiences}
+                currentUserId={this.state.currentUser.id}
               />
             )}
           />}
