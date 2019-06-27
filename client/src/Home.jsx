@@ -38,6 +38,7 @@ class Home extends React.Component {
           currentLocation={this.props.currentLocation}
           updateExperiences={this.props.updateExperiences}
           currentExperiences={this.props.currentExperiences}
+          currentUserId={this.props.currentUserId}
         />
       </div>
     );
