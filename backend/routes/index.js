@@ -1,8 +1,10 @@
 const express = require('express');
-const bodyParser = require("body-parser");
 const flash=require("connect-flash");
+const faker=require("faker")
 const router = express.Router();
-const passport = require('passport')
+const passport = require('passport');
+const knexConfig = require("../knexfile");
+const knex = require("knex")(knexConfig["development"]);
 
 
 /* GET home page. */
@@ -21,9 +23,26 @@ router.post('/chat', function(req, res, next) {
 });
 
 router.post('/register', function(req, res, next) {
-  res.json({
-    test: "you hit register"
-  })
+  const { firstname, lastname, email, password, hometown } = req.body;
+  const avartar_url = faker.internet.avatar();
+  const registerObject = {};
+  registerObject.first_name = firstname;
+  registerObject.last_name = lastname;
+  registerObject.email = email;
+  registerObject.password = password;
+  registerObject.hometown = hometown;
+  registerObject.avatar_url = avartar_url;
+  registerObject.hometown_latitude = null;
+  registerObject.hometown_longitude = null;
+  registerObject.about_me = null;
+  registerObject.type = "real";
+  knex('users')
+    .insert([registerObject])
+    .into('users')
+    .returning(['id', 'first_name', 'last_name', 'email', 'password', 'hometown', 'avatar_url', 'about_me', 'type', 'created_at', 'updated_at'])
+    .then(results => {
+      res.send({userObj: results[0], authorize: true})
+    })
 });
 
 router.post('/login',

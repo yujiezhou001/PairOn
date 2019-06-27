@@ -7,7 +7,7 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
-      authorize: ''
+      authorize: false
     };
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
