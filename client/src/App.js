@@ -26,7 +26,7 @@ class App extends Component {
       chatMessages: [],
       authorize: false
     };
-    
+
   }
 
   btnAbsolutR = {
@@ -51,7 +51,7 @@ class App extends Component {
     };
 
     this.socket.send(JSON.stringify(locObject));
-    console.log("USER OBJ SENT TO BACKEND", locObject);
+    // console.log("USER OBJ SENT TO BACKEND", locObject);
     // this.socket.send(JSON.stringify(locationObject))
   };
 
@@ -74,8 +74,8 @@ class App extends Component {
       type: "outgoingMessage"
     };
 
-    console.log("SEND", newMessage, "TO BACKEND!!!!");
-    console.log(messageObject);
+    // console.log("SEND", newMessage, "TO BACKEND!!!!");
+    // console.log(messageObject);
     this.socket.send(JSON.stringify(messageObject));
   };
 
@@ -118,7 +118,7 @@ class App extends Component {
   async componentDidMount() {
 
     this.socket = new WebSocket("ws://localhost:3001/");
-    
+
     this.socket.onopen = function() {
       console.log("Connected to server");
     };
@@ -127,7 +127,6 @@ class App extends Component {
       this.handleOnMessage(e);
     }
 
-
     try {
       const response = await fetch('http://localhost:3001/current_user', {credentials: 'include'});
       const data = await response.json();
@@ -135,13 +134,20 @@ class App extends Component {
     } catch(e) {
       // not logged in
     }
+
+  }
+
+  logout = async () => {
+    const response = await fetch('http://localhost:3001/logout', {credentials: 'include'});
+    const data = await response.json();
+    this.handleOnAuthorize(data);
   }
 
   render() {
     return (
       <div>
-        <BtnProfile btnAbsolutR={this.btnAbsolutR}/> 
-        <Router>          
+        <BtnProfile btnAbsolutR={this.btnAbsolutR}/>
+        <Router>
           {this.state.authorize && <Route
             exact
             path = "/"
@@ -170,6 +176,7 @@ class App extends Component {
             )}
           />
           {!this.state.authorize && <Route path="/login" render={props => <Login {...props} authorize={this.handleOnAuthorize}/>} />}
+          {/* <Route path="/logout" render={() => <Login />} /> */}
           <Route path="/register" render={() => <Register />} />
           <Route
             path="/users/:id"
@@ -185,9 +192,9 @@ class App extends Component {
               <li>
                 <Link to="/users/:id">Profile</Link>
               </li>
-              {!this.state.authorize && <li>
-                {<Link to="/login/">Login</Link>}
-              </li>}
+                <li>
+                  {this.state.authorize ? <button onClick={this.logout}> Logout</button> : <Link to="/login/">Login</Link>}
+                </li>
               <li>
                 <Link to="/register/">Register</Link>
               </li>
