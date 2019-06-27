@@ -78,7 +78,7 @@ app.use(function(err, req, res, next) {
 // .then(user => console.log(user));
 // }
 // ))
-
+const clientList = [];
 
 passport.use(new LocalStrategy({
     usernameField: 'username',
@@ -93,6 +93,22 @@ passport.use(new LocalStrategy({
     if (password !== user.password) {
       return done(null, false);
      } else {
+      // add the real user / logged in user to the clientList
+      // [user] = result;
+      clientList.push({
+            id: user.id,
+            firstName: user.first_name,
+            lastName: user.last_name,
+            email: user.email,
+            password: user.password,
+            hometown: user.hometown,
+            experiences: "All",
+            avatarURL: user.avatar_url,
+            currentLocation: ourLocation,
+            aboutMe: user.about_me,
+            type: "incomingClientList"
+          })
+
       return done(null, user);
     }
   })
@@ -111,6 +127,27 @@ passport.deserializeUser(function(id, done) {
   })
 });
 
+knex
+  .select("*")
+  .from("users")
+  .where("id", "<", 10)
+  .then(results => {
+    let i = 1;
+    results.forEach((userObj) => {
+      clientList.push({
+        id: i,
+        firstName: userObj.first_name,
+        hometown: userObj.hometown,
+        experiences: fakeExperience[i],
+        avatarURL: userObj.avatar_url,
+        currentLocation: fakeLocations[i],//generateRandomPoint({lat:45.530336999999996, lng:-73.60290119999999}, 100),
+        aboutMe: userObj.about_me,
+        type: "incomingClientList"
+      });
+      i++;
+      //console.log(results);
+    });
+  })
 // app.post('/login',
 //   passport.authenticate('local'),
 //   function(req, res) {
@@ -259,59 +296,46 @@ wss.on("connection", ws => {
   console.log("This is from received message:", messageObj)
   });
 
-const clientList = [];
 
-  knex
-    .select("*")
-    .from("users")
-    .where("id", "<", 10) // when login is implement : where (type = "fake")
-    .then(results => {
-      let i = 1;
-      results.forEach((userObj) => {
-        clientList.push({
-          id: i,
-          firstName: userObj.first_name,
-          hometown: userObj.hometown,
-          experiences: fakeExperience[i],
-          avatarURL: userObj.avatar_url,
-          currentLocation: fakeLocations[i],//generateRandomPoint({lat:45.530336999999996, lng:-73.60290119999999}, 100),
-          aboutMe: userObj.about_me,
-          type: "incomingClientList"
-        });
-        i++;
-        //console.log(results);
-      });
-    })
-    .then(results => {
-      const realUserId = 10; // Once login authentication implemented this value comes from the JWT.
 
-      knex
-        .select("*")
-        .from("users")
-        .where("id", realUserId)
-        .then(result => {
-          //const user = result[0]
-          [user] = result;
-          clientList.push({
-            id: realUserId,
-            firstName: user.first_name,
-            lastName: user.last_name,
-            email: user.email,
-            password: user.password,
-            hometown: user.hometown,
-            experiences: "All",
-            avatarURL: user.avatar_url,
-            currentLocation: ourLocation,
-            aboutMe: user.about_me,
-            type: "incomingClientList"
-          });
-        })
-        .finally(results => {
+  // knex
+  //   .select("*")
+  //   .from("users")
+  //   .where("id", "<", 10) // when login is implement : where (type = "fake")
+  //   .then(results => {
+  //     let i = 1;
+  //     results.forEach((userObj) => {
+  //       clientList.push({
+  //         id: i,
+  //         firstName: userObj.first_name,
+  //         hometown: userObj.hometown,
+  //         experiences: fakeExperience[i],
+  //         avatarURL: userObj.avatar_url,
+  //         currentLocation: fakeLocations[i],//generateRandomPoint({lat:45.530336999999996, lng:-73.60290119999999}, 100),
+  //         aboutMe: userObj.about_me,
+  //         type: "incomingClientList"
+  //       });
+  //       i++;
+  //       //console.log(results);
+  //     });
+  //   })
+    // .then(results => {
+    //   const realUserId = 10; // Once login authentication implemented this value comes from the JWT.
+
+    //   knex
+    //     .select("*")
+    //     .from("users")
+    //     .where("id", realUserId)
+    //     // .then(result => {
+    //     //   //const user = result[0]
+
+    //     // })
+    //     .finally(results => {
           wss.clients.forEach(function each(client) {
             client.send(JSON.stringify({ clientList }));
-            console.log("THIS:!!!! ",{clientList});
+            console.log("When the ClientList first sent: ",{clientList});
           });
-        });
+        // });
 
       ws.on("message", function incoming(message) {
         const messageObj = JSON.parse(message);
@@ -399,4 +423,4 @@ const clientList = [];
       // });
       ws.on("close", () => console.log("Client disconnected"));
     });
-});
+// });

@@ -91,8 +91,8 @@ class App extends Component {
       //   });
     } else if (data.type === "experiencePick") {
       console.log("EXPERIENCE FROM BACKEND:", this.state);
-    } else {
-      console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
+    } else if (this.state.authorize) {
+      console.log("CLIENTLIST sent after login", data);
       this.setState(data);
     }
   };
@@ -113,6 +113,7 @@ class App extends Component {
     }
     this.setState({currentUser: tempObj})
     this.setState({authorize: data.authorize})
+
   }
 
   async componentDidMount() {
