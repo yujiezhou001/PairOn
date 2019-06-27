@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 const usernameStyle = { color: "blue", fontWeight: "bold", margin: "10px" };
+const senderStyle = { color: "green", fontWeight: "bold", margin: "10px" };
 
 class Message extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class Message extends Component {
         )}
         {isSender && (
           <div className="message">
-            <span className="message-username" style={usernameStyle}>
+            <span className="message-username" style={senderStyle}>
               {this.props.username}:
             </span>
             <span className="message-content">{this.props.content}</span>
