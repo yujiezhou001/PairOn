@@ -19,8 +19,7 @@ class Message extends Component {
         {isRecipient && (
           <div className="message">
             <span className="message-username" style={usernameStyle}>
-              {this.props.username}: RECIPIENT ID: {this.props.recipientId}
-              CHAT PARTNER: {this.props.chatPartner}
+              {this.props.username}:
             </span>
             <span className="message-content">{this.props.content}</span>
           </div>
@@ -28,8 +27,7 @@ class Message extends Component {
         {isSender && (
           <div className="message">
             <span className="message-username" style={usernameStyle}>
-              {this.props.username}: RECIPIENT ID: {this.props.recipientId}
-              CHAT PARTNER: {this.props.chatPartner}
+              {this.props.username}:
             </span>
             <span className="message-content">{this.props.content}</span>
           </div>
