@@ -137,6 +137,12 @@ class App extends Component {
 
   }
 
+  logout = async () => {
+    const response = await fetch('http://localhost:3001/logout', {credentials: 'include'});
+    const data = await response.json();
+    this.handleOnAuthorize(data);
+  }
+
   render() {
     return (
       <div>
@@ -171,6 +177,7 @@ class App extends Component {
             )}
           />
           {!this.state.authorize && <Route path="/login" render={props => <Login {...props} authorize={this.handleOnAuthorize}/>} />}
+          {/* <Route path="/logout" render={() => <Login />} /> */}
           <Route path="/register" render={() => <Register />} />
           <Route
             path="/users/:id"
@@ -186,9 +193,9 @@ class App extends Component {
               <li>
                 <Link to="/users/:id">Profile</Link>
               </li>
-              {!this.state.authorize && <li>
-                {<Link to="/login/">Login</Link>}
-              </li>}
+                <li>
+                  {this.state.authorize ? <button onClick={this.logout}> Logout</button> : <Link to="/login/">Login</Link>}
+                </li>
               <li>
                 <Link to="/register/">Register</Link>
               </li>
