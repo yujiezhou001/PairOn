@@ -26,16 +26,6 @@ router.post('/register', function(req, res, next) {
   })
 });
 
-
-// router.post('/login',
-//   passport.authenticate('local', 
-//     { 
-//       successRedirect: '/', 
-//       failureRedirect: '/login' 
-//     }
-//   )
-// );
-
 router.post('/login',
   passport.authenticate('local'),
   function(req, res) {
@@ -45,18 +35,10 @@ router.post('/login',
   });
 
 
-  router.get('/logout', function(req, res){
-    req.logout();
-    res.redirect('/');
-  });
-  
-// router.post('/login', function(req, res, next) {
-//   res.send({
-//     email: req.body.username,
-//     password: req.body.password,
-//     test: "you hit login"
-//   })
-// });
+router.get('/logout', function(req, res){
+  req.logout();
+  res.json({authorize: false, userObj: {}})
+});
 
 router.post('/users/:id', function(req, res, next) {
   res.json({
