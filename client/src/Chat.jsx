@@ -81,7 +81,10 @@ class Chat extends Component {
         )}
         <div>
           <div style={messagesStyle}>
-            <MessageList messages={this.props.messages} />
+            <MessageList
+              messages={this.props.messages}
+              chatPartner={this.props.chatPartner}
+            />
           </div>
           <ChatBar addMessage={this.props.addMessage} />
         </div>

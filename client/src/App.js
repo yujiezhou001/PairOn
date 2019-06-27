@@ -69,7 +69,7 @@ class App extends Component {
   };
 
   updateChatPartner = userId => {
-    this.setState({ chatPartner: { id: userId } });
+    this.setState({ chatPartner: { id: parseInt(userId) } });
   };
 
   addMessage = newMessage => {
@@ -81,6 +81,8 @@ class App extends Component {
       type: "outgoingMessage"
     };
 
+    // this.setState({ chatMessages: [...this.state.chatMessages, newMessage] });
+
     console.log("SEND", newMessage, "TO BACKEND!!!!");
     console.log(messageObject);
     this.socket.send(JSON.stringify(messageObject));
@@ -90,7 +92,12 @@ class App extends Component {
     let data = JSON.parse(event.data);
 
     if (data.type === "incomingMessage") {
-      this.setState({ chatMessages: [...this.state.chatMessages, data] });
+      if (
+        this.state.currentUser.id === data.recipientId ||
+        this.state.currentUser.id === data.senderId
+      ) {
+        this.setState({ chatMessages: [...this.state.chatMessages, data] });
+      }
       console.log("CHAT BROADCAST BACK TO ME!", data);
       // } else if (data.type === "incomingUserLoc") {
       //   this.setState({
@@ -176,6 +183,7 @@ class App extends Component {
                 addMessage={this.addMessage}
                 messages={this.state.chatMessages}
                 updateChatPartner={this.updateChatPartner}
+                chatPartner={this.state.chatPartner.id}
               />
             )}
           />

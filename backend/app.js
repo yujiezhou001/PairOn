@@ -32,6 +32,14 @@ app.use(cors(corsOptions));
 const SocketServer = require("ws");
 var server = http.createServer(app);
 
+const sessionParser = session({
+  saveUninitialized: false,
+  secret: "$eCuRiTy",
+  resave: false
+});
+
+app.use(sessionParser);
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -47,10 +55,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
-app.use(session({ secret: 'keyboard cat' }));
+app.use(session({ secret: "keyboard cat" }));
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -113,9 +120,13 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  knex.select("*").from('users').where("id", id).then((user)=> {
-    done(null, user[0]);
-  })
+  knex
+    .select("*")
+    .from("users")
+    .where("id", id)
+    .then(user => {
+      done(null, user[0]);
+    });
 });
 
 // app.post('/login',
@@ -139,7 +150,41 @@ server.listen(PORT, () => {
 });
 
 const uuidv4 = require("uuid/v4");
+// const wss = new SocketServer.Server({ server });
+
 const wss = new SocketServer.Server({ server });
+
+// const wss = new SocketServer.Server({
+//   verifyClient: function(info, done) {
+//     console.log("Parsing session from request...");
+//     sessionParser(info.req, {}, () => {
+//       console.log("Session is parsed!");
+
+//
+// We can reject the connection by returning false to done(). For example,
+// reject here if user is unknown.
+//
+//       done(info.req.session.userId);
+//     });
+//   },
+//   server
+// });
+
+// const wss = new SocketServer.Server({
+//   verifyClient: function(info, done) {
+//     console.log("Parsing session from request...");
+//     sessionParser(info.req, {}, () => {
+//       console.log("Session is parsed!");
+
+//       //
+//       // We can reject the connection by returning false to done(). For example,
+//       // reject here if user is unknown.
+//       //
+//       done(info.req.session.userId);
+//     });
+//   },
+//   server
+// });
 
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
@@ -197,15 +242,21 @@ const fakeExperience = [
   "Culture"
 ];
 
+let clients = [];
+
+// wss.on("connection", (ws, request) => {
 wss.on("connection", ws => {
   console.log("Client connected");
-  ws.id = uuidv4();
+
+  // wss.on("connection", (ws, req) => {
+  //   console.log("Client connected", req.user);
+  //   ws.id = uuidv4();
 
   // once login authentication working - wrap all this code in "Usercredentials valid?"
-  ws.on("message", function incoming(message) {
-    const messageObj = JSON.parse(message);
-    console.log("This is from received message:", messageObj);
-  });
+  // ws.on("message", function incoming(message) {
+  //   const messageObj = JSON.parse(message);
+  //   console.log("This is from received message:", messageObj);
+  // });
 
   const clientList = [];
   const currentUser = {};
@@ -267,21 +318,25 @@ wss.on("connection", ws => {
         const messageObj = JSON.parse(message);
         messageObj.id = uuidv4();
 
-        console.log("This is from received message:", messageObj);
+        // console.log(
+        //   `CHECK!!!!! WS message ${message} from user ${request.session.userId}`
+        // );
+
+        // console.log("This is from received message:", messageObj);
 
         switch (messageObj.type) {
           case "outgoingMessage":
             messageObj.type = "incomingMessage";
 
-            // wss.broadcast(JSON.stringify(messageObj));
+            wss.broadcast(JSON.stringify(messageObj));
 
             // FIX!!!! THIS DOES NOT WORK -- SEE OBJECT FORMAT
-            console.log("THIS HERRR IS CLIENT:", wss.clients);
-            wss.clients.forEach(function each(client) {
-              if (messageObj.recipientId === client.id) {
-                client.send(JSON.stringify(messageObj));
-              }
-            });
+            // console.log("THIS HERRR IS CLIENT:", wss.clients);
+            // wss.clients.forEach(function each(client) {
+            //   if (messageObj.recipientId === client.id) {
+            //     client.send(JSON.stringify(messageObj));
+            //   }
+            // });
 
             break;
           case "outgoingClientList":
