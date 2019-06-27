@@ -64,16 +64,17 @@ class Profile extends React.Component {
       userObj => userObj.id === Number(this.props.match.params.id)
     );
 
-    const isAccountUser = this.checkCurrentId(this.state.currentUser.id);
+    const isAccountUser = this.checkCurrentId(this.props.currentid);
+  
     let button;
     if (isAccountUser) {
       button = (
         <div>
           <div className="p-3 mb-2 bg-light border border-info">
-            <p>First name: {this.state.currentUser.firstName}</p>
-            <p>Last name: {this.state.currentUser.lastName}</p>
-            <p>Hometown: {this.state.currentUser.hometown}</p>
-            <p>Email: {this.state.currentUser.email}</p>
+            <p>First name: {this.props.currentfirstName}</p>
+            <p>Last name: {this.props.currentlastName}</p>
+            <p>Hometown: {this.props.currenthometown}</p>
+            <p>Email: {this.props.currentEmail}</p>
             <p>Password: ******************</p>
           </div>
           <button onClick={this.handleClick} className="btn btn-primary">
