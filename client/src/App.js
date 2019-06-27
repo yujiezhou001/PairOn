@@ -26,7 +26,7 @@ class App extends Component {
       chatMessages: [],
       authorize: false
     };
-    
+
   }
 
   btnAbsolutR = {
@@ -51,7 +51,7 @@ class App extends Component {
     };
 
     this.socket.send(JSON.stringify(locObject));
-    console.log("USER OBJ SENT TO BACKEND", locObject);
+    // console.log("USER OBJ SENT TO BACKEND", locObject);
     // this.socket.send(JSON.stringify(locationObject))
   };
 
@@ -74,8 +74,8 @@ class App extends Component {
       type: "outgoingMessage"
     };
 
-    console.log("SEND", newMessage, "TO BACKEND!!!!");
-    console.log(messageObject);
+    // console.log("SEND", newMessage, "TO BACKEND!!!!");
+    // console.log(messageObject);
     this.socket.send(JSON.stringify(messageObject));
   };
 
@@ -118,7 +118,7 @@ class App extends Component {
   async componentDidMount() {
 
     this.socket = new WebSocket("ws://localhost:3001/");
-    
+
     this.socket.onopen = function() {
       console.log("Connected to server");
     };
@@ -127,7 +127,6 @@ class App extends Component {
       this.handleOnMessage(e);
     }
 
-
     try {
       const response = await fetch('http://localhost:3001/current_user', {credentials: 'include'});
       const data = await response.json();
@@ -135,6 +134,7 @@ class App extends Component {
     } catch(e) {
       // not logged in
     }
+
   }
 
   logout = async () => {
@@ -146,8 +146,8 @@ class App extends Component {
   render() {
     return (
       <div>
-        <BtnProfile btnAbsolutR={this.btnAbsolutR}/> 
-        <Router>          
+        <BtnProfile btnAbsolutR={this.btnAbsolutR}/>
+        <Router>
           {this.state.authorize && <Route
             exact
             path = "/"
