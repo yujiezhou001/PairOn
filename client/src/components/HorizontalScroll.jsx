@@ -1,6 +1,6 @@
 import React from "react";
 import ScrollMenu from "react-horizontal-scrolling-menu";
-
+import Food from "../svg/Food.jsx";
 // list of items
 const list = [
   { name: "Drinks" },
@@ -22,6 +22,18 @@ class HorizontalScroll extends React.Component {
   };
 
   render() {
+    let icon;
+    if ("Food") {
+      icon = <Food />;
+    } else {
+      icon = (
+        <a className="btn btn-primary" href="/" role="button">
+          Message
+        </a>
+      );
+    }
+
+    //For render the BTN
     const { selected } = this.state;
     // Create menu from items
     const Menu = list =>
@@ -41,17 +53,20 @@ class HorizontalScroll extends React.Component {
       return (
         <button
           onClick={this.props.handelExperience}
-          className={`btn btn-primary btn-lg menu-item ${text} ${selected ? 'active' : ''}`}
+          className={`btn btn-primary btn-lg menu-item ${text} ${
+            selected ? "active" : ""
+          }`}
           value={text}
         >
           {text}
+          let icon; if ("Food") {(icon = <Food />)}
         </button>
       );
     };
     const menu = Menu(list, selected);
 
     return (
-        <div className="scroll-view-horizon">
+      <div className="scroll-view-horizon">
         <ScrollMenu
           data={menu}
           arrowLeft={ArrowLeft}
@@ -59,7 +74,7 @@ class HorizontalScroll extends React.Component {
           selected={selected}
           onSelect={this.onSelect}
         />
-        </div>
+      </div>
     );
   }
 }
