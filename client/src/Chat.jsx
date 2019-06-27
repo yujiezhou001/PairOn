@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { ChatBar } from "./ChatBar";
 import { MessageList } from "./MessageList";
+import { Link } from "react-router-dom";
 
 const navStyle = {
   background: "#b3f2ef",
@@ -47,6 +48,10 @@ class Chat extends Component {
   //   });
   // }
 
+  componentDidMount() {
+    this.props.updateChatPartner(this.props.match.params.id);
+  }
+
   render() {
     const user = this.props.clientList.find(
       userObj => userObj.id === Number(this.props.match.params.id)
@@ -56,16 +61,18 @@ class Chat extends Component {
       <div>
         {user && (
           <div style={navStyle}>
-            <a href="/" className="btn btn-primary" role="button">
-              &laquo; Back
-            </a>
-            <a href={`/users/${JSON.stringify(user.id)}`}>
+            <Link to="/">
+              <button type="button">Back</button>
+            </Link>
+
+            <Link to={`/users/${JSON.stringify(user.id)}`}>
               <img
                 className="rounded-circle"
                 src={user.avatarURL}
                 style={imgPicture}
               />
-            </a>
+            </Link>
+
             <div style={userStyle}>
               <h4>
                 {user.firstName}
@@ -77,7 +84,10 @@ class Chat extends Component {
         )}
         <div>
           <div style={messagesStyle}>
-            <MessageList messages={this.props.messages} />
+            <MessageList
+              messages={this.props.messages}
+              chatPartner={this.props.chatPartner}
+            />
           </div>
           <ChatBar addMessage={this.props.addMessage} />
         </div>

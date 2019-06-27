@@ -65,7 +65,7 @@ class Profile extends React.Component {
     );
 
     const isAccountUser = this.checkCurrentId(this.props.currentid);
-  
+
     let button;
     if (isAccountUser) {
       button = (
@@ -77,6 +77,7 @@ class Profile extends React.Component {
             <p>Email: {this.props.currentEmail}</p>
             <p>Password: ******************</p>
           </div>
+
           <button onClick={this.handleClick} className="btn btn-primary">
             Edit
           </button>

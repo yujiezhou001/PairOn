@@ -24,6 +24,7 @@ class App extends Component {
       },
       clientList: [], // full of currentUser objects sent from WebSocket
       chatMessages: [],
+      chatPartner: { id: null },
       authorize: false
     };
   }
@@ -64,11 +65,18 @@ class App extends Component {
       experiences: experience
     };
     this.socket.send(JSON.stringify(experienceObj));
+    console.log("EXP OBJ:", experienceObj);
+  };
+
+  updateChatPartner = userId => {
+    this.setState({ chatPartner: { id: parseInt(userId) } });
   };
 
   addMessage = newMessage => {
     const messageObject = {
       username: this.state.currentUser.firstName,
+      senderId: this.state.currentUser.id,
+      recipientId: this.state.chatPartner.id,
       content: newMessage,
       type: "outgoingMessage"
     };
@@ -82,7 +90,12 @@ class App extends Component {
     let data = JSON.parse(event.data);
 
     if (data.type === "incomingMessage") {
-      this.setState({ chatMessages: [...this.state.chatMessages, data] });
+      if (
+        this.state.currentUser.id === data.recipientId ||
+        this.state.currentUser.id === data.senderId
+      ) {
+        this.setState({ chatMessages: [...this.state.chatMessages, data] });
+      }
       console.log("CHAT BROADCAST BACK TO ME!", data);
       // } else if (data.type === "incomingUserLoc") {
       //   this.setState({
@@ -147,13 +160,13 @@ class App extends Component {
   render() {
     return (
       <div>
-        <BtnProfile
-          btnAbsolutR={this.btnAbsolutR}
-          autorized={this.state.authorize}
-          fnlogout={this.logout}
-          CurrentUserId={this.state.currentUser.id}
-        />
         <Router>
+          <BtnProfile
+            btnAbsolutR={this.btnAbsolutR}
+            autorized={this.state.authorize}
+            fnlogout={this.logout}
+            CurrentUserId={this.state.currentUser.id}
+          />
           {this.state.authorize && (
             <Route
               exact
@@ -181,6 +194,8 @@ class App extends Component {
                 clientList={this.state.clientList}
                 addMessage={this.addMessage}
                 messages={this.state.chatMessages}
+                updateChatPartner={this.updateChatPartner}
+                chatPartner={this.state.chatPartner.id}
               />
             )}
           />
