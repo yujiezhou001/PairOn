@@ -32,14 +32,6 @@ app.use(cors(corsOptions));
 const SocketServer = require("ws");
 var server = http.createServer(app);
 
-const sessionParser = session({
-  saveUninitialized: false,
-  secret: "$eCuRiTy",
-  resave: false
-});
-
-app.use(sessionParser);
-
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -150,41 +142,7 @@ server.listen(PORT, () => {
 });
 
 const uuidv4 = require("uuid/v4");
-// const wss = new SocketServer.Server({ server });
-
 const wss = new SocketServer.Server({ server });
-
-// const wss = new SocketServer.Server({
-//   verifyClient: function(info, done) {
-//     console.log("Parsing session from request...");
-//     sessionParser(info.req, {}, () => {
-//       console.log("Session is parsed!");
-
-//
-// We can reject the connection by returning false to done(). For example,
-// reject here if user is unknown.
-//
-//       done(info.req.session.userId);
-//     });
-//   },
-//   server
-// });
-
-// const wss = new SocketServer.Server({
-//   verifyClient: function(info, done) {
-//     console.log("Parsing session from request...");
-//     sessionParser(info.req, {}, () => {
-//       console.log("Session is parsed!");
-
-//       //
-//       // We can reject the connection by returning false to done(). For example,
-//       // reject here if user is unknown.
-//       //
-//       done(info.req.session.userId);
-//     });
-//   },
-//   server
-// });
 
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
@@ -242,24 +200,69 @@ const fakeExperience = [
   "Culture"
 ];
 
-let clients = [];
+const fakeLocations = [
+  { lat: 45.525063, lng: -73.59943 },
 
-// wss.on("connection", (ws, request) => {
+  { lat: 45.5246127, lng: -73.5987241 },
+  {
+    lat: 45.52744,
+    lng: -73.59643
+  },
+  {
+    lat: 45.527255,
+    lng: -73.597953
+  },
+  {
+    lat: 45.5274897,
+    lng: -73.5984506
+  },
+  {
+    lat: 45.5311081,
+    lng: -73.5995769
+  },
+  {
+    lat: 45.5351011,
+    lng: -73.5995709
+  },
+  {
+    lat: 45.5241357,
+    lng: -73.5970109
+  },
+  {
+    lat: 45.5279216,
+    lng: -73.5965196
+  },
+  {
+    lat: 45.5277183,
+    lng: -73.5944831
+  },
+  {
+    lat: 45.5303865,
+    lng: -73.5988069
+  },
+  {
+    lat: 45.5263447,
+    lng: -73.5983598
+  },
+  {
+    lat: 45.5261267,
+    lng: -73.5972654
+  },
+  {
+    lat: 45.52714,
+    lng: -73.59613
+  }
+];
+
 wss.on("connection", ws => {
   console.log("Client connected");
-
-  // wss.on("connection", (ws, req) => {
-  //   console.log("Client connected", req.user);
-  //   ws.id = uuidv4();
-
   // once login authentication working - wrap all this code in "Usercredentials valid?"
-  // ws.on("message", function incoming(message) {
-  //   const messageObj = JSON.parse(message);
-  //   console.log("This is from received message:", messageObj);
-  // });
+  ws.on("message", function incoming(message) {
+    const messageObj = JSON.parse(message);
+    console.log("This is from received message:", messageObj);
+  });
 
   const clientList = [];
-  const currentUser = {};
 
   knex
     .select("*")
@@ -274,7 +277,7 @@ wss.on("connection", ws => {
           hometown: userObj.hometown,
           experiences: fakeExperience[i],
           avatarURL: userObj.avatar_url,
-          currentLocation: generateRandomPoint(ourLocation, 100),
+          currentLocation: fakeLocations[i], //generateRandomPoint({lat:45.530336999999996, lng:-73.60290119999999}, 100),
           aboutMe: userObj.about_me,
           type: "incomingClientList"
         });
@@ -307,10 +310,9 @@ wss.on("connection", ws => {
           });
         })
         .finally(results => {
-          console.log("hiiiiii", wss.clients.size);
           wss.clients.forEach(function each(client) {
             client.send(JSON.stringify({ clientList }));
-            // console.log("CLIENT LIST SENT TO FRONT-END", wss.clients[10]);
+            console.log("THIS:!!!! ", { clientList });
           });
         });
 
@@ -318,26 +320,12 @@ wss.on("connection", ws => {
         const messageObj = JSON.parse(message);
         messageObj.id = uuidv4();
 
-        // console.log(
-        //   `CHECK!!!!! WS message ${message} from user ${request.session.userId}`
-        // );
-
-        // console.log("This is from received message:", messageObj);
+        console.log("This is from received message:", messageObj);
 
         switch (messageObj.type) {
           case "outgoingMessage":
             messageObj.type = "incomingMessage";
-
             wss.broadcast(JSON.stringify(messageObj));
-
-            // FIX!!!! THIS DOES NOT WORK -- SEE OBJECT FORMAT
-            // console.log("THIS HERRR IS CLIENT:", wss.clients);
-            // wss.clients.forEach(function each(client) {
-            //   if (messageObj.recipientId === client.id) {
-            //     client.send(JSON.stringify(messageObj));
-            //   }
-            // });
-
             break;
           case "outgoingClientList":
             messageObj.type = "incomingClientList";
@@ -346,16 +334,8 @@ wss.on("connection", ws => {
           case "outgoingCurrUserInfo":
             ourLocation.lat = messageObj.myLocation.lat;
             ourLocation.lng = messageObj.myLocation.lng;
-
-            // messageObj.type = "incomingCurrUserInfo";
-            // const realUserObj = {
-            //   type: messageObj.type,
-            //   currentUser: currentUser,
-            //   id: messageObj.id
-            // };
-
             // wss.broadcast(JSON.stringify(messageObj));
-            // console.log("BACKEND - REAL USER OBJ", realUserObj);
+            console.log("BACKEND - MY LOC OBJ", messageObj);
             break;
           case "experiencePick":
             clientList.forEach(function(client) {

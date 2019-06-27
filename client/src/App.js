@@ -51,7 +51,7 @@ class App extends Component {
     };
 
     this.socket.send(JSON.stringify(locObject));
-    console.log("USER OBJ SENT TO BACKEND", locObject);
+    // console.log("USER OBJ SENT TO BACKEND", locObject);
     // this.socket.send(JSON.stringify(locationObject))
   };
 
@@ -81,10 +81,8 @@ class App extends Component {
       type: "outgoingMessage"
     };
 
-    // this.setState({ chatMessages: [...this.state.chatMessages, newMessage] });
-
-    console.log("SEND", newMessage, "TO BACKEND!!!!");
-    console.log(messageObject);
+    // console.log("SEND", newMessage, "TO BACKEND!!!!");
+    // console.log(messageObject);
     this.socket.send(JSON.stringify(messageObject));
   };
 
@@ -151,10 +149,23 @@ class App extends Component {
     }
   }
 
+  logout = async () => {
+    const response = await fetch("http://localhost:3001/logout", {
+      credentials: "include"
+    });
+    const data = await response.json();
+    this.handleOnAuthorize(data);
+  };
+
   render() {
     return (
       <div>
-        <BtnProfile btnAbsolutR={this.btnAbsolutR} />
+        <BtnProfile
+          btnAbsolutR={this.btnAbsolutR}
+          autorized={this.state.authorize}
+          fnlogout={this.logout}
+          CurrentUserId={this.state.currentUser.id}
+        />
         <Router>
           {this.state.authorize && (
             <Route
@@ -169,6 +180,7 @@ class App extends Component {
                   updateExperiences={this.updateExperiences}
                   handleOnClick={this.state.handleOnClick}
                   currentExperiences={this.state.currentUser.experiences}
+                  currentUserId={this.state.currentUser.id}
                 />
               )}
             />
@@ -195,11 +207,20 @@ class App extends Component {
               )}
             />
           )}
+          {/* <Route path="/logout" render={() => <Login />} /> */}
           <Route path="/register" render={() => <Register />} />
           <Route
             path="/users/:id"
             render={props => (
-              <Profile {...props} clientList={this.state.clientList} />
+              <Profile
+                {...props}
+                clientList={this.state.clientList}
+                currentEmail={this.state.currentUser.email}
+                currentfirstName={this.state.currentUser.firstName}
+                currentlastName={this.state.currentUser.lastName}
+                currenthometown={this.state.currentUser.hometown}
+                currentid={this.state.currentUser.id}
+              />
             )}
           />
           <nav>
@@ -210,9 +231,13 @@ class App extends Component {
               <li>
                 <Link to="/users/:id">Profile</Link>
               </li>
-              {!this.state.authorize && (
-                <li>{<Link to="/login/">Login</Link>}</li>
-              )}
+              <li>
+                {this.state.authorize ? (
+                  <button onClick={this.logout}> Logout</button>
+                ) : (
+                  <Link to="/login/">Login</Link>
+                )}
+              </li>
               <li>
                 <Link to="/register/">Register</Link>
               </li>
