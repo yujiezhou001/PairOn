@@ -26,7 +26,6 @@ class App extends Component {
       chatMessages: [],
       authorize: false
     };
-
   }
 
   btnAbsolutR = {
@@ -102,67 +101,77 @@ class App extends Component {
       id: data.userObj.id,
       firstName: data.userObj.first_name,
       lastName: data.userObj.last_name,
-      email:data.userObj.email,
-      password:data.userObj.password,
+      email: data.userObj.email,
+      password: data.userObj.password,
       hometown: data.userObj.hometown,
       experiences: "All",
       avatarURL: data.userObj.avatar_url,
       currentLocation: { lat: 0, lng: 0 },
       aboutMe: data.userObj.about_me,
       type: "live"
-    }
-    this.setState({currentUser: tempObj})
-    this.setState({authorize: data.authorize})
-  }
+    };
+    this.setState({ currentUser: tempObj });
+    this.setState({ authorize: data.authorize });
+  };
 
   async componentDidMount() {
-
     this.socket = new WebSocket("ws://localhost:3001/");
 
     this.socket.onopen = function() {
       console.log("Connected to server");
     };
-    this.socket.onmessage = (e) => {
-      console.log('WS EVENT', e);
+    this.socket.onmessage = e => {
+      console.log("WS EVENT", e);
       this.handleOnMessage(e);
-    }
+    };
 
     try {
-      const response = await fetch('http://localhost:3001/current_user', {credentials: 'include'});
+      const response = await fetch("http://localhost:3001/current_user", {
+        credentials: "include"
+      });
       const data = await response.json();
       this.handleOnAuthorize(data);
-    } catch(e) {
+    } catch (e) {
       // not logged in
     }
-
   }
 
   logout = async () => {
-    const response = await fetch('http://localhost:3001/logout', {credentials: 'include'});
+    const response = await fetch("http://localhost:3001/logout", {
+      credentials: "include"
+    });
     const data = await response.json();
     this.handleOnAuthorize(data);
-  }
+  };
 
   render() {
     return (
       <div>
-        <BtnProfile btnAbsolutR={this.btnAbsolutR}/>
+        <BtnProfile
+          btnAbsolutR={this.btnAbsolutR}
+          autorized={this.state.authorize}
+          fnlogout={this.logout}
+          CurrentUserId={this.state.currentUser.id}
+        />
         <Router>
-          {this.state.authorize && <Route
-            exact
-            path = "/"
-            render= {props => (
-              <Home
-                {...props}
-                clientList={this.state.clientList}
-                updateCurrentLocation={this.updateCurrentLocation}
-                currentLocation={this.state.currentUser.currentLocation}
-                updateExperiences={this.updateExperiences}
-                handleOnClick={this.state.handleOnClick}
-                currentExperiences={this.state.currentUser.experiences}
-              />
-            )}
-          />}
+          {this.state.authorize && (
+            <Route
+              exact
+              path="/"
+              render={props => (
+                <Home
+                  {...props}
+                  clientList={this.state.clientList}
+                  updateCurrentLocation={this.updateCurrentLocation}
+                  currentLocation={this.state.currentUser.currentLocation}
+                  updateExperiences={this.updateExperiences}
+                  handleOnClick={this.state.handleOnClick}
+                  currentExperiences={this.state.currentUser.experiences}
+                  currentUserId={this.state.currentUser.id}
+                />
+              )}
+            />
+          )}
           <Route
             exact
             path="/chat/:id"
@@ -175,13 +184,28 @@ class App extends Component {
               />
             )}
           />
-          {!this.state.authorize && <Route path="/login" render={props => <Login {...props} authorize={this.handleOnAuthorize}/>} />}
+          {!this.state.authorize && (
+            <Route
+              path="/login"
+              render={props => (
+                <Login {...props} authorize={this.handleOnAuthorize} />
+              )}
+            />
+          )}
           {/* <Route path="/logout" render={() => <Login />} /> */}
           <Route path="/register" render={() => <Register />} />
           <Route
             path="/users/:id"
             render={props => (
-              <Profile {...props} clientList={this.state.clientList} />
+              <Profile
+                {...props}
+                clientList={this.state.clientList}
+                currentEmail={this.state.currentUser.email}
+                currentfirstName={this.state.currentUser.firstName}
+                currentlastName={this.state.currentUser.lastName}
+                currenthometown={this.state.currentUser.hometown}
+                currentid={this.state.currentUser.id}
+              />
             )}
           />
           <nav>
@@ -192,9 +216,13 @@ class App extends Component {
               <li>
                 <Link to="/users/:id">Profile</Link>
               </li>
-                <li>
-                  {this.state.authorize ? <button onClick={this.logout}> Logout</button> : <Link to="/login/">Login</Link>}
-                </li>
+              <li>
+                {this.state.authorize ? (
+                  <button onClick={this.logout}> Logout</button>
+                ) : (
+                  <Link to="/login/">Login</Link>
+                )}
+              </li>
               <li>
                 <Link to="/register/">Register</Link>
               </li>

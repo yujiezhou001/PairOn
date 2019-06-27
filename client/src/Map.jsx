@@ -128,7 +128,14 @@ export class MapContainer extends Component {
             this.props.currentExperiences === person.experiences ||
             this.props.currentExperiences === "All" ||
             person.experiences === "All"
-          ) {
+          )
+          {
+            let personIcon = "/waving-icon-18.jpg"
+
+            if (this.props.currentUserId === person.id) {
+              personIcon = "/currentUser_Location.png"
+            }
+
             return (
               <Marker
                 key={index}
@@ -139,7 +146,7 @@ export class MapContainer extends Component {
                 }}
                 onClick={() => this.setState({ selectedPerson: person })}
                 icon={{
-                  url: `/waving-icon-18.jpg`,
+                  url: personIcon,
                   scaledSize: new window.google.maps.Size(40, 40)
                 }}
               />
