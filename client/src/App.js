@@ -8,6 +8,9 @@ import { Home } from "./Home";
 import { Profile } from "./Profile";
 import BtnProfile from "./components/BtnProfile.jsx";
 
+import toaster from "toasted-notes";
+import "toasted-notes/src/styles.css"; // optional styles
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -69,13 +72,20 @@ class App extends Component {
   };
 
   updateChatPartner = userId => {
-    this.setState({ chatPartner: { id: parseInt(userId) } });
+    var chatPartner = this.state.clientList.find(
+      element => element.id === parseInt(userId)
+    );
+
+    console.log(chatPartner);
+
+    this.setState({ chatPartner });
   };
 
   addMessage = newMessage => {
     const messageObject = {
       username: this.state.currentUser.firstName,
       senderId: this.state.currentUser.id,
+      senderAvatar: this.state.currentUser.avatarURL,
       recipientId: this.state.chatPartner.id,
       content: newMessage,
       type: "outgoingMessage"
@@ -90,21 +100,41 @@ class App extends Component {
     let data = JSON.parse(event.data);
 
     if (data.type === "incomingMessage") {
+      if (this.state.currentUser.id === data.recipientId) {
+        this.setState({ chatMessages: [...this.state.chatMessages, data] });
 
-      if (
-        this.state.currentUser.id === data.recipientId ||
-        this.state.currentUser.id === data.senderId
-      ) {
+        toaster.notify(
+          <div>
+            <img
+              className="rounded-circle"
+              src={data.senderAvatar}
+              style={{ width: "55px" }}
+            />
+            <h5>New message from {data.username}</h5>
+            <p>{data.content}</p>
+          </div>,
+          {
+            position: "bottom-left" // top-left, top, top-right, bottom-left, bottom, bottom-right
+            // duration: null // This notification will not automatically close
+          }
+        );
+
+        // toaster.notify(
+        //   `New message from ${this.state.chatPartner.firstName}: ${
+        //     data.content
+        //   }`,
+        //   {
+        //     position: "bottom-left" // top-left, top, top-right, bottom-left, bottom, bottom-right
+        //     // duration: null // This notification will not automatically close
+        //   }
+        // );
+      } else if (this.state.currentUser.id === data.senderId) {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
       }
       console.log("CHAT BROADCAST BACK TO ME!", data);
-
     } else if (data.type === "experiencePick") {
-      //console.log("EXPERIENCE FROM BACKEND:", this.state);
       this.setState(data);
-
     } else if (this.state.authorize) {
-      //console.log("CLIENTLIST sent after login", data);
       this.setState(data);
     }
   };
@@ -126,7 +156,6 @@ class App extends Component {
     this.setState({ currentUser: tempObj });
     this.setState({ authorize: data.authorize });
   };
-
 
   async componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001/");
@@ -196,7 +225,7 @@ class App extends Component {
                 addMessage={this.addMessage}
                 messages={this.state.chatMessages}
                 updateChatPartner={this.updateChatPartner}
-                chatPartner={this.state.chatPartner.id}
+                chatPartner={this.state.chatPartner}
               />
             )}
           />
