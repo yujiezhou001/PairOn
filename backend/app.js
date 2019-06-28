@@ -70,25 +70,30 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-
 const clientList = [];
 
-passport.use(new LocalStrategy({
-    usernameField: 'username',
-    passwordField: 'password'
-  },
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: "username",
+      passwordField: "password"
+    },
 
-  function(username, password, done) {
-    knex.select("*").from('users').where("email", username).first()
-    .then((user) => {
-      console.log("THIS IS DIRECTLY FROM CONSOLE LOG:", user)
-      if (!user) return done(null, false);
-      if (password !== user.password) {
-        return done(null, false);
-      } else {
-        // add the real user / logged in user to the clientList
-        // [user] = result;
-        clientList.push({
+    function(username, password, done) {
+      knex
+        .select("*")
+        .from("users")
+        .where("email", username)
+        .first()
+        .then(user => {
+          console.log("THIS IS DIRECTLY FROM CONSOLE LOG:", user);
+          if (!user) return done(null, false);
+          if (password !== user.password) {
+            return done(null, false);
+          } else {
+            // add the real user / logged in user to the clientList
+            // [user] = result;
+            clientList.push({
               id: user.id,
               firstName: user.first_name,
               lastName: user.last_name,
@@ -100,14 +105,14 @@ passport.use(new LocalStrategy({
               currentLocation: ourLocation,
               aboutMe: user.about_me,
               type: "incomingClientList"
-            })
+            });
 
-        return done(null, user);
-      }
-    })
-    .catch(err => {
-      return done(err);
-    });
+            return done(null, user);
+          }
+        })
+        .catch(err => {
+          return done(err);
+        });
     }
   )
 );
@@ -132,21 +137,21 @@ knex
   .where("id", "<", 10)
   .then(results => {
     let i = 1;
-    results.forEach((userObj) => {
+    results.forEach(userObj => {
       clientList.push({
         id: i,
         firstName: userObj.first_name,
         hometown: userObj.hometown,
         experiences: fakeExperience[i],
         avatarURL: userObj.avatar_url,
-        currentLocation: fakeLocations[i],//generateRandomPoint({lat:45.530336999999996, lng:-73.60290119999999}, 100),
+        currentLocation: fakeLocations[i], //generateRandomPoint({lat:45.530336999999996, lng:-73.60290119999999}, 100),
         aboutMe: userObj.about_me,
         type: "incomingClientList"
       });
       i++;
       //console.log(results);
     });
-  })
+  });
 // app.post('/login',
 //   passport.authenticate('local'),
 //   function(req, res) {
@@ -210,7 +215,7 @@ function generateRandomPoints(center, radius, count) {
   return points;
 }
 
-const ourLocation = { lat: 0, lng: 0} //{ lat: 45.530336999999996, lng: -73.60290119999999};
+const ourLocation = { lat: 0, lng: 0 }; //{ lat: 45.530336999999996, lng: -73.60290119999999};
 const id = uuidv4();
 const geolocations = generateRandomPoints(ourLocation, 100, 20);
 
@@ -290,47 +295,45 @@ wss.on("connection", ws => {
 
   wss.clients.forEach(function each(client) {
     client.send(JSON.stringify({ clientList }));
-    console.log("When the ClientList first sent: ",{clientList});
+    console.log("When the ClientList first sent: ", { clientList });
   });
-
-
 
   ws.on("message", function incoming(message) {
     const messageObj = JSON.parse(message);
-        // messageObj.id = uuidv4(); do not use!! overwrites user id!!
+    // messageObj.id = uuidv4(); do not use!! overwrites user id!!
 
     console.log("This is from received message:", messageObj);
 
     switch (messageObj.type) {
-
       case "outgoingMessage":
-      messageObj.type = "incomingMessage";
-      wss.broadcast(JSON.stringify(messageObj));
-      break;
+        messageObj.type = "incomingMessage";
+        messageObj.id = uuidv4();
+        console.log("OUTGOING MSG:", messageObj);
+        wss.broadcast(JSON.stringify(messageObj));
+        break;
 
       case "outgoingCurrUserInfo":
-      console.log("BACKEND - MY LOC OBJ", messageObj);
-      clientList.forEach(function(client) {
-        if (client.id === messageObj.id) {
-        client.currentLocation = messageObj.myLocation;
-               //DO not change, this is updating clientlist and below broadcasting!
-        }
-      });
-      wss.broadcast(JSON.stringify({ clientList }));
-      break;
+        console.log("BACKEND - MY LOC OBJ", messageObj);
+        clientList.forEach(function(client) {
+          if (client.id === messageObj.id) {
+            client.currentLocation = messageObj.myLocation;
+            //DO not change, this is updating clientlist and below broadcasting!
+          }
+        });
+        wss.broadcast(JSON.stringify({ clientList }));
+        break;
 
       case "experiencePick":
-      clientList.forEach(function(client) {
-      if (client.id === messageObj.id) {
-        client.experiences = messageObj.experiences;
-               //DO not change, this is updating clientlist and below broadcasting!
-        }
-      });
-      wss.broadcast(JSON.stringify({ clientList }));
-      break;
+        clientList.forEach(function(client) {
+          if (client.id === messageObj.id) {
+            client.experiences = messageObj.experiences;
+            //DO not change, this is updating clientlist and below broadcasting!
+          }
+        });
+        wss.broadcast(JSON.stringify({ clientList }));
+        break;
+    }
+  });
 
-        }
-      });
-
-      ws.on("close", () => console.log("Client disconnected"));
-    });
+  ws.on("close", () => console.log("Client disconnected"));
+});
