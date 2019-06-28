@@ -103,7 +103,7 @@ class App extends Component {
       //   });
     } else if (data.type === "experiencePick") {
       console.log("EXPERIENCE FROM BACKEND:", this.state);
-    } else {
+    } else if (this.state.authorize) {
       console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
       this.setState(data);
     }
@@ -123,8 +123,8 @@ class App extends Component {
       aboutMe: data.userObj.about_me,
       type: "real"
     };
-    this.setState({ currentUser: tempObj });
-    this.setState({ authorize: data.authorize });
+    console.log("handle on Authorize: ",data)
+    this.setState({ currentUser: tempObj, authorize: data.authorize });
   };
 
   async componentDidMount() {
@@ -143,6 +143,7 @@ class App extends Component {
         credentials: "include"
       });
       const data = await response.json();
+      console.log("testing", data)
       this.handleOnAuthorize(data);
     } catch (e) {
       // not logged in

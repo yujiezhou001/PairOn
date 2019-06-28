@@ -41,6 +41,7 @@ class Register extends React.Component {
       email: this.state.email,
       password: this.state.password
      }).then(({ data }) => {
+       console.log("Received from register:", data)
       this.setState({
         authorize:data
       });
