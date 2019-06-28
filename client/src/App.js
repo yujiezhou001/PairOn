@@ -121,10 +121,10 @@ class App extends Component {
       avatarURL: data.userObj.avatar_url,
       currentLocation: { lat: 0, lng: 0 },
       aboutMe: data.userObj.about_me,
-      type: "live"
+      type: "real"
     };
-    this.setState({ currentUser: tempObj });
-    this.setState({ authorize: data.authorize });
+    console.log("handle on Authorize: ",data)
+    this.setState({ currentUser: tempObj, authorize: data.authorize });
   };
 
 
@@ -209,7 +209,14 @@ class App extends Component {
             />
           )}
           {/* <Route path="/logout" render={() => <Login />} /> */}
-          <Route path="/register" render={() => <Register />} />
+          {!this.state.authorize && (
+            <Route 
+              path="/register"
+              render={props => (
+                <Register {...props} authorize={this.handleOnAuthorize} />
+              )}
+            />
+          )}
           <Route
             path="/users/:id"
             render={props => (
@@ -232,13 +239,9 @@ class App extends Component {
               <li>
                 <Link to="/users/:id">Profile</Link>
               </li>
-              <li>
-                {this.state.authorize ? (
-                  <button onClick={this.logout}> Logout</button>
-                ) : (
-                  <Link to="/login/">Login</Link>
-                )}
-              </li>
+              {!this.state.authorize && <li>
+                <Link to="/login/">Login</Link>
+              </li>}
               <li>
                 <Link to="/register/">Register</Link>
               </li>

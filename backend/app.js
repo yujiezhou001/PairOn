@@ -113,17 +113,24 @@ passport.use(new LocalStrategy({
 );
 
 passport.serializeUser(function(user, done) {
-  done(null, user.id);
+  console.log("this is from serialized user", user)
+  done(null, user);
 });
 
-passport.deserializeUser(function(id, done) {
-  knex
-    .select("*")
-    .from("users")
-    .where("id", id)
-    .then(user => {
-      done(null, user[0]);
-    });
+// passport.deserializeUser(function(id, done) {
+//   knex
+//     .select("*")
+//     .from("users")
+//     .where("id", id)
+//     .then(user => {
+//       console.log("this is from deserialized user", user)
+//       done(null, user[0]);
+//     });
+// });
+
+passport.deserializeUser(function(user, done) {
+    console.log("this is from deserialized user", user)
+    done(null, user);
 });
 
 knex
