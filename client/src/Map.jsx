@@ -129,12 +129,11 @@ export class MapContainer extends Component {
             this.props.currentExperiences === person.experiences ||
             this.props.currentExperiences === "All" ||
             person.experiences === "All"
-          )
-          {
-            let personIcon = "/waving-icon-18.jpg"
+          ) {
+            let personIcon = "/waving-icon-18.jpg";
 
             if (this.props.currentUserId === person.id) {
-              personIcon = "/currentUser_Location.png"
+              personIcon = "/currentUser_Location.png";
             }
 
             return (
@@ -177,15 +176,11 @@ export class MapContainer extends Component {
               <p>{this.state.selectedPerson.hometown}</p>
 
               <Link to={`../../users/${this.state.selectedPerson.id}`}>
-                <button type="button" className="btn btn-primary btn-sm">
-                  Profile
-                </button>
+                <button className="btn btn-primary btn-sm">Profile</button>
               </Link>
 
               <Link to={`../../chat/${this.state.selectedPerson.id}`}>
-                <button type="button" className="btn btn-primary btn-sm">
-                  Chat
-                </button>
+                <button className="btn btn-primary btn-sm">Chat</button>
               </Link>
             </div>
           </InfoWindow>
