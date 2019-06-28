@@ -1,30 +1,44 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
 const btnProfile = {
   width: "4em",
   height: "4em",
-  color: "#000",  
+  color: "#000"
 };
 
-function BtnProfile(props) {
-  return (<div>
-    <a href="/" role="button" style={props.btnAbsolutR} >
-      <FontAwesomeIcon style={btnProfile} icon={faUserCircle} />
-    </a>
-      <div className="dropdown">
-      <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Dropdown button
-      </button>
-      <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a className="dropdown-item" href="/logout">Logout</a>
-        <a className="dropdown-item" href="#">Another action</a>
-        <a className="dropdown-item" href="#">Something else here</a>
+const BtnProfile = props => {
+  let autorized = props.autorized;
+
+  return (
+    <div>
+      <div className="dropdown" style={props.btnAbsolutR}>
+        <button
+          type="button"
+          id="dropdownMenuButton"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <FontAwesomeIcon style={btnProfile} icon={faUserCircle} />
+        </button>
+        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <div className="dropdown-item">
+            <Link to={`/users/${props.CurrentUserId}`}>My Profile</Link>
+          </div>
+
+          {autorized && (
+            <button className="dropdown-item" onClick={props.fnlogout}>
+              {" "}
+              <a href="/login"> logout</a>
+            </button>
+          )}
+        </div>
       </div>
     </div>
-  </div>
-  )
-}
+  );
+};
 
 export default BtnProfile;

@@ -7,7 +7,10 @@ class MessageList extends Component {
       <Message
         key={messageObj.id}
         username={messageObj.username}
+        senderId={messageObj.senderId}
+        recipientId={messageObj.recipientId}
         content={messageObj.content}
+        chatPartner={this.props.chatPartner}
       />
     ));
     return (

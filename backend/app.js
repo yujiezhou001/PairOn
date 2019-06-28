@@ -21,12 +21,12 @@ const app = express();
 
 const corsOptions = {
   origin: true,
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   preflightContinue: true,
-  maxAge: 600,
+  maxAge: 600
 };
-app.options('*', cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
 
 const SocketServer = require("ws");
@@ -47,10 +47,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
-app.use(session({ secret: 'keyboard cat' }));
+app.use(session({ secret: "keyboard cat" }));
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -71,13 +70,7 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-// User Authentication
-// knex.select("*")
-// .from("users")
-// .where("email", username)
-// .then(user => console.log(user));
-// }
-// ))
+
 const clientList = [];
 
 passport.use(new LocalStrategy({
@@ -88,43 +81,49 @@ passport.use(new LocalStrategy({
   function(username, password, done) {
     knex.select("*").from('users').where("email", username).first()
     .then((user) => {
-    console.log("THIS IS DIRECTLY FROM CONSOLE LOG:", user)
-    if (!user) return done(null, false);
-    if (password !== user.password) {
-      return done(null, false);
-     } else {
-      // add the real user / logged in user to the clientList
-      // [user] = result;
-      clientList.push({
-            id: user.id,
-            firstName: user.first_name,
-            lastName: user.last_name,
-            email: user.email,
-            password: user.password,
-            hometown: user.hometown,
-            experiences: "All",
-            avatarURL: user.avatar_url,
-            currentLocation: ourLocation,
-            aboutMe: user.about_me,
-            type: "incomingClientList"
-          })
+      console.log("THIS IS DIRECTLY FROM CONSOLE LOG:", user)
+      if (!user) return done(null, false);
+      if (password !== user.password) {
+        return done(null, false);
+      } else {
+        // add the real user / logged in user to the clientList
+        // [user] = result;
+        clientList.push({
+              id: user.id,
+              firstName: user.first_name,
+              lastName: user.last_name,
+              email: user.email,
+              password: user.password,
+              hometown: user.hometown,
+              experiences: "All",
+              avatarURL: user.avatar_url,
+              currentLocation: ourLocation,
+              aboutMe: user.about_me,
+              type: "incomingClientList"
+            })
 
-      return done(null, user);
+        return done(null, user);
+      }
+    })
+    .catch(err => {
+      return done(err);
+    });
     }
-  })
-  .catch((err) => { return done(err); });
-}));
-
-
+  )
+);
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-  knex.select("*").from('users').where("id", id).then((user)=> {
-    done(null, user[0]);
-  })
+  knex
+    .select("*")
+    .from("users")
+    .where("id", id)
+    .then(user => {
+      done(null, user[0]);
+    });
 });
 
 knex
@@ -161,8 +160,6 @@ knex
 //                                    failureRedirect: '/login',
 //                                    failureFlash: 'Invalid username or password.'})
 //   );
-
-
 
 //Socket Server
 const PORT = 3001;
@@ -218,85 +215,78 @@ const id = uuidv4();
 const geolocations = generateRandomPoints(ourLocation, 100, 20);
 
 const fakeExperience = [
-  "All",
-  "Food",
-  "Drinks",
-  "All",
-  "All",
-  "Culture",
-  "Drinks",
-  "Food",
-  "Culture"
+  "all",
+  "food",
+  "drinks",
+  "all",
+  "all",
+  "culture",
+  "drinks",
+  "food",
+  "culture"
 ];
 
-
 const fakeLocations = [
-        {lat: 45.525063,
-          lng: -73.59943},
+  { lat: 45.525063, lng: -73.59943 },
 
-        {lat: 45.5246127,
-         lng: -73.5987241},
-        {
-          lat: 45.52744,
-          lng: -73.59643
-        },
-        {
-          lat: 45.527255,
-          lng: -73.597953
-        },
-        {
-          lat: 45.5274897,
-          lng: -73.5984506
-        },
-        {
-          lat: 45.5311081,
-          lng: -73.5995769
-        },
-        {
-
-          lat: 45.5351011,
-          lng: -73.5995709
-        },
-        {
-          lat: 45.5241357,
-          lng: -73.5970109
-        },
-        {
-          lat: 45.5279216,
-          lng: -73.5965196
-        },
-        {
-          lat: 45.5277183,
-          lng: -73.5944831
-        },
-        {
-          lat: 45.5303865,
-          lng: -73.5988069
-        },
-        {
-
-          lat: 45.5263447,
-          lng: -73.5983598
-        },
-        {
-          lat: 45.5261267,
-          lng: -73.5972654
-        },
-        {
-          lat: 45.52714,
-          lng: -73.59613
-        }
-      ]
+  { lat: 45.5246127, lng: -73.5987241 },
+  {
+    lat: 45.52744,
+    lng: -73.59643
+  },
+  {
+    lat: 45.527255,
+    lng: -73.597953
+  },
+  {
+    lat: 45.5274897,
+    lng: -73.5984506
+  },
+  {
+    lat: 45.5311081,
+    lng: -73.5995769
+  },
+  {
+    lat: 45.5351011,
+    lng: -73.5995709
+  },
+  {
+    lat: 45.5241357,
+    lng: -73.5970109
+  },
+  {
+    lat: 45.5279216,
+    lng: -73.5965196
+  },
+  {
+    lat: 45.5277183,
+    lng: -73.5944831
+  },
+  {
+    lat: 45.5303865,
+    lng: -73.5988069
+  },
+  {
+    lat: 45.5263447,
+    lng: -73.5983598
+  },
+  {
+    lat: 45.5261267,
+    lng: -73.5972654
+  },
+  {
+    lat: 45.52714,
+    lng: -73.59613
+  }
+];
 
 wss.on("connection", ws => {
   console.log("Client connected");
   // once login authentication working - wrap all this code in "Usercredentials valid?"
-  ws.on('message', function incoming(message) {
-  const messageObj = JSON.parse(message);
-  console.log("This is from received message:", messageObj)
-  });
-
-
+  // ws.on("message", function incoming(message) {
+  //   const messageObj = JSON.parse(message);
+  //   console.log("This is from received message:", messageObj);
+  // });
 
   wss.clients.forEach(function each(client) {
     client.send(JSON.stringify({ clientList }));
@@ -338,6 +328,7 @@ wss.on("connection", ws => {
       });
       wss.broadcast(JSON.stringify({ clientList }));
       break;
+
         }
       });
 
