@@ -16,7 +16,7 @@ class App extends Component {
         id: null,
         firstName: null,
         hometown: null,
-        experiences: "All",
+        experiences: "all",
         avatarURL: null,
         currentLocation: { lat: 0, lng: 0 },
         aboutMe: null,
@@ -90,6 +90,7 @@ class App extends Component {
     let data = JSON.parse(event.data);
 
     if (data.type === "incomingMessage") {
+
       if (
         this.state.currentUser.id === data.recipientId ||
         this.state.currentUser.id === data.senderId
@@ -97,14 +98,13 @@ class App extends Component {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
       }
       console.log("CHAT BROADCAST BACK TO ME!", data);
-      // } else if (data.type === "incomingUserLoc") {
-      //   this.setState({
-      //     currentUser: { name: data.username, userColor: data.color }
-      //   });
+
     } else if (data.type === "experiencePick") {
-      console.log("EXPERIENCE FROM BACKEND:", this.state);
-    } else {
-      console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
+      //console.log("EXPERIENCE FROM BACKEND:", this.state);
+      this.setState(data);
+
+    } else if (this.state.authorize) {
+      //console.log("CLIENTLIST sent after login", data);
       this.setState(data);
     }
   };
@@ -117,7 +117,7 @@ class App extends Component {
       email: data.userObj.email,
       password: data.userObj.password,
       hometown: data.userObj.hometown,
-      experiences: "All",
+      experiences: "all",
       avatarURL: data.userObj.avatar_url,
       currentLocation: { lat: 0, lng: 0 },
       aboutMe: data.userObj.about_me,
@@ -126,6 +126,7 @@ class App extends Component {
     this.setState({ currentUser: tempObj });
     this.setState({ authorize: data.authorize });
   };
+
 
   async componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001/");
