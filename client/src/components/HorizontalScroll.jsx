@@ -1,15 +1,23 @@
 import React from "react";
 import ScrollMenu from "react-horizontal-scrolling-menu";
-import Food from "../svg/Food.jsx";
+import Food from "./svg/Food";
+import Sports from "./svg/Sports";
+import Shopping from "./svg/Shopping";
+import Events from "./svg/Events";
+import Drink from "./svg/Drink";
+import Culture from "./svg/Culture";
+import Sights from "./svg/Sights";
+
 // list of items
 const list = [
-  { name: "Drinks" },
-  { name: "Food" },
-  { name: "Culture" },
-  { name: "Events" },
-  { name: "Sports" },
-  { name: "Unique" },
-  { name: "All" }
+  { name: "Drinks", css: "drinks", image: <Drink/> },
+  { name: "Food", css: "food", image: <Food/> },
+  { name: "Culture", css: "culture", image: <Culture/> },
+  { name: "Events", css: "events", image: <Events/> },
+  { name: "Sports", css: "sports", image: <Sports /> },
+  { name: "Sights & Landmarks", css: "sights", image: <Sights/> },
+  { name: "Shopping", css: "shopping", image: <Shopping/> },
+  { name: "All", css: "all", image: "All" }
 ];
 
 class HorizontalScroll extends React.Component {
@@ -22,25 +30,15 @@ class HorizontalScroll extends React.Component {
   };
 
   render() {
-    let icon;
-    if ("Food") {
-      icon = <Food />;
-    } else {
-      icon = (
-        <a className="btn btn-primary" href="/" role="button">
-          Message
-        </a>
-      );
-    }
 
     //For render the BTN
     const { selected } = this.state;
     // Create menu from items
     const Menu = list =>
       list.map(el => {
-        const { name } = el;
+        const { name, image, css } = el;
 
-        return <MenuItem text={name} key={name} />;
+        return <MenuItem text={name} key={name} image={image} css={css}/>;
       });
 
     const Arrow = ({ text, className }) => {
@@ -49,17 +47,20 @@ class HorizontalScroll extends React.Component {
 
     const ArrowLeft = Arrow({ text: "<", className: "arrow-prev" });
     const ArrowRight = Arrow({ text: ">", className: "arrow-next" });
-    const MenuItem = ({ text, selected }) => {
+    const MenuItem = ({ text, selected, image, css }) => {
       return (
         <button
           onClick={this.props.handelExperience}
-          className={`btn btn-primary btn-lg menu-item ${text} ${
+          className={`rounded-circle btn-experience menu-item ${css} ${
             selected ? "active" : ""
           }`}
-          value={text}
+          value={css}
+          title={text}
         >
-          {text}
-          let icon; if ("Food") {(icon = <Food />)}
+          {image}
+{/* 
+          {({text} === "Food") && <Food />}
+          {console.log({text} == "Food")} */}
         </button>
       );
     };
