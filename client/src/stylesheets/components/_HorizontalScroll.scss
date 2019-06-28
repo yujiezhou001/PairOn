@@ -18,7 +18,10 @@ $bgcolorFood: $bgcolor;
 $bgcolorShopping: $bgcolor;
 $bgcolorSights: $bgcolor;
 $bgcolorSports: $bgcolor;
-
+//hide the arrow 
+.scroll-menu-arrow {
+  display: none;
+}
 
 .scroll-view-horizon {
   margin-top: -126px;
@@ -37,10 +40,6 @@ $bgcolorSports: $bgcolor;
     border: 1px blue solid;
   }
 }
-/* bg for horizontalmenu
-.menu-wrapper--inner{
-  background-color: #fff;
-} */
 
 .menu-item.active {
   border: 1px green solid;

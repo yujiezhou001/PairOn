@@ -25,7 +25,7 @@ const BtnProfile = props => {
           <img src={props.CurrentUserImage} alt="Button My profile" className="rounded-circle" />
           {/* <FontAwesomeIcon style={btnProfile} icon={faUserCircle} /> */}
         </button>
-        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div className="dropdown-menu dropdown-menu-right text-right" aria-labelledby="dropdownMenuButton">
           <div className="dropdown-item">
             <Link to={`/users/${props.CurrentUserId}`}>My Profile</Link>
           </div>
