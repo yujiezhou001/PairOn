@@ -33,6 +33,7 @@ class Login extends React.Component {
         authorize:data
       });
       this.props.authorize(data)
+      window.location.reload()
     })
   }
 

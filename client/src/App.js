@@ -91,6 +91,7 @@ class App extends Component {
       //   });
     } else if (data.type === "experiencePick") {
       console.log("EXPERIENCE FROM BACKEND:", this.state);
+      this.setState(data);
     } else if (this.state.authorize) {
       console.log("CLIENTLIST sent after login", data);
       this.setState(data);
