@@ -124,17 +124,17 @@ export class MapContainer extends Component {
           options={circleOptions}
         />
 
-        {this.props.clientList.map((person, index) => { //this.state.persons
+        {this.props.clientList.map((person, index) => {
+          //this.state.persons
           if (
             this.props.currentExperiences === person.experiences ||
             this.props.currentExperiences === "all" ||
             person.experiences === "all"
-          )
-          {
-            let personIcon = "/waving-icon-18.jpg"
+          ) {
+            let personIcon = "/waving-icon-18.jpg";
 
             if (this.props.currentUserId === person.id) {
-              personIcon = "/currentUser_Location.png"
+              personIcon = "/currentUser_Location.png";
             }
 
             return (
