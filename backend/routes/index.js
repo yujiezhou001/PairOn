@@ -13,6 +13,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/current_user', (req, res) => {
+  console.log("Current User:", req.user)
   res.json({userObj: req.user, authorize: true})
 })
 
@@ -40,8 +41,12 @@ router.post('/register', function(req, res, next) {
     .insert([registerObject])
     .into('users')
     .returning(['id', 'first_name', 'last_name', 'email', 'password', 'hometown', 'avatar_url', 'about_me', 'type', 'created_at', 'updated_at'])
-    .then(results => {
-      res.send({userObj: results[0], authorize: true})
+    .then(user => {
+      req.login(user, function(err) {
+        console.log("Req.User:", user);
+        if (err) { return next(err); }
+        res.json({userObj: req.user[0], authorize: true})
+      });
     })
 });
 
@@ -55,8 +60,10 @@ router.post('/login',
 
 
 router.get('/logout', function(req, res){
-  req.logout();
-  res.json({authorize: false, userObj: {}})
+  req.session.destroy(function (err) {
+    res.clearCookie('connect.sid');
+    res.json({authorize: false, userObj: {}}) //Inside a callback… bulletproof!
+  });
 });
 
 router.post('/users/:id', function(req, res, next) {
