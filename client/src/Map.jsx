@@ -124,7 +124,7 @@ export class MapContainer extends Component {
           options={circleOptions}
         />
 
-        {this.state.persons.map((person, index) => {
+        {this.props.clientList.map((person, index) => { //this.state.persons
           if (
             this.props.currentExperiences === person.experiences ||
             this.props.currentExperiences === "all" ||
