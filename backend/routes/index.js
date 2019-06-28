@@ -41,11 +41,12 @@ router.post('/register', function(req, res, next) {
     .insert([registerObject])
     .into('users')
     .returning(['id', 'first_name', 'last_name', 'email', 'password', 'hometown', 'avatar_url', 'about_me', 'type', 'created_at', 'updated_at'])
-    .then(user => {
+    .then(results => {
+      const user = results[0];
       req.login(user, function(err) {
         console.log("Req.User:", user);
         if (err) { return next(err); }
-        res.json({userObj: req.user[0], authorize: true})
+        res.json({userObj: req.user, authorize: true})
       });
     })
 });

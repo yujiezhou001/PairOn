@@ -143,7 +143,6 @@ class App extends Component {
         credentials: "include"
       });
       const data = await response.json();
-      console.log("testing", data)
       this.handleOnAuthorize(data);
     } catch (e) {
       // not logged in

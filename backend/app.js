@@ -108,8 +108,8 @@ passport.use(
 );
 
 passport.serializeUser(function(user, done) {
-  console.log(user)
-  done(null, user[0].id);
+  console.log("this is from serialized user", user)
+  done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
@@ -118,7 +118,8 @@ passport.deserializeUser(function(id, done) {
     .from("users")
     .where("id", id)
     .then(user => {
-      done(null, user[0]);
+      console.log("this is from deserialized user", user)
+      done(null, user[0].id);
     });
 });
 
