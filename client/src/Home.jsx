@@ -20,7 +20,7 @@ class Home extends React.Component {
 
   componentDidMount() {
     axios.get("/").then(({ data }) => {
-      console.log(data);
+      // console.log(data);
     });
   }
   render() {
