@@ -13,7 +13,7 @@ const BtnProfile = props => {
   let autorized = props.autorized;
 
   return (
-    <div>
+    <div className="btn-profile">
       <div className="dropdown" style={props.btnAbsolutR}>
         <button
           type="button"
@@ -22,7 +22,8 @@ const BtnProfile = props => {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <FontAwesomeIcon style={btnProfile} icon={faUserCircle} />
+          <img src={props.CurrentUserImage} alt="Button My profile" className="rounded-circle" />
+          {/* <FontAwesomeIcon style={btnProfile} icon={faUserCircle} /> */}
         </button>
         <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <div className="dropdown-item">

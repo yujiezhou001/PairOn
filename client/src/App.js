@@ -161,12 +161,14 @@ class App extends Component {
     return (
       <div>
         <Router>
-          <BtnProfile
+        {this.state.authorize && (<BtnProfile
             btnAbsolutR={this.btnAbsolutR}
             autorized={this.state.authorize}
             fnlogout={this.logout}
             CurrentUserId={this.state.currentUser.id}
+            CurrentUserImage={this.state.currentUser.avatarURL}
           />
+          )}
           {this.state.authorize && (
             <Route
               exact
