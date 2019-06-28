@@ -103,7 +103,7 @@ class App extends Component {
       //   });
     } else if (data.type === "experiencePick") {
       console.log("EXPERIENCE FROM BACKEND:", this.state);
-    } else if (this.state.authorize) {
+    } else {
       console.log("CLIENTLIST BROADCAST BACK TO ME!", data);
       this.setState(data);
     }

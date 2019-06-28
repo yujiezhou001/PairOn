@@ -109,18 +109,23 @@ passport.use(
 
 passport.serializeUser(function(user, done) {
   console.log("this is from serialized user", user)
-  done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser(function(id, done) {
-  knex
-    .select("*")
-    .from("users")
-    .where("id", id)
-    .then(user => {
-      console.log("this is from deserialized user", user)
-      done(null, user[0].id);
-    });
+// passport.deserializeUser(function(id, done) {
+//   knex
+//     .select("*")
+//     .from("users")
+//     .where("id", id)
+//     .then(user => {
+//       console.log("this is from deserialized user", user)
+//       done(null, user[0]);
+//     });
+// });
+
+passport.deserializeUser(function(user, done) {
+    console.log("this is from deserialized user", user)
+    done(null, user);
 });
 
 // app.post('/login',
