@@ -189,15 +189,15 @@ const id = uuidv4();
 const geolocations = generateRandomPoints(ourLocation, 100, 20);
 
 const fakeExperience = [
-  "All",
-  "Food",
-  "Drinks",
-  "All",
-  "All",
-  "Culture",
-  "Drinks",
-  "Food",
-  "Culture"
+  "all",
+  "food",
+  "drinks",
+  "all",
+  "all",
+  "culture",
+  "drinks",
+  "food",
+  "culture"
 ];
 
 const fakeLocations = [
@@ -302,7 +302,7 @@ wss.on("connection", ws => {
             email: user.email,
             password: user.password,
             hometown: user.hometown,
-            experiences: "All",
+            experiences: "all",
             avatarURL: user.avatar_url,
             currentLocation: ourLocation,
             aboutMe: user.about_me,
