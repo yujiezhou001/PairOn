@@ -8,7 +8,6 @@ function Food() {
       x="0px"
       y="0px"
       viewBox="0 0 95 118.75"
-      enable-background="new 0 0 95 95"
     >
       <g>
         <g>
