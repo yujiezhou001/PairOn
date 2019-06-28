@@ -8,7 +8,7 @@ import Drink from "./svg/Drink";
 import Culture from "./svg/Culture";
 import Sights from "./svg/Sights";
 
-// list of items
+// list of items 
 const list = [
   { name: "Drinks", css: "drinks", image: <Drink/> },
   { name: "Food", css: "food", image: <Food/> },
