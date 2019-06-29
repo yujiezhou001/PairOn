@@ -61,7 +61,7 @@ class Chat extends Component {
       <div>
         {user && (
           <div style={navStyle}>
-            <Link to="/">
+            <Link to="/chat/">
               <button type="button">Back</button>
             </Link>
 

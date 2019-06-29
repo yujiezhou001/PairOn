@@ -1,13 +1,22 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
-import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect
+} from "react-router-dom";
 import { Chat } from "./Chat";
+import { ChatConvos } from "./ChatConvos";
 import { Register } from "./Register";
 import { Login } from "./Login";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
 import BtnProfile from "./components/BtnProfile.jsx";
+import BtnChat from "./components/BtnChat.jsx";
 
+import toaster from "toasted-notes";
+import "toasted-notes/src/styles.css"; // optional styles
 
 class App extends Component {
   constructor(props) {
@@ -27,7 +36,9 @@ class App extends Component {
       eventsList: [],
       chatMessages: [],
       chatPartner: { id: null },
-      authorize: false
+      authorize: false,
+      unreadMsgs: 0,
+      unread: false
     };
   }
 
@@ -36,6 +47,10 @@ class App extends Component {
     top: 0,
     right: 0,
     zIndex: "300"
+  };
+
+  resetUnread = () => {
+    this.setState({ unreadMsgs: 0, unread: false });
   };
 
   updateCurrentLocation = locationObject => {
@@ -71,7 +86,13 @@ class App extends Component {
   };
 
   updateChatPartner = userId => {
-    this.setState({ chatPartner: { id: parseInt(userId) } });
+    var chatPartner = this.state.clientList.find(
+      element => element.id === parseInt(userId)
+    );
+
+    console.log(chatPartner);
+
+    this.setState({ chatPartner });
   };
 
   updateEventsList = onClickEvent => {
@@ -80,7 +101,9 @@ class App extends Component {
       type: "newEventPin",
       id: this.state.currentUser.id,
       avatarURL: this.state.currentUser.avatarURL,
-      description:`${this.state.currentUser.firstName}'s event. \n Show up or message him for more info!`,
+      description: `${
+        this.state.currentUser.firstName
+      }'s event. \n Show up or message him for more info!`,
       lat: onClickEvent.latLng.lat(),
       lng: onClickEvent.latLng.lng()
     };
@@ -90,27 +113,33 @@ class App extends Component {
     //console.log(onClickEvent)
   };
 
-  removeEventPin = (oneEvent) => {
+  removeEventPin = oneEvent => {
     //console.log(oneEvent);
-    if(this.state.currentUser.id === oneEvent.id){
+    if (this.state.currentUser.id === oneEvent.id) {
       let pinRemoval = {
         type: "removeEvent",
         uuid: oneEvent.uuid
-      }
-      this.socket.send(JSON.stringify(pinRemoval))
+      };
+      this.socket.send(JSON.stringify(pinRemoval));
     }
-  }
+  };
 
   addMessage = newMessage => {
+    const date = new Date();
+    const d = date.toDateString();
+    const time = date.toLocaleTimeString();
+
     const messageObject = {
       username: this.state.currentUser.firstName,
       senderId: this.state.currentUser.id,
+      senderAvatar: this.state.currentUser.avatarURL,
       recipientId: this.state.chatPartner.id,
       content: newMessage,
-      type: "outgoingMessage"
+      type: "outgoingMessage",
+      datetime: `${d} ${time}`
     };
 
-    // console.log("SEND", newMessage, "TO BACKEND!!!!");
+    console.log("SEND", newMessage, "TO BACKEND!!!!");
     // console.log(messageObject);
     this.socket.send(JSON.stringify(messageObject));
   };
@@ -119,18 +148,45 @@ class App extends Component {
     let data = JSON.parse(event.data);
 
     if (data.type === "incomingMessage") {
-      if (
-        this.state.currentUser.id === data.recipientId ||
-        this.state.currentUser.id === data.senderId
-      ) {
+      debugger;
+      if (this.state.currentUser.id === data.recipientId) {
+        this.setState({ chatMessages: [...this.state.chatMessages, data] });
+
+        if (
+          !(
+            window.location.pathname === `/chat/${data.senderId}` ||
+            window.location.pathname === "/chat/"
+          )
+        ) {
+          this.setState({ unread: true });
+
+          const newUnreadCount = this.state.unreadMsgs + 1;
+          console.log("UNREAD COUNT", newUnreadCount);
+          this.setState({ unreadMsgs: newUnreadCount });
+
+          toaster.notify(
+            <div>
+              <img
+                className="rounded-circle"
+                src={data.senderAvatar}
+                style={{ width: "55px" }}
+              />
+              <h5>New message from {data.username}</h5>
+              <p>{data.content}</p>
+            </div>,
+            {
+              position: "bottom-left" // top-left, top, top-right, bottom-left, bottom, bottom-right
+              // duration: null // This notification will not automatically close
+            }
+          );
+        }
+      } else if (this.state.currentUser.id === data.senderId) {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
       }
       console.log("CHAT BROADCAST BACK TO ME!", data);
     } else if (data.type === "experiencePick") {
-      //console.log("EXPERIENCE FROM BACKEND:", this.state);
       this.setState(data);
     } else if (this.state.authorize) {
-      //console.log("CLIENTLIST sent after login", data);
       this.setState(data);
     }
   };
@@ -149,7 +205,7 @@ class App extends Component {
       aboutMe: data.userObj.about_me,
       type: "real"
     };
-    console.log("handle on Authorize: ",data)
+    console.log("handle on Authorize: ", data);
     this.setState({ currentUser: tempObj, authorize: data.authorize });
   };
 
@@ -187,6 +243,15 @@ class App extends Component {
     return (
       <div>
         <Router>
+          <Link to="/chat/">
+            {this.state.authorize && (
+              <BtnChat
+                resetUnread={this.resetUnread}
+                unreadMsgs={this.state.unreadMsgs}
+                unread={this.state.unread}
+              />
+            )}
+          </Link>
           {this.state.authorize && (
             <BtnProfile
               btnAbsolutR={this.btnAbsolutR}
@@ -196,12 +261,12 @@ class App extends Component {
               CurrentUserImage={this.state.currentUser.avatarURL}
             />
           )}
-            <Route
-              exact
-              path="/"
-              render={props => (
-                this.state.authorize ? (
-                  <Home
+          <Route
+            exact
+            path="/"
+            render={props =>
+              this.state.authorize ? (
+                <Home
                   {...props}
                   clientList={this.state.clientList}
                   updateCurrentLocation={this.updateCurrentLocation}
@@ -214,50 +279,65 @@ class App extends Component {
                   updateEventsList={this.updateEventsList}
                   removeEventPin={this.removeEventPin}
                 />
-                ) : (
-                  <Redirect to="/login" />
-                )
-              )}
-            />
-          <Route
-            exact
-            path="/chat/:id"
-            render={props => (
-              <Chat
-                {...props}
-                clientList={this.state.clientList}
-                addMessage={this.addMessage}
-                messages={this.state.chatMessages}
-                updateChatPartner={this.updateChatPartner}
-                chatPartner={this.state.chatPartner.id}
-              />
-            )}
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
+          )}
+          {this.state.authorize && (
             <Route
-              path="/login"
+              exact
+              path="/chat/:id"
               render={props => (
-                this.state.authorize ? (
-                  <Redirect to="/" />
-                  ) : (
-                  <Login {...props} authorize={this.handleOnAuthorize} />
-                )
+                <Chat
+                  {...props}
+                  clientList={this.state.clientList}
+                  addMessage={this.addMessage}
+                  messages={this.state.chatMessages}
+                  updateChatPartner={this.updateChatPartner}
+                  chatPartner={this.state.chatPartner}
+                />
               )}
-
-
             />
-
+          )}
+          {this.state.authorize && (
+            <Route
+              exact
+              path="/chat"
+              render={props => (
+                <ChatConvos
+                  {...props}
+                  clientList={this.state.clientList}
+                  addMessage={this.addMessage}
+                  messages={this.state.chatMessages}
+                  chatPartner={this.state.chatPartner}
+                  currentUser={this.state.currentUser}
+                />
+              )}
+            />
+          )}
+          <Route
+            path="/login"
+            render={props =>
+              this.state.authorize ? (
+                <Redirect to="/" />
+              ) : (
+                <Login {...props} authorize={this.handleOnAuthorize} />
+              )
+            }
+          />
           {/* <Route path="/logout" render={() => <Login />} /> */}
-            <Route
-              path="/register"
-              render={props => (
-                this.state.authorize ? (
-                  <Redirect to="/" />
-                ) : (
-                  <Register {...props} authorize={this.handleOnAuthorize} />
-                )
-              )}
-            />
-
+          <Route
+            path="/register"
+            render={props =>
+              this.state.authorize ? (
+                <Redirect to="/" />
+              ) : (
+                <Register {...props} authorize={this.handleOnAuthorize} />
+              )
+            }
+          />
           <Route
             path="/users/:id"
             render={props => (

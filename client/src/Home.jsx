@@ -10,6 +10,9 @@ import {
   InfoWindow
 } from "react-google-maps";
 
+import toaster from "toasted-notes";
+import "toasted-notes/src/styles.css"; // optional styles
+
 const WrappedMap = withScriptjs(withGoogleMap(MapContainer));
 
 class Home extends React.Component {
