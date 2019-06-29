@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect
+} from "react-router-dom";
 import { Chat } from "./Chat";
 import { ChatConvos } from "./ChatConvos";
 import { Register } from "./Register";
@@ -28,6 +33,7 @@ class App extends Component {
         type: "live"
       },
       clientList: [], // full of currentUser objects sent from WebSocket
+      eventsList: [],
       chatMessages: [],
       chatPartner: { id: null },
       authorize: false,
@@ -87,6 +93,35 @@ class App extends Component {
     console.log(chatPartner);
 
     this.setState({ chatPartner });
+  };
+
+  updateEventsList = onClickEvent => {
+    //let newEventsList = this.state.eventsList;
+    const newEventsObj = {
+      type: "newEventPin",
+      id: this.state.currentUser.id,
+      avatarURL: this.state.currentUser.avatarURL,
+      description: `${
+        this.state.currentUser.firstName
+      }'s event. \n Show up or message him for more info!`,
+      lat: onClickEvent.latLng.lat(),
+      lng: onClickEvent.latLng.lng()
+    };
+    this.socket.send(JSON.stringify(newEventsObj));
+    // newEventsList.push
+    // this.setState(newEventsList)
+    //console.log(onClickEvent)
+  };
+
+  removeEventPin = oneEvent => {
+    //console.log(oneEvent);
+    if (this.state.currentUser.id === oneEvent.id) {
+      let pinRemoval = {
+        type: "removeEvent",
+        uuid: oneEvent.uuid
+      };
+      this.socket.send(JSON.stringify(pinRemoval));
+    }
   };
 
   addMessage = newMessage => {
@@ -162,16 +197,16 @@ class App extends Component {
       firstName: data.userObj.first_name,
       lastName: data.userObj.last_name,
       email: data.userObj.email,
-      password: data.userObj.password,
+      // password: data.userObj.password,
       hometown: data.userObj.hometown,
       experiences: "all",
       avatarURL: data.userObj.avatar_url,
       currentLocation: { lat: 0, lng: 0 },
       aboutMe: data.userObj.about_me,
-      type: "live"
+      type: "real"
     };
-    this.setState({ currentUser: tempObj });
-    this.setState({ authorize: data.authorize });
+    console.log("handle on Authorize: ", data);
+    this.setState({ currentUser: tempObj, authorize: data.authorize });
   };
 
   async componentDidMount() {
@@ -209,23 +244,28 @@ class App extends Component {
       <div>
         <Router>
           <Link to="/chat/">
-            <BtnChat
-              resetUnread={this.resetUnread}
-              unreadMsgs={this.state.unreadMsgs}
-              unread={this.state.unread}
-            />
+            {this.state.authorize && (
+              <BtnChat
+                resetUnread={this.resetUnread}
+                unreadMsgs={this.state.unreadMsgs}
+                unread={this.state.unread}
+              />
+            )}
           </Link>
-          <BtnProfile
-            btnAbsolutR={this.btnAbsolutR}
-            autorized={this.state.authorize}
-            fnlogout={this.logout}
-            CurrentUserId={this.state.currentUser.id}
-          />
           {this.state.authorize && (
-            <Route
-              exact
-              path="/"
-              render={props => (
+            <BtnProfile
+              btnAbsolutR={this.btnAbsolutR}
+              autorized={this.state.authorize}
+              fnlogout={this.logout}
+              CurrentUserId={this.state.currentUser.id}
+              CurrentUserImage={this.state.currentUser.avatarURL}
+            />
+          )}
+          <Route
+            exact
+            path="/"
+            render={props =>
+              this.state.authorize ? (
                 <Home
                   {...props}
                   clientList={this.state.clientList}
@@ -235,9 +275,15 @@ class App extends Component {
                   handleOnClick={this.state.handleOnClick}
                   currentExperiences={this.state.currentUser.experiences}
                   currentUserId={this.state.currentUser.id}
+                  eventsList={this.state.eventsList}
+                  updateEventsList={this.updateEventsList}
+                  removeEventPin={this.removeEventPin}
                 />
-              )}
-            />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
           )}
           {this.state.authorize && (
             <Route
@@ -255,7 +301,6 @@ class App extends Component {
               )}
             />
           )}
-
           {this.state.authorize && (
             <Route
               exact
@@ -272,18 +317,27 @@ class App extends Component {
               )}
             />
           )}
-
-          {!this.state.authorize && (
-            <Route
-              path="/login"
-              render={props => (
+          <Route
+            path="/login"
+            render={props =>
+              this.state.authorize ? (
+                <Redirect to="/" />
+              ) : (
                 <Login {...props} authorize={this.handleOnAuthorize} />
-              )}
-            />
-          )}
-
+              )
+            }
+          />
           {/* <Route path="/logout" render={() => <Login />} /> */}
-          <Route path="/register" render={() => <Register />} />
+          <Route
+            path="/register"
+            render={props =>
+              this.state.authorize ? (
+                <Redirect to="/" />
+              ) : (
+                <Register {...props} authorize={this.handleOnAuthorize} />
+              )
+            }
+          />
           <Route
             path="/users/:id"
             render={props => (
@@ -300,25 +354,21 @@ class App extends Component {
           />
           <nav>
             <ul>
-              <li>
+              {/* <li>
                 <Link to="/">Home</Link>
               </li>
               <li>
                 <Link to="/users/:id">Profile</Link>
               </li>
-              <li>
-                {this.state.authorize ? (
-                  <button onClick={this.logout}> Logout</button>
-                ) : (
-                  <Link to="/login/">Login</Link>
-                )}
-              </li>
-              <li>
+              {!this.state.authorize && <li>
+                <Link to="/login/">Login</Link>
+              </li>}
+              {!this.state.authorize && <li>
                 <Link to="/register/">Register</Link>
-              </li>
+              </li>}
               <li>
                 <Link to="/chat/">Chat</Link>
-              </li>
+              </li> */}
             </ul>
           </nav>
         </Router>

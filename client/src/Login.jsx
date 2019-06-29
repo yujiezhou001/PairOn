@@ -1,5 +1,8 @@
 import React from "react";
 import axios from "axios";
+import Logo from "./components/Logo.jsx";
+import { Link } from 'react-router-dom';
+
 
 class Login extends React.Component {
   constructor(props) {
@@ -7,7 +10,7 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
-      authorize: ''
+      authorize: false
     };
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -52,16 +55,21 @@ class Login extends React.Component {
   render() {
     console.log(this.state.authorize)
     return (
-      <div>
+
+      <div id = "login">
+      <div className="logoClass">
+      <Logo />
+      </div>
+
         <form onSubmit={this.handleOnSubmit}>
           <div className="form-group">
-            <label htmlFor="inputEmail4">Email</label>
+            <label htmlFor="inputEmail4">Email address</label>
             <input
               type="email"
               name="username"
               className="form-control"
               id="inputEmail"
-              placeholder="Email"
+              placeholder="Please enter your email"
               value={this.state.username}
               onChange={this.handleUsernameChange}
             />
@@ -73,25 +81,27 @@ class Login extends React.Component {
               name="password"
               className="form-control"
               id="inputPassword"
-              placeholder="Password"
+              placeholder="Please enter your password"
               value={this.state.password}
               onChange={this.handlePasswordChange}
             />
           </div>
+          <div className="loginButton">
           <button type="submit" className="btn btn-primary">
             Login
           </button>
+          </div>
         </form>
-
         <p>
           Don't have an account? <br />
-          <button className="btn btn-primary" type="submit">
+          <Link to="/register">
+          <button className="btn btn-primary" type="button">
             Join
           </button>
+          </Link>
         </p>
       </div>
     );
   }
 }
-
 export { Login };

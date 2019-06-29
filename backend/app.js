@@ -71,6 +71,7 @@ app.use(function(err, req, res, next) {
 });
 
 const clientList = [];
+let eventsList = [];
 
 passport.use(
   new LocalStrategy(
@@ -98,7 +99,7 @@ passport.use(
               firstName: user.first_name,
               lastName: user.last_name,
               email: user.email,
-              password: user.password,
+              // password: user.password,
               hometown: user.hometown,
               experiences: "All",
               avatarURL: user.avatar_url,
@@ -118,17 +119,24 @@ passport.use(
 );
 
 passport.serializeUser(function(user, done) {
-  done(null, user.id);
+  console.log("this is from serialized user", user);
+  done(null, user);
 });
 
-passport.deserializeUser(function(id, done) {
-  knex
-    .select("*")
-    .from("users")
-    .where("id", id)
-    .then(user => {
-      done(null, user[0]);
-    });
+// passport.deserializeUser(function(id, done) {
+//   knex
+//     .select("*")
+//     .from("users")
+//     .where("id", id)
+//     .then(user => {
+//       console.log("this is from deserialized user", user)
+//       done(null, user[0]);
+//     });
+// });
+
+passport.deserializeUser(function(user, done) {
+  console.log("this is from deserialized user", user);
+  done(null, user);
 });
 
 knex
@@ -302,7 +310,7 @@ wss.on("connection", ws => {
     const messageObj = JSON.parse(message);
     // messageObj.id = uuidv4(); do not use!! overwrites user id!!
 
-    console.log("This is from received message:", messageObj);
+    console.log("This is from any received message:", messageObj);
 
     switch (messageObj.type) {
       case "outgoingMessage":
@@ -331,6 +339,21 @@ wss.on("connection", ws => {
           }
         });
         wss.broadcast(JSON.stringify({ clientList }));
+        break;
+
+      case "newEventPin":
+        messageObj.uuid = uuidv4();
+        eventsList.push(messageObj);
+        wss.broadcast(JSON.stringify({ eventsList }));
+        break;
+
+      case "removeEvent":
+        eventsList = eventsList.filter(oneEvent => {
+          if (oneEvent.uuid !== messageObj.uuid) {
+            return oneEvent;
+          }
+        });
+        wss.broadcast(JSON.stringify({ eventsList }));
         break;
     }
   });
