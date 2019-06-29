@@ -55,10 +55,12 @@ class Login extends React.Component {
   render() {
     console.log(this.state.authorize)
     return (
+
       <div id = "login">
       <div className="logoClass">
-      < Logo />
+      <Logo />
       </div>
+
         <form onSubmit={this.handleOnSubmit}>
           <div className="form-group">
             <label htmlFor="inputEmail4">Email address</label>
