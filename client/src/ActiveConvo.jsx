@@ -33,11 +33,13 @@ class ActiveConvo extends Component {
     return (
       <div class="panel panel-default">
         <div class="panel-body">
-          <img
-            className="rounded-circle"
-            src={currentChatter.avatarURL}
-            style={{ width: "55px" }}
-          />
+          <Link to={`/users/${JSON.stringify(this.props.chatterId)}`}>
+            <img
+              className="rounded-circle"
+              src={currentChatter.avatarURL}
+              style={{ width: "55px" }}
+            />
+          </Link>
           <span className="message-username" style={fontStyle}>
             {currentChatter.firstName}
           </span>
