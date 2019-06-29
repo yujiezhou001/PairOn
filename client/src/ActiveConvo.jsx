@@ -33,7 +33,7 @@ class ActiveConvo extends Component {
     return (
       <div class="panel panel-default">
         <div class="panel-body">
-          <Link to={`/users/${JSON.stringify(this.props.chatterId)}`}>
+          <Link to={`/chat/${JSON.stringify(this.props.chatterId)}`}>
             <img
               className="rounded-circle"
               src={currentChatter.avatarURL}

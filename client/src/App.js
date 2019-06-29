@@ -8,6 +8,7 @@ import { Login } from "./Login";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
 import BtnProfile from "./components/BtnProfile.jsx";
+import BtnChat from "./components/BtnChat.jsx";
 
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css"; // optional styles
@@ -29,7 +30,9 @@ class App extends Component {
       clientList: [], // full of currentUser objects sent from WebSocket
       chatMessages: [],
       chatPartner: { id: null },
-      authorize: false
+      authorize: false,
+      unreadMsgs: 0,
+      unread: false
     };
   }
 
@@ -38,6 +41,10 @@ class App extends Component {
     top: 0,
     right: 0,
     zIndex: "300"
+  };
+
+  resetUnread = () => {
+    this.setState({ unreadMsgs: 0, unread: false });
   };
 
   updateCurrentLocation = locationObject => {
@@ -108,6 +115,11 @@ class App extends Component {
     if (data.type === "incomingMessage") {
       if (this.state.currentUser.id === data.recipientId) {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
+
+        const newUnreadCount = this.state.unreadMsgs + 1;
+        console.log("UNREAD COUNT", newUnreadCount);
+        this.setState({ unreadMsgs: newUnreadCount });
+        this.setState({ unread: true });
 
         toaster.notify(
           <div>
@@ -187,6 +199,13 @@ class App extends Component {
     return (
       <div>
         <Router>
+          <Link to="/chat/">
+            <BtnChat
+              resetUnread={this.resetUnread}
+              unreadMsgs={this.state.unreadMsgs}
+              unread={this.state.unread}
+            />
+          </Link>
           <BtnProfile
             btnAbsolutR={this.btnAbsolutR}
             autorized={this.state.authorize}
