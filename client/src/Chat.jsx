@@ -3,6 +3,7 @@ import axios from "axios";
 import { ChatBar } from "./ChatBar";
 import { MessageList } from "./MessageList";
 import { Link } from "react-router-dom";
+import BackArrow from "./components/c-svg/BackArrow";
 
 const navStyle = {
   background: "#b3f2ef",
@@ -58,11 +59,14 @@ class Chat extends Component {
     );
 
     return (
-      <div>
+      <div className="chat">
         {user && (
+          
           <div style={navStyle}>
             <Link to="/">
-              <button type="button">Back</button>
+              <div className="back-arrow">
+              <BackArrow />
+              </div>
             </Link>
 
             <Link to={`/users/${JSON.stringify(user.id)}`}>
