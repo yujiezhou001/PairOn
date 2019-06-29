@@ -90,7 +90,6 @@ class App extends Component {
     let data = JSON.parse(event.data);
 
     if (data.type === "incomingMessage") {
-
       if (
         this.state.currentUser.id === data.recipientId ||
         this.state.currentUser.id === data.senderId
@@ -98,11 +97,9 @@ class App extends Component {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
       }
       console.log("CHAT BROADCAST BACK TO ME!", data);
-
     } else if (data.type === "experiencePick") {
       //console.log("EXPERIENCE FROM BACKEND:", this.state);
       this.setState(data);
-
     } else if (this.state.authorize) {
       //console.log("CLIENTLIST sent after login", data);
       this.setState(data);
@@ -126,7 +123,6 @@ class App extends Component {
     console.log("handle on Authorize: ",data)
     this.setState({ currentUser: tempObj, authorize: data.authorize });
   };
-
 
   async componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001/");
@@ -162,12 +158,15 @@ class App extends Component {
     return (
       <div>
         <Router>
-          <BtnProfile
-            btnAbsolutR={this.btnAbsolutR}
-            autorized={this.state.authorize}
-            fnlogout={this.logout}
-            CurrentUserId={this.state.currentUser.id}
-          />
+          {this.state.authorize && (
+            <BtnProfile
+              btnAbsolutR={this.btnAbsolutR}
+              autorized={this.state.authorize}
+              fnlogout={this.logout}
+              CurrentUserId={this.state.currentUser.id}
+              CurrentUserImage={this.state.currentUser.avatarURL}
+            />
+          )}
             <Route
               exact
               path="/"
