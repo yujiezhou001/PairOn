@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import { Chat } from "./Chat";
 import { Register } from "./Register";
 import { Login } from "./Login";
@@ -112,7 +112,7 @@ class App extends Component {
       firstName: data.userObj.first_name,
       lastName: data.userObj.last_name,
       email: data.userObj.email,
-      password: data.userObj.password,
+      // password: data.userObj.password,
       hometown: data.userObj.hometown,
       experiences: "all",
       avatarURL: data.userObj.avatar_url,
@@ -167,12 +167,12 @@ class App extends Component {
               CurrentUserImage={this.state.currentUser.avatarURL}
             />
           )}
-          {this.state.authorize && (
             <Route
               exact
               path="/"
               render={props => (
-                <Home
+                this.state.authorize ? (
+                  <Home
                   {...props}
                   clientList={this.state.clientList}
                   updateCurrentLocation={this.updateCurrentLocation}
@@ -182,9 +182,11 @@ class App extends Component {
                   currentExperiences={this.state.currentUser.experiences}
                   currentUserId={this.state.currentUser.id}
                 />
+                ) : (
+                  <Redirect to="/login" />
+                )
               )}
             />
-          )}
           <Route
             exact
             path="/chat/:id"
@@ -199,23 +201,27 @@ class App extends Component {
               />
             )}
           />
-          {!this.state.authorize && (
             <Route
               path="/login"
               render={props => (
-                <Login {...props} authorize={this.handleOnAuthorize} />
+                this.state.authorize ? (
+                  <Redirect to="/" />
+                ) : (
+                  <Login {...props} authorize={this.handleOnAuthorize} />
+                )
               )}
             />
-          )}
           {/* <Route path="/logout" render={() => <Login />} /> */}
-          {!this.state.authorize && (
             <Route 
               path="/register"
               render={props => (
-                <Register {...props} authorize={this.handleOnAuthorize} />
+                this.state.authorize ? (
+                  <Redirect to="/" />
+                ) : (
+                  <Register {...props} authorize={this.handleOnAuthorize} />
+                )
               )}
             />
-          )}
           <Route
             path="/users/:id"
             render={props => (
@@ -232,7 +238,7 @@ class App extends Component {
           />
           <nav>
             <ul>
-              <li>
+              {/* <li>
                 <Link to="/">Home</Link>
               </li>
               <li>
@@ -241,12 +247,12 @@ class App extends Component {
               {!this.state.authorize && <li>
                 <Link to="/login/">Login</Link>
               </li>}
-              <li>
+              {!this.state.authorize && <li>
                 <Link to="/register/">Register</Link>
-              </li>
+              </li>}
               <li>
                 <Link to="/chat/">Chat</Link>
-              </li>
+              </li> */}
             </ul>
           </nav>
         </Router>
