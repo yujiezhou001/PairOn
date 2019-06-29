@@ -39,6 +39,9 @@ class Home extends React.Component {
           updateExperiences={this.props.updateExperiences}
           currentExperiences={this.props.currentExperiences}
           currentUserId={this.props.currentUserId}
+          eventsList={this.props.eventsList}
+          updateEventsList={this.props.updateEventsList}
+          removeEventPin={this.props.removeEventPin}
         />
       </div>
     );
