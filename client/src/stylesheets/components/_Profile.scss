@@ -1,0 +1,23 @@
+.profile {
+  height: 100vh;
+  padding: 1em;
+  background-image: linear-gradient(to top right, #93a5cf, #e4efe9);
+  .oter-profile {
+  }
+  img {
+    border: 0.5em solid #fff;
+    margin-bottom: -3.5em;
+    width: 7em;
+    height: 7em;
+    z-index: 500;
+  }
+  .about-me {
+    background-color: #fff;
+    padding: 3.5em 2em;
+    width: 100%;
+  }
+
+  .edit-account{
+    width: 100%;
+  }
+}
