@@ -56,9 +56,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    const imgPicture = {
-      width: "100px"
-    };
+
 
     const user = this.props.clientList.find(
       userObj => userObj.id === Number(this.props.match.params.id)
@@ -78,35 +76,37 @@ class Profile extends React.Component {
             <p>Password: ******************</p>
           </div>
 
-          <button onClick={this.handleClick} className="btn btn-primary">
+          <button onClick={this.handleClick} className="btn btn-outline-color">
             Edit
           </button>
         </div>
       );
     } else {
       button = (
-        <a className="btn btn-primary" href="/" role="button">
+        <a className="btn btn-outline-color" href="/" role="button">
           Message
         </a>
       );
     }
 
     const personalProfile = user && (
-      <div>
+      <div className="oter-profile d-flex justify-content-start flex-column align-items-center">
         <img
           className="rounded-circle"
           src={user.avatarURL}
-          style={imgPicture}
         />
-        <h3>{user.firstName}</h3>
-        <p>{user.hometown}</p>
-        <h4>About me</h4>
-        <p>{user.aboutMe}</p>
+        <div className="about-me d-flex justify-content-start flex-column align-items-center">
+          <h3>{user.firstName}</h3>
+          <p>{user.hometown}</p>
+          <h4>About me</h4>
+          <p>{user.aboutMe}</p>
+          {button}
+        </div>
       </div>
     );
 
     return (
-      <div>
+      <div className="profile d-flex justify-content-center align-items-center">
         {this.state.isToggleOn ? (
           <div className="edit-account">
             <form onSubmit={this.handleOnSubmit}>
@@ -175,7 +175,7 @@ class Profile extends React.Component {
                   placeholder="Password"
                 />
               </div>
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn btn-outline-color">
                 Join
               </button>
             </form>
@@ -183,7 +183,6 @@ class Profile extends React.Component {
         ) : (
           <div>
             {personalProfile}
-            {button}
           </div>
         )}
       </div>
