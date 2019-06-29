@@ -1,0 +1,68 @@
+#register {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height:100%
+}
+
+#register form {
+    margin-top: 2.8rem;
+}
+
+#register .form-control {
+    display: block;
+    padding: .375rem .75rem;
+    margin-top: 0px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+#register p {
+    display: block;
+    padding: .375rem .75rem;
+    margin-top: 20px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    text-align: center;
+}
+
+#register .registerButton {
+    display: flex;
+    justify-content: center;
+}
+
+#register p {
+    margin-top: 2.5rem;
+}
+
+#register p button {
+    margin-top: 0.6rem;
+}
+
+#register img {
+    width: 8.5rem;
+}
+
+#register h1 {
+    font-size: 1.5rem;
+    font-weight: 200;
+}
+
+#register .logoClass {
+    margin-top: 2.2rem;
+}
+
+#register .form-group {
+    width: 20rem;
+}

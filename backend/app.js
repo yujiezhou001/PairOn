@@ -93,7 +93,7 @@ passport.use(new LocalStrategy({
               firstName: user.first_name,
               lastName: user.last_name,
               email: user.email,
-              password: user.password,
+              // password: user.password,
               hometown: user.hometown,
               experiences: "All",
               avatarURL: user.avatar_url,

@@ -1,5 +1,7 @@
 import React from "react";
 import axios from "axios";
+import Logo from "./components/Logo.jsx";
+import { Link } from 'react-router-dom';
 
 class Register extends React.Component {
   constructor(props) {
@@ -46,6 +48,7 @@ class Register extends React.Component {
         authorize:data
       });
       this.props.authorize(data)
+      window.location.reload()
     })
   }
 
@@ -81,7 +84,10 @@ class Register extends React.Component {
 
   render() {
     return (
-      <div>
+      <div id = "register">
+      <div className="logoClass">
+        < Logo />
+        </div>
         <form onSubmit={this.handleOnSubmit}>
           <div className="form-group">
             <label htmlFor="inputAddress">First name</label>
@@ -90,7 +96,7 @@ class Register extends React.Component {
               className="form-control"
               name="firstname"
               id="inputFirstName"
-              placeholder="Hey ton "
+              placeholder="Please enter your firstname"
               value={this.state.firstName}
               onChange={this.handleFirstNameInput}
             />
@@ -102,7 +108,7 @@ class Register extends React.Component {
               className="form-control"
               name="lastname"
               id="inputLastName"
-              placeholder="Yo ton"
+              placeholder="Please enter your lastname"
               value={this.state.lastName}
               onChange={this.handleLastNameInput}
             />
@@ -114,7 +120,7 @@ class Register extends React.Component {
               className="form-control"
               name="hometown"
               id="inputHomeTown"
-              placeholder="Ton Hometown"
+              placeholder="Please enter your hometown"
               value={this.state.hometown}
               onChange={this.handleHometownInput}
             />
@@ -126,7 +132,7 @@ class Register extends React.Component {
               className="form-control"
               name="email"
               id="inputEmail"
-              placeholder="Email"
+              placeholder="Please enter your email"
               value={this.state.email}
               onChange={this.handleEmailInput}
             />
@@ -138,19 +144,21 @@ class Register extends React.Component {
               className="form-control"
               name="password"
               id="inputPassword"
-              placeholder="Password"
+              placeholder="Please enter your password"
               value={this.state.password}
               onChange={this.handlePasswordInput}
             />
           </div>
+          <div className="registerButton">
           <button type="submit" className="btn btn-primary">
             Join
           </button>
+          </div>
         </form>
         <p>
           Already a member?
           <br />
-          <a href="/login">Login</a>
+          <Link to="/login">Login</Link>
         </p>
       </div>
     );
