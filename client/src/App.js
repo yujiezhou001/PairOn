@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 import { Chat } from "./Chat";
 import { Register } from "./Register";
 import { Login } from "./Login";
@@ -182,6 +182,7 @@ class App extends Component {
                   handleOnClick={this.state.handleOnClick}
                   currentExperiences={this.state.currentUser.experiences}
                   currentUserId={this.state.currentUser.id}
+
                 />
               )}
             />
@@ -200,16 +201,23 @@ class App extends Component {
               />
             )}
           />
-          {!this.state.authorize && (
             <Route
               path="/login"
               render={props => (
+                this.state.authorize ? (
+                  <Redirect to="/" />
+                  ) : (
                 <Login {...props} authorize={this.handleOnAuthorize} />
+                )
               )}
+
+
             />
-          )}
+
           {/* <Route path="/logout" render={() => <Login />} /> */}
           <Route path="/register" render={() => <Register />} />
+
+
           <Route
             path="/users/:id"
             render={props => (

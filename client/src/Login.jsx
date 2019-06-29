@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Logo from "./components/Logo.jsx";
 
 class Login extends React.Component {
   constructor(props) {
@@ -53,6 +54,7 @@ class Login extends React.Component {
     console.log(this.state.authorize)
     return (
       <div>
+        <Logo/>
         <form onSubmit={this.handleOnSubmit}>
           <div className="form-group">
             <label htmlFor="inputEmail4">Email</label>
