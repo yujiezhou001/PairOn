@@ -72,6 +72,7 @@ app.use(function(err, req, res, next) {
 
 
 const clientList = [];
+let eventsList = [];
 
 passport.use(new LocalStrategy({
     usernameField: 'username',
@@ -306,7 +307,7 @@ wss.on("connection", ws => {
     const messageObj = JSON.parse(message);
         // messageObj.id = uuidv4(); do not use!! overwrites user id!!
 
-    console.log("This is from received message:", messageObj);
+    console.log("This is from any received message:", messageObj);
 
     switch (messageObj.type) {
 
@@ -336,6 +337,20 @@ wss.on("connection", ws => {
       wss.broadcast(JSON.stringify({ clientList }));
       break;
 
+      case "newEventPin":
+        messageObj.uuid = uuidv4();
+        eventsList.push(messageObj);
+        wss.broadcast(JSON.stringify({ eventsList }));
+      break;
+
+      case "removeEvent":
+        eventsList = eventsList.filter((oneEvent)=> {
+          if(oneEvent.uuid !== messageObj.uuid){
+           return oneEvent
+          }
+        })
+        wss.broadcast(JSON.stringify({ eventsList }));
+        break;
         }
       });
 
