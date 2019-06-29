@@ -113,29 +113,38 @@ class App extends Component {
     let data = JSON.parse(event.data);
 
     if (data.type === "incomingMessage") {
+      debugger;
       if (this.state.currentUser.id === data.recipientId) {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
 
-        const newUnreadCount = this.state.unreadMsgs + 1;
-        console.log("UNREAD COUNT", newUnreadCount);
-        this.setState({ unreadMsgs: newUnreadCount });
-        this.setState({ unread: true });
+        if (
+          !(
+            window.location.pathname === `/chat/${data.senderId}` ||
+            window.location.pathname === "/chat/"
+          )
+        ) {
+          this.setState({ unread: true });
 
-        toaster.notify(
-          <div>
-            <img
-              className="rounded-circle"
-              src={data.senderAvatar}
-              style={{ width: "55px" }}
-            />
-            <h5>New message from {data.username}</h5>
-            <p>{data.content}</p>
-          </div>,
-          {
-            position: "bottom-left" // top-left, top, top-right, bottom-left, bottom, bottom-right
-            // duration: null // This notification will not automatically close
-          }
-        );
+          const newUnreadCount = this.state.unreadMsgs + 1;
+          console.log("UNREAD COUNT", newUnreadCount);
+          this.setState({ unreadMsgs: newUnreadCount });
+
+          toaster.notify(
+            <div>
+              <img
+                className="rounded-circle"
+                src={data.senderAvatar}
+                style={{ width: "55px" }}
+              />
+              <h5>New message from {data.username}</h5>
+              <p>{data.content}</p>
+            </div>,
+            {
+              position: "bottom-left" // top-left, top, top-right, bottom-left, bottom, bottom-right
+              // duration: null // This notification will not automatically close
+            }
+          );
+        }
       } else if (this.state.currentUser.id === data.senderId) {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
       }
