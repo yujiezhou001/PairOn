@@ -112,7 +112,7 @@ class App extends Component {
       firstName: data.userObj.first_name,
       lastName: data.userObj.last_name,
       email: data.userObj.email,
-      password: data.userObj.password,
+      // password: data.userObj.password,
       hometown: data.userObj.hometown,
       experiences: "all",
       avatarURL: data.userObj.avatar_url,
