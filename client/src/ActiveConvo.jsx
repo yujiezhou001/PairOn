@@ -16,27 +16,6 @@ class ActiveConvo extends Component {
     return chatPartner;
   };
 
-  //   findLatestMsg = userId => {
-  // this.props.messages.reverse().forEach(function(element) {
-  //   if (element.senderId === userId || element.recipientId === userId) {
-  //     return element;
-  //   }
-  // });
-  // let array = this.props.messages.reverse();
-  // let result = null;
-  // for (let i = 0; i < array.length; i++) {
-  //   if (array[i].senderId === userId || array[i].recipientId === userId) {
-  //     result = array[i];
-  //     break;
-  //   }
-  // }
-  //   };
-
-  // const latestMsg = this.props.messages
-  //   .reverse()
-  //   .find(element => element.senderId === userId);
-  // return latestMsg;
-
   findLatestMsg = userId => {
     const latestMsg = this.props.messages
       .reverse()
