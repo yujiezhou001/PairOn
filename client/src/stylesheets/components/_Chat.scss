@@ -1,9 +1,50 @@
-.chat{
+.chat {
   height: 100vh;
   padding: 1em;
   background-image: linear-gradient(to top right, #93a5cf, #e4efe9);
-
-  .back-arrow{
+  img {
+    border: 0.5em solid #fff;
+    width: 7em;
+    height: 7em;
+    z-index: 500;
+  }
+  .user-info {
+    background-color: #fff;
+    padding: 3.5em 2em;
+    width: 100%;
+    margin-top: -3.5em;
+    z-index: 500;
+  }
+  .back-arrow {
     width: 4em;
   }
+}
+
+.message {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px;
+  margin: 0.4em 1em;
+
+  .message-username,
+  .message-content{
+    overflow: hidden;
+  margin: 5px;
+  padding: 0 10px;
+  }
+
+  .message-username {
+    padding-left: 1em;
+  display: flex;
+  font-weight: 700;
+  justify-content: flex-end;
+  }
+  .message-content {
+    flex: 8;
+    border-radius: 2em;
+    border: 1px solid #000;
+    padding: 1em;
+  }
+  
 }

@@ -5,37 +5,14 @@ import { MessageList } from "./MessageList";
 import { Link } from "react-router-dom";
 import BackArrow from "./components/c-svg/BackArrow";
 
-const navStyle = {
-  background: "#b3f2ef",
-  height: "80px",
-  borderBottom: "1px solid black",
-  left: "0",
-  padding: "10px",
-  // padding: "0 10px"
-  // position: "fixed",
-  right: 0,
-  top: 0,
-  display: "flex",
-  justifyContent: "flex-start",
-  alignItems: "bottom"
-};
-
-const userStyle = {
-  display: "flex",
-  flexDirection: "column",
-  padding: "10px"
-};
-
 const messagesStyle = {
   height: "300px",
   border: "1px solid black",
   left: "0",
   padding: "10px"
 };
-
-const imgPicture = {
-  width: "55px",
-  margin: "0 10px"
+const zIndex = {
+  zIndex: "5555"
 };
 
 class Chat extends Component {
@@ -61,29 +38,29 @@ class Chat extends Component {
     return (
       <div className="chat">
         {user && (
-          
-          <div style={navStyle}>
-            <Link to="/">
+        <div>
+        <Link to="/">
               <div className="back-arrow">
-              <BackArrow />
+                <BackArrow />
               </div>
             </Link>
+          <div className="d-flex justify-content-start flex-column align-items-center">
+            
 
-            <Link to={`/users/${JSON.stringify(user.id)}`}>
+            <Link to={`/users/${JSON.stringify(user.id)}`} style={zIndex}>
               <img
                 className="rounded-circle"
                 src={user.avatarURL}
-                style={imgPicture}
               />
             </Link>
-
-            <div style={userStyle}>
+            <div className="user-info">
               <h4>
                 {user.firstName}
                 <br />
               </h4>
               <p>{user.hometown}</p>
             </div>
+          </div>
           </div>
         )}
         <div>
