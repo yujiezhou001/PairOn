@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import logo from "./logo.svg";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Chat } from "./Chat";
+import { ChatConvos } from "./ChatConvos";
 import { Register } from "./Register";
 import { Login } from "./Login";
 import { Home } from "./Home";
@@ -82,16 +83,21 @@ class App extends Component {
   };
 
   addMessage = newMessage => {
+    const date = new Date();
+    const d = date.toDateString();
+    const time = date.toLocaleTimeString();
+
     const messageObject = {
       username: this.state.currentUser.firstName,
       senderId: this.state.currentUser.id,
       senderAvatar: this.state.currentUser.avatarURL,
       recipientId: this.state.chatPartner.id,
       content: newMessage,
-      type: "outgoingMessage"
+      type: "outgoingMessage",
+      datetime: `${d} ${time}`
     };
 
-    // console.log("SEND", newMessage, "TO BACKEND!!!!");
+    console.log("SEND", newMessage, "TO BACKEND!!!!");
     // console.log(messageObject);
     this.socket.send(JSON.stringify(messageObject));
   };
@@ -118,16 +124,6 @@ class App extends Component {
             // duration: null // This notification will not automatically close
           }
         );
-
-        // toaster.notify(
-        //   `New message from ${this.state.chatPartner.firstName}: ${
-        //     data.content
-        //   }`,
-        //   {
-        //     position: "bottom-left" // top-left, top, top-right, bottom-left, bottom, bottom-right
-        //     // duration: null // This notification will not automatically close
-        //   }
-        // );
       } else if (this.state.currentUser.id === data.senderId) {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
       }
@@ -215,20 +211,40 @@ class App extends Component {
               )}
             />
           )}
-          <Route
-            exact
-            path="/chat/:id"
-            render={props => (
-              <Chat
-                {...props}
-                clientList={this.state.clientList}
-                addMessage={this.addMessage}
-                messages={this.state.chatMessages}
-                updateChatPartner={this.updateChatPartner}
-                chatPartner={this.state.chatPartner}
-              />
-            )}
-          />
+          {this.state.authorize && (
+            <Route
+              exact
+              path="/chat/:id"
+              render={props => (
+                <Chat
+                  {...props}
+                  clientList={this.state.clientList}
+                  addMessage={this.addMessage}
+                  messages={this.state.chatMessages}
+                  updateChatPartner={this.updateChatPartner}
+                  chatPartner={this.state.chatPartner}
+                />
+              )}
+            />
+          )}
+
+          {this.state.authorize && (
+            <Route
+              exact
+              path="/chat"
+              render={props => (
+                <ChatConvos
+                  {...props}
+                  clientList={this.state.clientList}
+                  addMessage={this.addMessage}
+                  messages={this.state.chatMessages}
+                  chatPartner={this.state.chatPartner}
+                  currentUser={this.state.currentUser}
+                />
+              )}
+            />
+          )}
+
           {!this.state.authorize && (
             <Route
               path="/login"
@@ -237,6 +253,7 @@ class App extends Component {
               )}
             />
           )}
+
           {/* <Route path="/logout" render={() => <Login />} /> */}
           <Route path="/register" render={() => <Register />} />
           <Route
