@@ -22,6 +22,7 @@ export class MapContainer extends Component {
 
     this.state = {
       selectedPerson: null,
+      selectedEvent: null,
       currentLocation: {
         lat: 0,
         lng: 0
@@ -29,6 +30,7 @@ export class MapContainer extends Component {
       geoReady: false,
       geoError: null,
       persons: this.props.clientList
+
     };
   }
 
@@ -62,6 +64,7 @@ export class MapContainer extends Component {
     // this.setState({currentUser: event.currentTarget.value})
     // }
   };
+
 
   componentDidMount() {
     let geoOptions = {
@@ -114,15 +117,78 @@ export class MapContainer extends Component {
           lng: lng
         }}
         defaultOptions={{ styles: mapStyles }}
+
+        onRightClick={this.props.updateEventsList}
       >
-        <Circle
+{/*        <Circle
           defaultCenter={{
             lat: 45.5275387,
             lng: -73.5986187
           }}
           radius={1000}
           options={circleOptions}
-        />
+        />*/}
+
+        // render an event marker for each event in the event list with .map function
+        {this.props.eventsList.map((oneEvent, index) => {
+
+          {
+            let eventIcon = "/eventicon.png"
+
+            return (
+              <Marker
+                key={index}
+                id={index}
+                position={{
+                  lat: oneEvent.lat,
+                  lng: oneEvent.lng
+                }}
+                onClick={() => this.setState({ selectedEvent: oneEvent })}
+                onRightClick={() => this.props.removeEventPin(oneEvent)}
+                icon={{
+                  url: eventIcon,
+                  scaledSize: new window.google.maps.Size(40, 40)
+                }}
+              />
+            );
+          }
+        })}
+
+        {this.state.selectedEvent && (
+          <InfoWindow
+            onCloseClick={() => {
+              this.setState({ selectedEvent: null });
+            }}
+            position={{
+              lat: this.state.selectedEvent.lat,
+              lng: this.state.selectedEvent.lng
+            }}
+          >
+            <div>
+              <img
+                className="rounded-circle"
+                src={this.state.selectedEvent.avatarURL}
+                style={imgPicture}
+              />
+
+              <h5>Event</h5>
+
+              <p>{this.state.selectedEvent.description}</p>
+
+              <Link to={`../../users/${this.state.selectedEvent.id}`}>
+                <button type="button" className="btn btn-primary btn-sm">
+                  Profile
+                </button>
+              </Link>
+
+              <Link to={`../../chat/${this.state.selectedEvent.id}`}>
+                <button type="button" className="btn btn-primary btn-sm">
+                  Chat
+                </button>
+              </Link>
+            </div>
+          </InfoWindow>
+        )}
 
         {this.props.clientList.map((person, index) => { //this.state.persons
           if (

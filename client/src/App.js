@@ -8,6 +8,7 @@ import { Home } from "./Home";
 import { Profile } from "./Profile";
 import BtnProfile from "./components/BtnProfile.jsx";
 
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +24,7 @@ class App extends Component {
         type: "live"
       },
       clientList: [], // full of currentUser objects sent from WebSocket
+      eventsList: [],
       chatMessages: [],
       chatPartner: { id: null },
       authorize: false
@@ -71,6 +73,33 @@ class App extends Component {
   updateChatPartner = userId => {
     this.setState({ chatPartner: { id: parseInt(userId) } });
   };
+
+  updateEventsList = onClickEvent => {
+    //let newEventsList = this.state.eventsList;
+    const newEventsObj = {
+      type: "newEventPin",
+      id: this.state.currentUser.id,
+      avatarURL: this.state.currentUser.avatarURL,
+      description:`${this.state.currentUser.firstName}'s event. \n Show up or message him for more info!`,
+      lat: onClickEvent.latLng.lat(),
+      lng: onClickEvent.latLng.lng()
+    };
+    this.socket.send(JSON.stringify(newEventsObj));
+    // newEventsList.push
+    // this.setState(newEventsList)
+    //console.log(onClickEvent)
+  };
+
+  removeEventPin = (oneEvent) => {
+    //console.log(oneEvent);
+    if(this.state.currentUser.id === oneEvent.id){
+      let pinRemoval = {
+        type: "removeEvent",
+        uuid: oneEvent.uuid
+      }
+      this.socket.send(JSON.stringify(pinRemoval))
+    }
+  }
 
   addMessage = newMessage => {
     const messageObject = {
@@ -182,7 +211,9 @@ class App extends Component {
                   handleOnClick={this.state.handleOnClick}
                   currentExperiences={this.state.currentUser.experiences}
                   currentUserId={this.state.currentUser.id}
-
+                  eventsList={this.state.eventsList}
+                  updateEventsList={this.updateEventsList}
+                  removeEventPin={this.removeEventPin}
                 />
               )}
             />
