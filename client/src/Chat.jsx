@@ -38,20 +38,9 @@ class Chat extends Component {
     return (
       <div className="chat">
         {user && (
-        <div>
-        <Link to="/">
-              <div className="back-arrow">
-                <BackArrow />
-              </div>
-            </Link>
-          <div className="d-flex justify-content-start flex-column align-items-center">
-            
-
+          <div className="d-flex justify-content-start align-items-center">
             <Link to={`/users/${JSON.stringify(user.id)}`} style={zIndex}>
-              <img
-                className="rounded-circle"
-                src={user.avatarURL}
-              />
+              <img className="rounded-circle" src={user.avatarURL} />
             </Link>
             <div className="user-info">
               <h4>
@@ -60,7 +49,6 @@ class Chat extends Component {
               </h4>
               <p>{user.hometown}</p>
             </div>
-          </div>
           </div>
         )}
         <div>

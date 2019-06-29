@@ -1,13 +1,18 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
-import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Redirect
+} from "react-router-dom";
 import { Chat } from "./Chat";
 import { Register } from "./Register";
 import { Login } from "./Login";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
 import BtnProfile from "./components/BtnProfile.jsx";
-
+import BtnBack from "./components/BtnBack";
 
 class App extends Component {
   constructor(props) {
@@ -80,7 +85,9 @@ class App extends Component {
       type: "newEventPin",
       id: this.state.currentUser.id,
       avatarURL: this.state.currentUser.avatarURL,
-      description:`${this.state.currentUser.firstName}'s event. \n Show up or message him for more info!`,
+      description: `${
+        this.state.currentUser.firstName
+      }'s event. \n Show up or message him for more info!`,
       lat: onClickEvent.latLng.lat(),
       lng: onClickEvent.latLng.lng()
     };
@@ -90,16 +97,16 @@ class App extends Component {
     //console.log(onClickEvent)
   };
 
-  removeEventPin = (oneEvent) => {
+  removeEventPin = oneEvent => {
     //console.log(oneEvent);
-    if(this.state.currentUser.id === oneEvent.id){
+    if (this.state.currentUser.id === oneEvent.id) {
       let pinRemoval = {
         type: "removeEvent",
         uuid: oneEvent.uuid
-      }
-      this.socket.send(JSON.stringify(pinRemoval))
+      };
+      this.socket.send(JSON.stringify(pinRemoval));
     }
-  }
+  };
 
   addMessage = newMessage => {
     const messageObject = {
@@ -149,7 +156,7 @@ class App extends Component {
       aboutMe: data.userObj.about_me,
       type: "real"
     };
-    console.log("handle on Authorize: ",data)
+    console.log("handle on Authorize: ", data);
     this.setState({ currentUser: tempObj, authorize: data.authorize });
   };
 
@@ -187,89 +194,93 @@ class App extends Component {
     return (
       <div>
         <Router>
-          {this.state.authorize && (
-            <BtnProfile
-              btnAbsolutR={this.btnAbsolutR}
-              autorized={this.state.authorize}
-              fnlogout={this.logout}
-              CurrentUserId={this.state.currentUser.id}
-              CurrentUserImage={this.state.currentUser.avatarURL}
-            />
-          )}
-            <Route
-              exact
-              path="/"
-              render={props => (
-                this.state.authorize ? (
+          <Route
+            exact
+            path="/"
+            render={props =>
+              this.state.authorize ? (
+                <div>
+                  <BtnProfile
+                    btnAbsolutR={this.btnAbsolutR}
+                    autorized={this.state.authorize}
+                    fnlogout={this.logout}
+                    CurrentUserId={this.state.currentUser.id}
+                    CurrentUserImage={this.state.currentUser.avatarURL}
+                  />
                   <Home
-                  {...props}
-                  clientList={this.state.clientList}
-                  updateCurrentLocation={this.updateCurrentLocation}
-                  currentLocation={this.state.currentUser.currentLocation}
-                  updateExperiences={this.updateExperiences}
-                  handleOnClick={this.state.handleOnClick}
-                  currentExperiences={this.state.currentUser.experiences}
-                  currentUserId={this.state.currentUser.id}
-                  eventsList={this.state.eventsList}
-                  updateEventsList={this.updateEventsList}
-                  removeEventPin={this.removeEventPin}
-                />
-                ) : (
-                  <Redirect to="/login" />
-                )
-              )}
-            />
+                    {...props}
+                    clientList={this.state.clientList}
+                    updateCurrentLocation={this.updateCurrentLocation}
+                    currentLocation={this.state.currentUser.currentLocation}
+                    updateExperiences={this.updateExperiences}
+                    handleOnClick={this.state.handleOnClick}
+                    currentExperiences={this.state.currentUser.experiences}
+                    currentUserId={this.state.currentUser.id}
+                    eventsList={this.state.eventsList}
+                    updateEventsList={this.updateEventsList}
+                    removeEventPin={this.removeEventPin}
+                  />
+                </div>
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
+          />
           <Route
             exact
             path="/chat/:id"
             render={props => (
-              <Chat
-                {...props}
-                clientList={this.state.clientList}
-                addMessage={this.addMessage}
-                messages={this.state.chatMessages}
-                updateChatPartner={this.updateChatPartner}
-                chatPartner={this.state.chatPartner.id}
-              />
+              <div>
+                <BtnBack backLinks="/" />
+                <Chat
+                  {...props}
+                  clientList={this.state.clientList}
+                  addMessage={this.addMessage}
+                  messages={this.state.chatMessages}
+                  updateChatPartner={this.updateChatPartner}
+                  chatPartner={this.state.chatPartner.id}
+                />
+              </div>
             )}
           />
-            <Route
-              path="/login"
-              render={props => (
-                this.state.authorize ? (
-                  <Redirect to="/" />
-                  ) : (
-                  <Login {...props} authorize={this.handleOnAuthorize} />
-                )
-              )}
-
-
-            />
+          <Route
+            path="/login"
+            render={props =>
+              this.state.authorize ? (
+                <Redirect to="/" />
+              ) : (
+                <Login {...props} authorize={this.handleOnAuthorize} />
+              )
+            }
+          />
 
           {/* <Route path="/logout" render={() => <Login />} /> */}
-            <Route
-              path="/register"
-              render={props => (
-                this.state.authorize ? (
-                  <Redirect to="/" />
-                ) : (
-                  <Register {...props} authorize={this.handleOnAuthorize} />
-                )
-              )}
-            />
+          <Route
+            path="/register"
+            render={props =>
+              this.state.authorize ? (
+                <Redirect to="/" />
+              ) : (
+                <Register {...props} authorize={this.handleOnAuthorize} />
+              )
+            }
+          />
 
           <Route
             path="/users/:id"
             render={props => (
-              <Profile
-                {...props}
-                clientList={this.state.clientList}
-                currentEmail={this.state.currentUser.email}
-                currentfirstName={this.state.currentUser.firstName}
-                currentlastName={this.state.currentUser.lastName}
-                currenthometown={this.state.currentUser.hometown}
-                currentid={this.state.currentUser.id}
-              />
+              <div>
+                <BtnBack backLinks="/" />
+                <Profile
+                  {...props}
+                  clientList={this.state.clientList}
+                  currentEmail={this.state.currentUser.email}
+                  currentfirstName={this.state.currentUser.firstName}
+                  currentlastName={this.state.currentUser.lastName}
+                  currenthometown={this.state.currentUser.hometown}
+                  currentid={this.state.currentUser.id}
+                />
+              </div>
             )}
           />
           <nav>

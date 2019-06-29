@@ -19,6 +19,7 @@ class Message extends Component {
       <div>
         {isRecipient && (
           <div className="message">
+            {/* <img src={this.props.username} alt=""/> */}
             <span className="message-username" style={usernameStyle}>
               {this.props.username}:
             </span>
