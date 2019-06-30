@@ -14,7 +14,7 @@ import { Home } from "./Home";
 import { Profile } from "./Profile";
 import BtnProfile from "./components/BtnProfile.jsx";
 import BtnChat from "./components/BtnChat.jsx";
-
+import BtnBack from "./components/BtnBack.jsx"
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css"; // optional styles
 
@@ -148,7 +148,6 @@ class App extends Component {
     let data = JSON.parse(event.data);
 
     if (data.type === "incomingMessage") {
-      debugger;
       if (this.state.currentUser.id === data.recipientId) {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
 
@@ -243,7 +242,7 @@ class App extends Component {
     return (
       <div>
         <Router>
-          <Link to="/chat/">
+          <Link to="/chat/" className="btn-chat">
             {this.state.authorize && (
               <BtnChat
                 resetUnread={this.resetUnread}
@@ -252,52 +251,54 @@ class App extends Component {
               />
             )}
           </Link>
-          {this.state.authorize && (
-            <BtnProfile
-              btnAbsolutR={this.btnAbsolutR}
-              autorized={this.state.authorize}
-              fnlogout={this.logout}
-              CurrentUserId={this.state.currentUser.id}
-              CurrentUserImage={this.state.currentUser.avatarURL}
-            />
-          )}
           <Route
             exact
             path="/"
             render={props =>
               this.state.authorize ? (
-                <Home
-                  {...props}
-                  clientList={this.state.clientList}
-                  updateCurrentLocation={this.updateCurrentLocation}
-                  currentLocation={this.state.currentUser.currentLocation}
-                  updateExperiences={this.updateExperiences}
-                  handleOnClick={this.state.handleOnClick}
-                  currentExperiences={this.state.currentUser.experiences}
-                  currentUserId={this.state.currentUser.id}
-                  eventsList={this.state.eventsList}
-                  updateEventsList={this.updateEventsList}
-                  removeEventPin={this.removeEventPin}
-                />
+                <div>
+                  <BtnProfile
+                    btnAbsolutR={this.btnAbsolutR}
+                    autorized={this.state.authorize}
+                    fnlogout={this.logout}
+                    CurrentUserId={this.state.currentUser.id}
+                    CurrentUserImage={this.state.currentUser.avatarURL}
+                  />
+                  <Home
+                    {...props}
+                    clientList={this.state.clientList}
+                    updateCurrentLocation={this.updateCurrentLocation}
+                    currentLocation={this.state.currentUser.currentLocation}
+                    updateExperiences={this.updateExperiences}
+                    handleOnClick={this.state.handleOnClick}
+                    currentExperiences={this.state.currentUser.experiences}
+                    currentUserId={this.state.currentUser.id}
+                    eventsList={this.state.eventsList}
+                    updateEventsList={this.updateEventsList}
+                    removeEventPin={this.removeEventPin}
+                  />
+                </div>
               ) : (
                 <Redirect to="/login" />
               )
             }
           />
-          )}
           {this.state.authorize && (
             <Route
               exact
               path="/chat/:id"
               render={props => (
-                <Chat
-                  {...props}
-                  clientList={this.state.clientList}
-                  addMessage={this.addMessage}
-                  messages={this.state.chatMessages}
-                  updateChatPartner={this.updateChatPartner}
-                  chatPartner={this.state.chatPartner}
-                />
+                <div>
+                  <BtnBack backLinks="/" />
+                  <Chat
+                    {...props}
+                    clientList={this.state.clientList}
+                    addMessage={this.addMessage}
+                    messages={this.state.chatMessages}
+                    updateChatPartner={this.updateChatPartner}
+                    chatPartner={this.state.chatPartner}
+                  />
+                </div>
               )}
             />
           )}
@@ -306,14 +307,17 @@ class App extends Component {
               exact
               path="/chat"
               render={props => (
-                <ChatConvos
-                  {...props}
-                  clientList={this.state.clientList}
-                  addMessage={this.addMessage}
-                  messages={this.state.chatMessages}
-                  chatPartner={this.state.chatPartner}
-                  currentUser={this.state.currentUser}
-                />
+                <div>
+                  <BtnBack backLinks="/" />
+                  <ChatConvos
+                    {...props}
+                    clientList={this.state.clientList}
+                    addMessage={this.addMessage}
+                    messages={this.state.chatMessages}
+                    chatPartner={this.state.chatPartner}
+                    currentUser={this.state.currentUser}
+                  />
+                </div>
               )}
             />
           )}
@@ -341,15 +345,18 @@ class App extends Component {
           <Route
             path="/users/:id"
             render={props => (
-              <Profile
-                {...props}
-                clientList={this.state.clientList}
-                currentEmail={this.state.currentUser.email}
-                currentfirstName={this.state.currentUser.firstName}
-                currentlastName={this.state.currentUser.lastName}
-                currenthometown={this.state.currentUser.hometown}
-                currentid={this.state.currentUser.id}
-              />
+              <div>
+                <BtnBack backLinks="/" />
+                <Profile
+                  {...props}
+                  clientList={this.state.clientList}
+                  currentEmail={this.state.currentUser.email}
+                  currentfirstName={this.state.currentUser.firstName}
+                  currentlastName={this.state.currentUser.lastName}
+                  currenthometown={this.state.currentUser.hometown}
+                  currentid={this.state.currentUser.id}
+                />
+              </div>
             )}
           />
           <nav>

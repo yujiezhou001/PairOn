@@ -3,38 +3,16 @@ import axios from "axios";
 import { ChatBar } from "./ChatBar";
 import { MessageList } from "./MessageList";
 import { Link } from "react-router-dom";
-
-const navStyle = {
-  background: "#b3f2ef",
-  height: "80px",
-  borderBottom: "1px solid black",
-  left: "0",
-  padding: "10px",
-  // padding: "0 10px"
-  // position: "fixed",
-  right: 0,
-  top: 0,
-  display: "flex",
-  justifyContent: "flex-start",
-  alignItems: "bottom"
-};
-
-const userStyle = {
-  display: "flex",
-  flexDirection: "column",
-  padding: "10px"
-};
+import BackArrow from "./components/c-svg/BackArrow";
 
 const messagesStyle = {
-  height: "300px",
-  border: "1px solid black",
+  height: "80%",
   left: "0",
-  padding: "10px"
+  padding: "10px",
+  backgroundColor: "#fff"
 };
-
-const imgPicture = {
-  width: "55px",
-  margin: "0 10px"
+const zIndex = {
+  zIndex: "5555"
 };
 
 class Chat extends Component {
@@ -60,37 +38,28 @@ class Chat extends Component {
     return (
       <div>
         {user && (
-          <div style={navStyle}>
-            <Link to="/chat/">
-              <button type="button">Back</button>
+          <div className="header-chat">
+            <Link to={`/users/${JSON.stringify(user.id)}`} style={zIndex}>
+              <img className="rounded-circle shadow" src={user.avatarURL} />
             </Link>
-
-            <Link to={`/users/${JSON.stringify(user.id)}`}>
-              <img
-                className="rounded-circle"
-                src={user.avatarURL}
-                style={imgPicture}
-              />
-            </Link>
-
-            <div style={userStyle}>
+            <div className="user-info">
               <h4>
                 {user.firstName}
-                <br />
               </h4>
               <p>{user.hometown}</p>
             </div>
           </div>
         )}
-        <div>
-          <div style={messagesStyle}>
+        <div className="chat">
+          <div className="space-header" />
+          <div style={messagesStyle} className="chat-box">
             <MessageList
               messages={this.props.messages}
               chatPartner={this.props.chatPartner}
             />
           </div>
-          <ChatBar addMessage={this.props.addMessage} />
         </div>
+        <ChatBar addMessage={this.props.addMessage} />
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import MessengerChat from "./c-svg/MessengerChat";
 
 class BtnChat extends Component {
   constructor(props) {
@@ -11,13 +12,15 @@ class BtnChat extends Component {
   }
 
   render() {
-    return (
-      <button onClick={this.handleClick} className="btn btn-primary">
-        Chat
-        {this.props.unread && (
-          <span class="badge badge-light">{this.props.unreadMsgs}</span>
-        )}
-      </button>
+    return (     
+        
+        <button onClick={this.handleClick} className="btn-messenger">
+          <MessengerChat />
+          {this.props.unread && (
+            <span class="badge badge-light">{this.props.unreadMsgs}</span>
+          )}
+        </button>
+      
     );
   }
 }
