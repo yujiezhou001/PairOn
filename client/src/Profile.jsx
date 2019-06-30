@@ -71,7 +71,13 @@ class Profile extends React.Component {
      }).then(({ data }) => {
       this.props.authorize(data)
       this.setState({
-        updated:"Your Profile is successfully updated"
+        firstname: data.userObj.first_name,
+        lastname: data.userObj.last_name,
+        hometown: data.userObj.hometown,
+        email: data.userObj.email,
+        password:data.userObj.password,
+        aboutme: data.userObj.about_me,
+        updated:"Your Profile is successfully updated",
       });
     })
   }
@@ -119,7 +125,7 @@ class Profile extends React.Component {
   render() {
 
 
-    const user = this.props.clientList.find(
+    const user = this.props.clientList.reverse().find(
       userObj => userObj.id === Number(this.props.match.params.id)
     );
 

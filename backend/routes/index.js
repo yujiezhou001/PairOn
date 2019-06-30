@@ -104,7 +104,7 @@ router.post('/users/:id', function(req, res, next) {
     .then(results => {
       const user = results[0];
       req.login(user, function(err) {
-        console.log("Registered User:", user);
+        console.log("Updated:", user);
         if (err) { return next(err); }
         res.json({userObj: user, authorize: true})
       });

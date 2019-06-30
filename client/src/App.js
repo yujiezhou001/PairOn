@@ -364,17 +364,18 @@ class App extends Component {
             path="/users/:id"
             render={props => (
               <div>
-                <BtnBack backLinks="/" />
-                <Profile
-                  {...props}
-                  clientList={this.state.clientList}
-                  currentEmail={this.state.currentUser.email}
-                  currentfirstName={this.state.currentUser.firstName}
-                  currentlastName={this.state.currentUser.lastName}
-                  currenthometown={this.state.currentUser.hometown}
-                  currentid={this.state.currentUser.id}
-                  authorize={this.handleOnAuthorize}
-                />
+              <BtnBack backLinks="/" />
+              <Profile
+                {...props}
+                clientList={this.state.clientList}
+                currentEmail={this.state.currentUser.email}
+                currentfirstName={this.state.currentUser.firstName}
+                currentlastName={this.state.currentUser.lastName}
+                currenthometown={this.state.currentUser.hometown}
+                currentAboutMe={this.state.currentUser.aboutMe}
+                currentid={this.state.currentUser.id}
+                authorize={this.handleOnAuthorize}
+              />
               </div>
             )}
           />
