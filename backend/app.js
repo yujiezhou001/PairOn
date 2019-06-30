@@ -71,7 +71,22 @@ app.use(function(err, req, res, next) {
 });
 
 const clientList = [];
-let eventsList = [];
+let eventsList = [
+// {avatarURL:
+// "https://s3.amazonaws.com/uifaces/faces/twitter/kolsvein/128.jpg"
+// description:
+// "Chuck's event. \n Show up or message him for more info!"
+// id:
+// 8
+// lat:
+// 45.5355364150229
+// lng:
+// -73.49661296986693
+// type:
+// "newEventPin"
+// uuid:
+// "391996bb-8933-4945-ab4c-6b596e794048"}
+];
 
 passport.use(
   new LocalStrategy(
@@ -305,6 +320,9 @@ wss.on("connection", ws => {
     client.send(JSON.stringify({ clientList }));
     console.log("When the ClientList first sent: ", { clientList });
   });
+
+  ws.send(JSON.stringify({eventsList}));
+
 
   ws.on("message", function incoming(message) {
     const messageObj = JSON.parse(message);

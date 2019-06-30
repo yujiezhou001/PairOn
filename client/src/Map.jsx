@@ -115,8 +115,10 @@ export class MapContainer extends Component {
           lng: lng
         }}
         defaultOptions={{ styles: mapStyles }}
-        onRightClick={this.props.updateEventsList}
+
+        onDblClick={this.props.updateEventsList}
       >
+
         {/*        <Circle
           defaultCenter={{
             lat: 45.5275387,
@@ -127,6 +129,7 @@ export class MapContainer extends Component {
         />*/}
 
         {/* //render an event marker for each event in the event list with .map function */}
+
         {this.props.eventsList.map((oneEvent, index) => {
           {
             let eventIcon = "/eventicon.png";
@@ -140,7 +143,7 @@ export class MapContainer extends Component {
                   lng: oneEvent.lng
                 }}
                 onClick={() => this.setState({ selectedEvent: oneEvent })}
-                onRightClick={() => this.props.removeEventPin(oneEvent)}
+                onDblClick={() => this.props.removeEventPin(oneEvent)}
                 icon={{
                   url: eventIcon,
                   scaledSize: new window.google.maps.Size(40, 40)
@@ -172,13 +175,13 @@ export class MapContainer extends Component {
               <p>{this.state.selectedEvent.description}</p>
 
               <Link to={`../../users/${this.state.selectedEvent.id}`}>
-                <button type="button" className="btn btn-primary btn-sm">
+                <button className="btn btn-main-color btn-sm">
                   Profile
                 </button>
               </Link>
 
               <Link to={`../../chat/${this.state.selectedEvent.id}`}>
-                <button type="button" className="btn btn-primary btn-sm">
+                <button className="btn btn-main-color btn-sm">
                   Chat
                 </button>
               </Link>
