@@ -1,5 +1,7 @@
 import React from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
 //@@@ creer plusieur component fix for the current user
 class Profile extends React.Component {
   constructor(props) {
@@ -142,9 +144,7 @@ class Profile extends React.Component {
       );
     } else {
       button = (
-        <a className="btn btn-outline-color" href="/" role="button">
-          Message
-        </a>
+        <Link to={`/chat/${this.props.match.params.id}`} className="btn btn-outline-color">Message</Link>        
       );
     }
 

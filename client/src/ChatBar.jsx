@@ -28,15 +28,13 @@ export class ChatBar extends Component {
 
   render() {
     return (
-      <footer className="chatbar">
         <input
-          className="form-control"
+          className="form-control chat-bar"
           name="content"
           placeholder="Type a message and hit ENTER"
           onKeyDown={this.handleKeyDown}
           onChange={this.handleChange}
         />
-      </footer>
     );
   }
 }
