@@ -7,9 +7,9 @@ import BackArrow from "./components/c-svg/BackArrow";
 
 const messagesStyle = {
   height: "80%",
-  border: "1px solid black",
   left: "0",
-  padding: "10px"
+  padding: "10px",
+  backgroundColor: "#fff"
 };
 const zIndex = {
   zIndex: "5555"
@@ -36,30 +36,30 @@ class Chat extends Component {
     );
 
     return (
-      <div className="chat">
+      <div>
         {user && (
           <div className="header-chat">
             <Link to={`/users/${JSON.stringify(user.id)}`} style={zIndex}>
-              <img className="rounded-circle" src={user.avatarURL} />
+              <img className="rounded-circle shadow" src={user.avatarURL} />
             </Link>
             <div className="user-info">
               <h4>
                 {user.firstName}
-                <br />
               </h4>
               <p>{user.hometown}</p>
             </div>
           </div>
         )}
-        <div>
-          <div style={messagesStyle}>
+        <div className="chat">
+          <div className="space-header" />
+          <div style={messagesStyle} className="chat-box">
             <MessageList
               messages={this.props.messages}
               chatPartner={this.props.chatPartner}
             />
           </div>
-          <ChatBar addMessage={this.props.addMessage} />
         </div>
+        <ChatBar addMessage={this.props.addMessage} />
       </div>
     );
   }

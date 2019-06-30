@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-const usernameStyle = { color: "blue", fontWeight: "bold", margin: "10px" };
-const senderStyle = { color: "green", fontWeight: "bold", margin: "10px" };
 
 class Message extends Component {
   constructor(props) {
@@ -18,25 +16,21 @@ class Message extends Component {
     return (
       <div>
         {isRecipient && (
-          <div className="message">
-            {/* <img src={this.props.username} alt=""/> */}
-            <span className="message-username" style={usernameStyle}>
-              {this.props.username}:
-            </span>
-            <span className="message-content">{this.props.content}</span>
+          <div className="message recipient">
+            <img
+              className="rounded-circle shadow"
+              src={this.props.senderAvatar}
+            />
+            <span className="message-content shadow-sm">{this.props.content}</span>
           </div>
         )}
         {isSender && (
-          <div className="message">
+          <div className="message sender">
             <img
-              className="rounded-circle"
+              className="rounded-circle shadow"
               src={this.props.senderAvatar}
-              style={{ width: "55px", padding: "0 10px" }}
             />
-            <span className="message-username" style={senderStyle}>
-              {this.props.username}:
-            </span>
-            <span className="message-content">{this.props.content}</span>
+            <span className="message-content shadow-sm">{this.props.content}</span>
           </div>
         )}
       </div>

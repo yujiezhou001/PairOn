@@ -1,23 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom";
 import BackArrow from "./c-svg/BackArrow";
-
-
-const btnBack = {
-  width: "5em",
-  color: "#000",
-  position: "absolute"
-};
+import zIndex from "@material-ui/core/styles/zIndex";
 
 const BtnBack = props => {
   let autorized = props.autorized;
 
   return (
-    <div style={btnBack}>
+    <div className="back-arrow">
       <Link to={props.backLinks}>
-        <div className="back-arrow">
-          <BackArrow />
-        </div>
+        <BackArrow />
       </Link>
     </div>
   );

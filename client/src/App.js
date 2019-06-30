@@ -242,7 +242,7 @@ class App extends Component {
     return (
       <div>
         <Router>
-          <Link to="/chat/">
+          <Link to="/chat/" className="btn-chat">
             {this.state.authorize && (
               <BtnChat
                 resetUnread={this.resetUnread}
