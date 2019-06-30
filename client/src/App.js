@@ -7,12 +7,16 @@ import {
   Redirect
 } from "react-router-dom";
 import { Chat } from "./Chat";
+import { ChatConvos } from "./ChatConvos";
 import { Register } from "./Register";
 import { Login } from "./Login";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
 import BtnProfile from "./components/BtnProfile.jsx";
-import BtnBack from "./components/BtnBack";
+import BtnChat from "./components/BtnChat.jsx";
+import BtnBack from "./components/BtnBack.jsx"
+import toaster from "toasted-notes";
+import "toasted-notes/src/styles.css"; // optional styles
 
 class App extends Component {
   constructor(props) {
@@ -32,15 +36,21 @@ class App extends Component {
       eventsList: [],
       chatMessages: [],
       chatPartner: { id: null },
-      authorize: false
+      authorize: false,
+      unreadMsgs: 0,
+      unread: false
     };
   }
 
   btnAbsolutR = {
     position: "absolute",
     top: 0,
-    left: 0,
+    right: 0,
     zIndex: "300"
+  };
+
+  resetUnread = () => {
+    this.setState({ unreadMsgs: 0, unread: false });
   };
 
   updateCurrentLocation = locationObject => {
@@ -76,7 +86,13 @@ class App extends Component {
   };
 
   updateChatPartner = userId => {
-    this.setState({ chatPartner: { id: parseInt(userId) } });
+    var chatPartner = this.state.clientList.find(
+      element => element.id === parseInt(userId)
+    );
+
+    console.log(chatPartner);
+
+    this.setState({ chatPartner });
   };
 
   updateEventsList = onClickEvent => {
@@ -109,15 +125,21 @@ class App extends Component {
   };
 
   addMessage = newMessage => {
+    const date = new Date();
+    const d = date.toDateString();
+    const time = date.toLocaleTimeString();
+
     const messageObject = {
       username: this.state.currentUser.firstName,
       senderId: this.state.currentUser.id,
+      senderAvatar: this.state.currentUser.avatarURL,
       recipientId: this.state.chatPartner.id,
       content: newMessage,
-      type: "outgoingMessage"
+      type: "outgoingMessage",
+      datetime: `${d} ${time}`
     };
 
-    // console.log("SEND", newMessage, "TO BACKEND!!!!");
+    console.log("SEND", newMessage, "TO BACKEND!!!!");
     // console.log(messageObject);
     this.socket.send(JSON.stringify(messageObject));
   };
@@ -126,18 +148,44 @@ class App extends Component {
     let data = JSON.parse(event.data);
 
     if (data.type === "incomingMessage") {
-      if (
-        this.state.currentUser.id === data.recipientId ||
-        this.state.currentUser.id === data.senderId
-      ) {
+      if (this.state.currentUser.id === data.recipientId) {
+        this.setState({ chatMessages: [...this.state.chatMessages, data] });
+
+        if (
+          !(
+            window.location.pathname === `/chat/${data.senderId}` ||
+            window.location.pathname === "/chat/"
+          )
+        ) {
+          this.setState({ unread: true });
+
+          const newUnreadCount = this.state.unreadMsgs + 1;
+          console.log("UNREAD COUNT", newUnreadCount);
+          this.setState({ unreadMsgs: newUnreadCount });
+
+          toaster.notify(
+            <div>
+              <img
+                className="rounded-circle"
+                src={data.senderAvatar}
+                style={{ width: "55px" }}
+              />
+              <h5>New message from {data.username}</h5>
+              <p>{data.content}</p>
+            </div>,
+            {
+              position: "bottom-left" // top-left, top, top-right, bottom-left, bottom, bottom-right
+              // duration: null // This notification will not automatically close
+            }
+          );
+        }
+      } else if (this.state.currentUser.id === data.senderId) {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
       }
       console.log("CHAT BROADCAST BACK TO ME!", data);
     } else if (data.type === "experiencePick") {
-      //console.log("EXPERIENCE FROM BACKEND:", this.state);
       this.setState(data);
     } else if (this.state.authorize) {
-      //console.log("CLIENTLIST sent after login", data);
       this.setState(data);
     }
   };
@@ -194,6 +242,15 @@ class App extends Component {
     return (
       <div>
         <Router>
+          <Link to="/chat/">
+            {this.state.authorize && (
+              <BtnChat
+                resetUnread={this.resetUnread}
+                unreadMsgs={this.state.unreadMsgs}
+                unread={this.state.unread}
+              />
+            )}
+          </Link>
           <Route
             exact
             path="/"
@@ -226,23 +283,44 @@ class App extends Component {
               )
             }
           />
-          <Route
-            exact
-            path="/chat/:id"
-            render={props => (
-              <div>
-                <BtnBack backLinks="/" />
-                <Chat
-                  {...props}
-                  clientList={this.state.clientList}
-                  addMessage={this.addMessage}
-                  messages={this.state.chatMessages}
-                  updateChatPartner={this.updateChatPartner}
-                  chatPartner={this.state.chatPartner.id}
-                />
-              </div>
-            )}
-          />
+          {this.state.authorize && (
+            <Route
+              exact
+              path="/chat/:id"
+              render={props => (
+                <div>
+                  <BtnBack backLinks="/" />
+                  <Chat
+                    {...props}
+                    clientList={this.state.clientList}
+                    addMessage={this.addMessage}
+                    messages={this.state.chatMessages}
+                    updateChatPartner={this.updateChatPartner}
+                    chatPartner={this.state.chatPartner}
+                  />
+                </div>
+              )}
+            />
+          )}
+          {this.state.authorize && (
+            <Route
+              exact
+              path="/chat"
+              render={props => (
+                <div>
+                  <BtnBack backLinks="/" />
+                  <ChatConvos
+                    {...props}
+                    clientList={this.state.clientList}
+                    addMessage={this.addMessage}
+                    messages={this.state.chatMessages}
+                    chatPartner={this.state.chatPartner}
+                    currentUser={this.state.currentUser}
+                  />
+                </div>
+              )}
+            />
+          )}
           <Route
             path="/login"
             render={props =>
@@ -253,7 +331,6 @@ class App extends Component {
               )
             }
           />
-
           {/* <Route path="/logout" render={() => <Login />} /> */}
           <Route
             path="/register"
@@ -265,7 +342,6 @@ class App extends Component {
               )
             }
           />
-
           <Route
             path="/users/:id"
             render={props => (

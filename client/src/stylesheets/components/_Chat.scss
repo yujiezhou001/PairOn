@@ -2,21 +2,31 @@
   height: 100vh;
   padding: 1em;
   background-image: linear-gradient(to top right, #93a5cf, #e4efe9);
+  
+  .header-chat{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row-reverse;
+  }
+  
   img {
     border: 0.1em solid #fff;
-    width: 7em;
-    height: 7em;
+    width: 5em;
+    height: 5em;
     z-index: 500;
   }
   .user-info {
-    padding: 3.5em 2em;
+    padding: 1em;
     width: 100%;
-    margin-top: -3.5em;
+    text-align: end;
+    line-height: 0.4em;
     z-index: 500;
   }
   .back-arrow {
     width: 4em;
   }
+  
 }
 
 .message {

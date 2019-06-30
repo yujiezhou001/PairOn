@@ -243,15 +243,11 @@ export class MapContainer extends Component {
               <p>{this.state.selectedPerson.hometown}</p>
 
               <Link to={`../../users/${this.state.selectedPerson.id}`}>
-                <button type="button" className="btn btn-primary btn-sm">
-                  Profile
-                </button>
+                <button className="btn btn-primary btn-sm">Profile</button>
               </Link>
 
               <Link to={`../../chat/${this.state.selectedPerson.id}`}>
-                <button type="button" className="btn btn-primary btn-sm">
-                  Chat
-                </button>
+                <button className="btn btn-primary btn-sm">Chat</button>
               </Link>
             </div>
           </InfoWindow>

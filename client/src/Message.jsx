@@ -8,7 +8,7 @@ class Message extends Component {
     super(props);
   }
   checkId(currentId) {
-    return currentId === this.props.chatPartner;
+    return currentId === this.props.chatPartner.id;
   }
 
   render() {

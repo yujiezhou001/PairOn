@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import BackArrow from "./components/c-svg/BackArrow";
 
 const messagesStyle = {
-  height: "300px",
+  height: "80%",
   border: "1px solid black",
   left: "0",
   padding: "10px"
@@ -38,7 +38,7 @@ class Chat extends Component {
     return (
       <div className="chat">
         {user && (
-          <div className="d-flex justify-content-start align-items-center">
+          <div className="header-chat">
             <Link to={`/users/${JSON.stringify(user.id)}`} style={zIndex}>
               <img className="rounded-circle" src={user.avatarURL} />
             </Link>
