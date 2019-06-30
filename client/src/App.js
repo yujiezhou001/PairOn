@@ -14,7 +14,7 @@ import { Home } from "./Home";
 import { Profile } from "./Profile";
 import BtnProfile from "./components/BtnProfile.jsx";
 import BtnChat from "./components/BtnChat.jsx";
-import BtnBack from "./components/BtnBack.jsx"
+import BtnBack from "./components/BtnBack.jsx";
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css"; // optional styles
 
@@ -125,9 +125,17 @@ class App extends Component {
   };
 
   addMessage = newMessage => {
+    const timeOptions = {
+      timeZone: "Canada/Central",
+      hour12: true,
+      hour: "numeric",
+      minute: "numeric",
+      seconds: "numeric"
+    };
+
     const date = new Date();
     const d = date.toDateString();
-    const time = date.toLocaleTimeString();
+    const time = date.toLocaleTimeString("en-US", timeOptions);
 
     const messageObject = {
       username: this.state.currentUser.firstName,
@@ -136,7 +144,7 @@ class App extends Component {
       recipientId: this.state.chatPartner.id,
       content: newMessage,
       type: "outgoingMessage",
-      datetime: `${d} ${time}`
+      datetime: `${time}`
     };
 
     console.log("SEND", newMessage, "TO BACKEND!!!!");
