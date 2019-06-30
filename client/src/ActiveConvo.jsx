@@ -17,7 +17,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   },
   inline: {
-    display: "inline"
+    display: "flex",
+    justifyContent: "space-between"
   }
 }));
 
@@ -56,7 +57,14 @@ export function ActiveConvo(props) {
         </ListItemAvatar>
         <ListItemText
           primary={currentChatter.firstName}
-          secondary={<React.Fragment>{latestMsg.content}</React.Fragment>}
+          secondary={
+            <React.Fragment className={classes.inline}>
+              <Typography component="span" variant="body2" color="textPrimary">
+                {latestMsg.content}
+              </Typography>
+              {latestMsg.datetime}
+            </React.Fragment>
+          }
         />
       </ListItem>
     </List>

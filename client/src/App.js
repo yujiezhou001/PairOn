@@ -136,7 +136,7 @@ class App extends Component {
       recipientId: this.state.chatPartner.id,
       content: newMessage,
       type: "outgoingMessage",
-      datetime: `${d} ${time}`
+      datetime: `${time}`
     };
 
     console.log("SEND", newMessage, "TO BACKEND!!!!");
@@ -148,7 +148,6 @@ class App extends Component {
     let data = JSON.parse(event.data);
 
     if (data.type === "incomingMessage") {
-      debugger;
       if (this.state.currentUser.id === data.recipientId) {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
 
