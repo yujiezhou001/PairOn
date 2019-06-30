@@ -30,7 +30,6 @@ export class MapContainer extends Component {
       geoReady: false,
       geoError: null,
       persons: this.props.clientList
-
     };
   }
 
@@ -64,7 +63,6 @@ export class MapContainer extends Component {
     // this.setState({currentUser: event.currentTarget.value})
     // }
   };
-
 
   componentDidMount() {
     let geoOptions = {
@@ -117,10 +115,9 @@ export class MapContainer extends Component {
           lng: lng
         }}
         defaultOptions={{ styles: mapStyles }}
-
         onRightClick={this.props.updateEventsList}
       >
-{/*        <Circle
+        {/*        <Circle
           defaultCenter={{
             lat: 45.5275387,
             lng: -73.5986187
@@ -129,11 +126,10 @@ export class MapContainer extends Component {
           options={circleOptions}
         />*/}
 
-        {/* render an event marker for each event in the event list with .map function */}
+        {/* //render an event marker for each event in the event list with .map function */}
         {this.props.eventsList.map((oneEvent, index) => {
-
           {
-            let eventIcon = "/eventicon.png"
+            let eventIcon = "/eventicon.png";
 
             return (
               <Marker

@@ -150,16 +150,18 @@ class Profile extends React.Component {
       );
     } else {
       button = (
-        <Link to={`/chat/${this.props.match.params.id}`} className="btn btn-outline-color">Message</Link>        
+        <Link
+          to={`/chat/${this.props.match.params.id}`}
+          className="btn btn-outline-color"
+        >
+          Message
+        </Link>
       );
     }
 
     const personalProfile = user && (
       <div className="oter-profile d-flex justify-content-start flex-column align-items-center">
-        <img
-          className="rounded-circle"
-          src={user.avatarURL}
-        />
+        <img className="rounded-circle" src={user.avatarURL} />
         <div className="about-me d-flex justify-content-start flex-column align-items-center">
           <h3>{user.firstName}</h3>
           <p>{user.hometown}</p>
@@ -263,9 +265,7 @@ class Profile extends React.Component {
             </form>
           </div>
         ) : (
-          <div>
-            {personalProfile}
-          </div>
+          <div>{personalProfile}</div>
         )}
       </div>
     );

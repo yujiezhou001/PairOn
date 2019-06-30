@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
-    maxWidth: 360,
+    padding: 0,
     backgroundColor: theme.palette.background.paper
   },
   inline: {
@@ -40,11 +40,19 @@ export function ActiveConvo(props) {
 
   const currentChatter = findChatterInfo(props.chatterId);
   const latestMsg = findLatestMsg(props.chatterId);
-  console.log("THIS IS LATEST!!!", latestMsg);
+
+  const isLongMsg = message => {
+    if (message.content.length > 40) {
+      return message.content.slice(0, 37) + "...";
+    }
+    return message.content;
+  };
+
+  const displayMsg = isLongMsg(latestMsg);
 
   return (
     <List className={classes.root}>
-      <ListItem alignItems="flex-start">
+      <ListItem alignItems="flex-start" style={{ padding: "8px" }}>
         <ListItemAvatar>
           <Link to={`/chat/${JSON.stringify(props.chatterId)}`}>
             <img
@@ -56,9 +64,24 @@ export function ActiveConvo(props) {
         </ListItemAvatar>
         <ListItemText
           primary={currentChatter.firstName}
-          secondary={<React.Fragment>{latestMsg.content}</React.Fragment>}
+          secondary={
+            <React.Fragment
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <Typography
+                component="span"
+                variant="body2"
+                className={classes.inline}
+                color="textPrimary"
+              >
+                {displayMsg}
+              </Typography>
+              {` - ${latestMsg.datetime}`}
+            </React.Fragment>
+          }
         />
       </ListItem>
+      <Divider variant="inset" component="li" />
     </List>
   );
 }
