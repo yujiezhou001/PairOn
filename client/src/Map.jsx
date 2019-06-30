@@ -118,18 +118,9 @@ export class MapContainer extends Component {
         }}
         defaultOptions={{ styles: mapStyles }}
 
-        onRightClick={this.props.updateEventsList}
+        onDblClick={this.props.updateEventsList}
       >
-{/*        <Circle
-          defaultCenter={{
-            lat: 45.5275387,
-            lng: -73.5986187
-          }}
-          radius={1000}
-          options={circleOptions}
-        />*/}
 
-        // render an event marker for each event in the event list with .map function
         {this.props.eventsList.map((oneEvent, index) => {
 
           {
@@ -144,7 +135,7 @@ export class MapContainer extends Component {
                   lng: oneEvent.lng
                 }}
                 onClick={() => this.setState({ selectedEvent: oneEvent })}
-                onRightClick={() => this.props.removeEventPin(oneEvent)}
+                onDblClick={() => this.props.removeEventPin(oneEvent)}
                 icon={{
                   url: eventIcon,
                   scaledSize: new window.google.maps.Size(40, 40)
