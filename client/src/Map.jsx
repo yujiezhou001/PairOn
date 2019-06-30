@@ -129,7 +129,7 @@ export class MapContainer extends Component {
           options={circleOptions}
         />*/}
 
-        // render an event marker for each event in the event list with .map function
+        {/* render an event marker for each event in the event list with .map function */}
         {this.props.eventsList.map((oneEvent, index) => {
 
           {

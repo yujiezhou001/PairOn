@@ -44,7 +44,7 @@ router.post('/register', function(req, res, next) {
     .then(results => {
       const user = results[0];
       req.login(user, function(err) {
-        console.log("Req.User:", user);
+        console.log("Registered User:", user);
         if (err) { return next(err); }
         res.json({userObj: req.user, authorize: true})
       });
@@ -69,9 +69,46 @@ router.get('/logout', function(req, res){
 });
 
 router.post('/users/:id', function(req, res, next) {
-  res.json({
-    test: "you hit submit"
-  })
+  const { firstname, lastname, hometown, email, password, aboutme } = req.body;
+  const user_id = req.user.id;
+  const profileObject = {};
+  console.log("This is from updated profile", user_id)
+  profileObject.first_name = firstname;
+  profileObject.last_name = lastname;
+  profileObject.email = email;
+  profileObject.password = password;
+  profileObject.hometown = hometown;
+  profileObject.about_me = aboutme;
+  if (profileObject.first_name.length === 0) {
+    delete profileObject.first_name;
+  }
+  if (profileObject.last_name.length === 0) {
+    delete profileObject.last_name;
+  }
+  if (profileObject.email.length === 0) {
+    delete profileObject.email;
+  }
+  if (profileObject.password.length === 0) {
+    delete profileObject.password;
+  }
+  if (profileObject.hometown.length === 0) {
+    delete profileObject.hometown;
+  }
+  if (profileObject.about_me.length === 0) {
+    delete profileObject.about_me;
+  }
+  knex("users")
+    .where("id", user_id)
+    .update(profileObject)
+    .returning(['id', 'first_name', 'last_name', 'email', 'password', 'hometown', 'avatar_url', 'about_me', 'type', 'created_at', 'updated_at'])
+    .then(results => {
+      const user = results[0];
+      req.login(user, function(err) {
+        console.log("Registered User:", user);
+        if (err) { return next(err); }
+        res.json({userObj: user, authorize: true})
+      });
+    });
 });
 
 module.exports = router;

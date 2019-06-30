@@ -153,6 +153,24 @@ class App extends Component {
     this.setState({ currentUser: tempObj, authorize: data.authorize });
   };
 
+  handleOnUpdate = data => {
+    const tempObj = {
+      id: data.userObj.id,
+      firstName: data.userObj.first_name,
+      lastName: data.userObj.last_name,
+      email: data.userObj.email,
+      // password: data.userObj.password,
+      hometown: data.userObj.hometown,
+      experiences: "all",
+      avatarURL: data.userObj.avatar_url,
+      currentLocation: { lat: 0, lng: 0 },
+      aboutMe: data.userObj.about_me,
+      type: "real"
+    };
+    console.log("handle on Update: ",data)
+    this.setState({ currentUser: tempObj});
+  };
+
   async componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001/");
 
@@ -269,6 +287,7 @@ class App extends Component {
                 currentlastName={this.state.currentUser.lastName}
                 currenthometown={this.state.currentUser.hometown}
                 currentid={this.state.currentUser.id}
+                authorize={this.handleOnAuthorize}
               />
             )}
           />

@@ -5,7 +5,6 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isToggleOn: false,
       currentUser: {
         id: 4,
         avatarURL:
@@ -17,11 +16,25 @@ class Profile extends React.Component {
         password: "patate",
         aboutMe:
           "Fam actually scenester microdosing church-key pinterest synth copper mug enamel pin narwhal YOLO helvetica 8-bit cardigan. Sartorial selvage hashtag, cliche pug yr artisan iceland scenester art party live-edge. Try-hard synth vaporware austin."
-      }
+      },
+      firstname: '',
+      lastname: '',
+      hometown: '',
+      email: '',
+      password: '',
+      aboutme: '',
+      updated: false,
+      isToggleOn: false
     };
 
     this.handleClick = this.handleClick.bind(this);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
+    this.handleFirstNameInput = this.handleFirstNameInput.bind(this);
+    this.handleLastNameInput = this.handleLastNameInput.bind(this);
+    this.handleHometownInput = this.handleHometownInput.bind(this);
+    this.handleEmailInput = this.handleEmailInput.bind(this);
+    this.handlePasswordInput = this.handlePasswordInput.bind(this);
+    this.handleAboutMeInput = this.handleAboutMeInput.bind(this);
   }
 
   componentDidMount() {
@@ -46,8 +59,54 @@ class Profile extends React.Component {
 
   handleOnSubmit(e) {
     e.preventDefault();
-    axios.post(this.props.match.url).then(({ data }) => {
-      console.log(data, this.props.match.url);
+    axios.post("/users/:id", { 
+      firstname: this.state.firstname, 
+      lastname: this.state.lastname,
+      hometown: this.state.hometown,
+      email: this.state.email,
+      password: this.state.password,
+      aboutme: this.state.aboutme
+     }).then(({ data }) => {
+      this.props.authorize(data)
+      this.setState({
+        updated:"Your Profile is successfully updated"
+      });
+    })
+  }
+
+  handleFirstNameInput(e) {
+    this.setState({
+      firstname:e.target.value
+    });
+  }
+
+  handleLastNameInput(e) {
+    this.setState({
+      lastname:e.target.value
+    });
+  }
+
+  handleHometownInput(e) {
+    this.setState({
+      hometown:e.target.value
+    });
+  }
+
+  handleEmailInput(e) {
+    this.setState({
+      email:e.target.value
+    });
+  }
+
+  handlePasswordInput(e) {
+    this.setState({
+      password:e.target.value
+    });
+  }
+
+  handleAboutMeInput(e) {
+    this.setState({
+      aboutme:e.target.value
     });
   }
 
@@ -114,9 +173,12 @@ class Profile extends React.Component {
                 <label hmtlFor="exampleFormControlTextarea1">About me</label>
                 <textarea
                   className="form-control"
-                  id="exampleFormControlTextarea1"
                   rows="3"
                   placeholder="Tell us a little bit about yourself."
+                  name="aboutme"
+                  id="inputAboutMe"
+                  value={this.state.aboutme}
+                  onChange={this.handleAboutMeInput}
                 />
               </div>
               <div className="form-group">
@@ -126,6 +188,10 @@ class Profile extends React.Component {
                   className="form-control"
                   id="inputFirstName"
                   placeholder="First name "
+                  name="firstname"
+                  id="inputFirstName"
+                  value={this.state.firstname}
+                  onChange={this.handleFirstNameInput}
                 />
               </div>
               <div className="form-group">
@@ -135,6 +201,10 @@ class Profile extends React.Component {
                   className="form-control"
                   id="inputLastName"
                   placeholder="Last name"
+                  name="lastname"
+                  id="inputLastName"
+                  value={this.state.lastname}
+                  onChange={this.handleLastNameInput}
                 />
               </div>
               <div className="form-group">
@@ -144,6 +214,10 @@ class Profile extends React.Component {
                   className="form-control"
                   id="inputHomeTown"
                   placeholder="Hometown"
+                  name="hometown"
+                  id="inputHomeTown"
+                  value={this.state.hometown}
+                  onChange={this.handleHometownInput}
                 />
               </div>
               <div className="form-group">
@@ -153,6 +227,10 @@ class Profile extends React.Component {
                   className="form-control"
                   id="inputEmail"
                   placeholder="Email"
+                  name="email"
+                  id="inputEmail"
+                  value={this.state.email}
+                  onChange={this.handleEmailInput}
                 />
               </div>
               <div className="form-group">
@@ -162,11 +240,20 @@ class Profile extends React.Component {
                   className="form-control"
                   id="inputNewPassword"
                   placeholder="Password"
+                  name="password"
+                  id="inputPassword"
+                  value={this.state.password}
+                  onChange={this.handlePasswordInput}
                 />
               </div>
               <button type="submit" className="btn btn-outline-color">
-                Join
+                Update
               </button>
+              {this.state.updated && <div>
+                <p className="updateStatus">
+                  Your profile is successfully updated!
+                </p>
+              </div>}
             </form>
           </div>
         ) : (
