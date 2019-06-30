@@ -27,6 +27,11 @@ class Message extends Component {
         )}
         {isSender && (
           <div className="message">
+            <img
+              className="rounded-circle"
+              src={this.props.senderAvatar}
+              style={{ width: "55px", padding: "0 10px" }}
+            />
             <span className="message-username" style={senderStyle}>
               {this.props.username}:
             </span>
