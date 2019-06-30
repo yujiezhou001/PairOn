@@ -28,6 +28,12 @@ class ChatConvos extends Component {
     return (
       <div>
         <h1>Chats</h1>
+        {!this.props.messages.length && (
+          <div>
+            <h5>No active conversations</h5>
+          </div>
+        )}
+        <div />
         <main>
           <div className="well well-lg">{conversations}</div>
         </main>
