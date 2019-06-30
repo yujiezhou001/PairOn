@@ -116,9 +116,7 @@ class Profile extends React.Component {
                   className="form-control"
                   id="exampleFormControlTextarea1"
                   rows="3"
-                  placeholder="Fam actually scenester microdosing church-key pinterest synth copper mug enamel pin narwhal YOLO helvetica
-  8-bit cardigan. Sartorial selvage hashtag, cliche pug yr artisan iceland scenester art party live-edge. Try-hard
-  synth vaporware austin."
+                  placeholder="Tell us a little bit about yourself."
                 />
               </div>
               <div className="form-group">
@@ -155,15 +153,6 @@ class Profile extends React.Component {
                   className="form-control"
                   id="inputEmail"
                   placeholder="Email"
-                />
-              </div>
-              <div className="form-group">
-                <label hmtlFor="inputPassword4">Old password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="inputOldPassword"
-                  placeholder="Password"
                 />
               </div>
               <div className="form-group">
