@@ -1,3 +1,8 @@
+$color-bg-drak: #697ca9;
+
+
+
+@import "./general/_btn.scss";
 @import "./components/_App.scss";
 @import "./components/_Map.scss";
 @import "./components/_Login.scss";
@@ -5,8 +10,9 @@
 @import "./components/_HorizontalScroll.scss";
 @import "./components/_BtnProfile.scss";
 @import "./components/_Profile.scss";
+@import "./components/_Chat.scss";
 
-$color-bg-drak: #697ca9;
+
 
 body {
   margin: 0;
@@ -22,7 +28,4 @@ code {
     monospace;
 }
 
-.btn.btn-outline-color {
-  color: $color-bg-drak;
-  border-color: $color-bg-drak;
-}
+
