@@ -1,5 +1,7 @@
 import React from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
 //@@@ creer plusieur component fix for the current user
 class Profile extends React.Component {
   constructor(props) {
@@ -56,8 +58,6 @@ class Profile extends React.Component {
   }
 
   render() {
-
-
     const user = this.props.clientList.find(
       userObj => userObj.id === Number(this.props.match.params.id)
     );
@@ -83,18 +83,18 @@ class Profile extends React.Component {
       );
     } else {
       button = (
-        <a className="btn btn-outline-color" href="/" role="button">
+        <Link
+          to={`/chat/${this.props.match.params.id}`}
+          className="btn btn-outline-color"
+        >
           Message
-        </a>
+        </Link>
       );
     }
 
     const personalProfile = user && (
       <div className="oter-profile d-flex justify-content-start flex-column align-items-center">
-        <img
-          className="rounded-circle"
-          src={user.avatarURL}
-        />
+        <img className="rounded-circle" src={user.avatarURL} />
         <div className="about-me d-flex justify-content-start flex-column align-items-center">
           <h3>{user.firstName}</h3>
           <p>{user.hometown}</p>
@@ -181,9 +181,7 @@ class Profile extends React.Component {
             </form>
           </div>
         ) : (
-          <div>
-            {personalProfile}
-          </div>
+          <div>{personalProfile}</div>
         )}
       </div>
     );

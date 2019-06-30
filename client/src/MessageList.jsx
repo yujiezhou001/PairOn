@@ -11,6 +11,7 @@ class MessageList extends Component {
         recipientId={messageObj.recipientId}
         content={messageObj.content}
         chatPartner={this.props.chatPartner}
+        senderAvatar={messageObj.senderAvatar} //ADDED THIS
       />
     ));
     return (

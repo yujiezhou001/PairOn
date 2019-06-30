@@ -30,7 +30,6 @@ export class MapContainer extends Component {
       geoReady: false,
       geoError: null,
       persons: this.props.clientList
-
     };
   }
 
@@ -64,7 +63,6 @@ export class MapContainer extends Component {
     // this.setState({currentUser: event.currentTarget.value})
     // }
   };
-
 
   componentDidMount() {
     let geoOptions = {
@@ -121,10 +119,20 @@ export class MapContainer extends Component {
         onDblClick={this.props.updateEventsList}
       >
 
-        {this.props.eventsList.map((oneEvent, index) => {
+        {/*        <Circle
+          defaultCenter={{
+            lat: 45.5275387,
+            lng: -73.5986187
+          }}
+          radius={1000}
+          options={circleOptions}
+        />*/}
 
+        {/* //render an event marker for each event in the event list with .map function */}
+
+        {this.props.eventsList.map((oneEvent, index) => {
           {
-            let eventIcon = "/eventicon.png"
+            let eventIcon = "/eventicon.png";
 
             return (
               <Marker
@@ -167,13 +175,13 @@ export class MapContainer extends Component {
               <p>{this.state.selectedEvent.description}</p>
 
               <Link to={`../../users/${this.state.selectedEvent.id}`}>
-                <button type="button" className="btn btn-primary btn-sm">
+                <button className="btn btn-main-color btn-sm">
                   Profile
                 </button>
               </Link>
 
               <Link to={`../../chat/${this.state.selectedEvent.id}`}>
-                <button type="button" className="btn btn-primary btn-sm">
+                <button className="btn btn-main-color btn-sm">
                   Chat
                 </button>
               </Link>
@@ -234,15 +242,11 @@ export class MapContainer extends Component {
               <p>{this.state.selectedPerson.hometown}</p>
 
               <Link to={`../../users/${this.state.selectedPerson.id}`}>
-                <button type="button" className="btn btn-primary btn-sm">
-                  Profile
-                </button>
+                <button className="btn btn-main-color btn-sm">Profile</button>
               </Link>
 
               <Link to={`../../chat/${this.state.selectedPerson.id}`}>
-                <button type="button" className="btn btn-primary btn-sm">
-                  Chat
-                </button>
+                <button className="btn btn-main-color btn-sm">Chat</button>
               </Link>
             </div>
           </InfoWindow>
