@@ -11,7 +11,8 @@
 //components
 .btn-chat {
   position: fixed;
-  right:  5.5em;
+  right:  4.5em;
+  top: 1.3em;
   z-index: 1000;
 }
 
@@ -34,5 +35,8 @@
     left: 26px;
     top: 2px;
     background-color: red;
+  }
+  svg{
+    stroke: #000;
   }
 }

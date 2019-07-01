@@ -28,9 +28,10 @@
 
   input.form-control.chat-bar{
     position: fixed;
-    bottom: 0;
+    bottom: 2vh;
     border-radius: 0;
     height: 4em;
+    padding: 2em;
   } 
   
   .chat {
