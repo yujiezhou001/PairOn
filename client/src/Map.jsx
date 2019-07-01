@@ -196,6 +196,7 @@ export class MapContainer extends Component {
             this.props.currentExperiences === "all" ||
             person.experiences === "all"
           ) {
+            // {let personIcon = this.state.selectedPerson ? "/waving-icon-18.jpg" : "/bonhomme.gif"}
             let personIcon = "/waving-icon-18.jpg";
 
             if (this.props.currentUserId === person.id) {
