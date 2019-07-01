@@ -172,14 +172,23 @@ class App extends Component {
           this.setState({ unreadMsgs: newUnreadCount });
 
           toaster.notify(
-            <div>
+            <div
+              elevation="md"
+              style={{
+                overflow: "hidden",
+                alignItems: "center",
+                display: "flex"
+              }}
+            >
               <img
                 className="rounded-circle"
                 src={data.senderAvatar}
-                style={{ width: "55px" }}
+                style={{ width: "70px" }}
               />
-              <h5>New message from {data.username}</h5>
-              <p>{data.content}</p>
+              <div style={{ padding: "1rem" }}>
+                <h6>New message from {data.username}</h6>
+                <p>{data.content}</p>
+              </div>
             </div>,
             {
               position: "bottom-left" // top-left, top, top-right, bottom-left, bottom, bottom-right
@@ -230,8 +239,8 @@ class App extends Component {
       aboutMe: data.userObj.about_me,
       type: "real"
     };
-    console.log("handle on Update: ",data)
-    this.setState({ currentUser: tempObj});
+    console.log("handle on Update: ", data);
+    this.setState({ currentUser: tempObj });
   };
 
   async componentDidMount() {
@@ -372,18 +381,18 @@ class App extends Component {
             path="/users/:id"
             render={props => (
               <div>
-              <BtnBack backLinks="/" />
-              <Profile
-                {...props}
-                clientList={this.state.clientList}
-                currentEmail={this.state.currentUser.email}
-                currentfirstName={this.state.currentUser.firstName}
-                currentlastName={this.state.currentUser.lastName}
-                currenthometown={this.state.currentUser.hometown}
-                currentAboutMe={this.state.currentUser.aboutMe}
-                currentid={this.state.currentUser.id}
-                authorize={this.handleOnAuthorize}
-              />
+                <BtnBack backLinks="/" />
+                <Profile
+                  {...props}
+                  clientList={this.state.clientList}
+                  currentEmail={this.state.currentUser.email}
+                  currentfirstName={this.state.currentUser.firstName}
+                  currentlastName={this.state.currentUser.lastName}
+                  currenthometown={this.state.currentUser.hometown}
+                  currentAboutMe={this.state.currentUser.aboutMe}
+                  currentid={this.state.currentUser.id}
+                  authorize={this.handleOnAuthorize}
+                />
               </div>
             )}
           />
