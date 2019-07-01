@@ -1,4 +1,4 @@
-$color-bg-drak: #697ca9;
+$color-bg-drak: #556790;
 
 
 
@@ -12,7 +12,9 @@ $color-bg-drak: #697ca9;
 @import "./components/_Profile.scss";
 @import "./components/_Chat.scss";
 
-
+#root a{
+  color: $color-bg-drak;
+}
 
 body {
   margin: 0;

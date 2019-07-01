@@ -4,13 +4,60 @@
 
 //Google zoom and person
 .gmnoprint.gm-bundled-control.gm-bundled-control-on-bottom{
+  display: none;
   top: 50vh;
 }
+
 #root > div > div > div.map > div > div:nth-child(1) > div > div > div:nth-child(1) > div:nth-child(3){
-  background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255,255,255,0), rgba(255,255,255,1), );
+  background-image: linear-gradient(rgba(255,255,255,1), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255,255,255,0), rgba(255,255,255,1), );
 
 }
 
+// for the popup user
+.gm-style-iw-a{
+  .gm-style-iw-t{
+    bottom: 5em!important;
+  }
+}
+
+// the element pop up user
+#root > div > div:nth-child(2) > div.map > div > div:nth-child(1) > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(4) > div > div > div > div > div > div > div{
+  text-align: center;
+
+  .rounded-circle{
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+  }
+
+  h5{
+    margin: 0;
+  }
+  p{
+    margin-bottom: .5rem;
+    padding-bottom: .5em;
+    border-bottom: 1px solid #dadada;
+  }
+
+  button{
+    font-size: 1.2em;
+    padding: .4em .6em;
+  }
+}
+//first btn (Profile)
+#root > div > div:nth-child(2) > div.map > div > div:nth-child(1) > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(4) > div > div > div > div > div > div > div > a:nth-child(4) > button {
+  margin-right: 0.5em;
+}
+
+// div content for popup
+#root > div > div:nth-child(2) > div.map > div > div:nth-child(1) > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(4) > div > div > div > div > div > div > div {
+  max-width: 10em;
+}
+
+.logo-map{
+  position: fixed;
+  width: 8em;
+  z-index: 500;
+  margin-left: .5em;
+}
 
 .pulsating-circle {
   position: absolute;

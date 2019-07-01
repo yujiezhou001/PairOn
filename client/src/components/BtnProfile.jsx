@@ -22,7 +22,7 @@ const BtnProfile = props => {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <img src={props.CurrentUserImage} alt="Button My profile" className="rounded-circle" />
+          <img src={props.CurrentUserImage} alt="Button My profile" className="rounded-circle shadow-sm" />
           {/* <FontAwesomeIcon style={btnProfile} icon={faUserCircle} /> */}
         </button>
         <div className="dropdown-menu dropdown-menu-right text-right" aria-labelledby="dropdownMenuButton">
