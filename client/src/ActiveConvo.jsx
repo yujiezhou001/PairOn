@@ -43,7 +43,7 @@ export function ActiveConvo(props) {
 
   const isLongMsg = message => {
     if (message.content.length > 40) {
-      return message.content.slice(0, 37) + "...";
+      return message.content.slice(0, 40) + "...";
     }
     return message.content;
   };
@@ -65,9 +65,7 @@ export function ActiveConvo(props) {
         <ListItemText
           primary={currentChatter.firstName}
           secondary={
-            <React.Fragment
-              style={{ display: "flex", justifyContent: "space-between" }}
-            >
+            <React.Fragment>
               <Typography
                 component="span"
                 variant="body2"

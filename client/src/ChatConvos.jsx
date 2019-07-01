@@ -9,8 +9,8 @@ const noneStyle = {
   flexDirection: "column",
   alignItems: "center",
   backgroundColor: "white",
-  color: "grey",
-  fontStyle: "italic"
+  color: "grey"
+  // fontStyle: "italic"
 };
 
 class ChatConvos extends Component {
@@ -62,7 +62,7 @@ class ChatConvos extends Component {
                   src={lonelyEmoji}
                   style={{ width: "100px", marginBottom: "20px" }}
                 />
-                <p>Connect with a local now!</p>
+                <p style={{ fontStyle: "italic" }}>Connect with a local now!</p>
 
                 <Link to="/">
                   <button className="btn btn-outline-color">Map</button>
