@@ -29,6 +29,7 @@ class Home extends React.Component {
   render() {
     return (
       <div className="map" style={{ width: "100vw", height: "100vh" }}>
+        <img className="logo-map" src="../pair_on_logo.png" />
         <WrappedMap
           googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${
             process.env.REACT_APP_GOOGLE_KEY

@@ -4,13 +4,27 @@
 
 //Google zoom and person
 .gmnoprint.gm-bundled-control.gm-bundled-control-on-bottom{
+  display: none;
   top: 50vh;
 }
+
 #root > div > div > div.map > div > div:nth-child(1) > div > div > div:nth-child(1) > div:nth-child(3){
   background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255,255,255,0), rgba(255,255,255,1), );
 
 }
 
+.gm-style-iw-a{
+  .gm-style-iw-t{
+    bottom: 5em!important;
+  }
+}
+
+.logo-map{
+  position: fixed;
+  width: 8em;
+  z-index: 500;
+  margin-left: .5em;
+}
 
 .pulsating-circle {
   position: absolute;

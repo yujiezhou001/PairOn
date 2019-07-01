@@ -43,7 +43,7 @@ class App extends Component {
   }
 
   btnAbsolutR = {
-    position: "absolute",
+    position: "fixed",
     top: 0,
     right: 0,
     zIndex: "300"
@@ -310,6 +310,15 @@ class App extends Component {
             }
           />
           {this.state.authorize && (
+            <div>
+              <BtnProfile
+                    btnAbsolutR={this.btnAbsolutR}
+                    autorized={this.state.authorize}
+                    fnlogout={this.logout}
+                    CurrentUserId={this.state.currentUser.id}
+                    CurrentUserImage={this.state.currentUser.avatarURL}
+                  />
+            
             <Route
               exact
               path="/chat/:id"
@@ -327,6 +336,7 @@ class App extends Component {
                 </div>
               )}
             />
+            </div>
           )}
           {this.state.authorize && (
             <Route
