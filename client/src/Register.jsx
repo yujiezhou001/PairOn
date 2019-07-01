@@ -150,7 +150,7 @@ class Register extends React.Component {
             />
           </div>
           <div className="registerButton">
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-main-color">
             Join
           </button>
           </div>

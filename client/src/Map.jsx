@@ -165,7 +165,7 @@ export class MapContainer extends Component {
           >
             <div>
               <img
-                className="rounded-circle"
+                className="rounded-circle shadow-sm"
                 src={this.state.selectedEvent.avatarURL}
                 style={imgPicture}
               />
@@ -175,13 +175,13 @@ export class MapContainer extends Component {
               <p>{this.state.selectedEvent.description}</p>
 
               <Link to={`../../users/${this.state.selectedEvent.id}`}>
-                <button className="btn btn-main-color btn-sm">
+                <button className="btn btn-outline-color btn-sm">
                   Profile
                 </button>
               </Link>
 
               <Link to={`../../chat/${this.state.selectedEvent.id}`}>
-                <button className="btn btn-main-color btn-sm">
+                <button className="btn btn-outline-color btn-sm">
                   Chat
                 </button>
               </Link>
@@ -196,6 +196,7 @@ export class MapContainer extends Component {
             this.props.currentExperiences === "all" ||
             person.experiences === "all"
           ) {
+            // {let personIcon = this.state.selectedPerson ? "/waving-icon-18.jpg" : "/bonhomme.gif"}
             let personIcon = "/waving-icon-18.jpg";
 
             if (this.props.currentUserId === person.id) {

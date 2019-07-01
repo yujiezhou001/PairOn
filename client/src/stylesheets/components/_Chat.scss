@@ -89,6 +89,7 @@
     background-color: #f3f3f3;
     border-radius: 2em;
     padding: 1em 1.2em;
+    text-align: center;
   }
 
   &.recipient {
@@ -99,7 +100,7 @@
     flex-direction: row-reverse;
     .message-content {
       background-color: $color-bg-drak;
-      text-align: center;
+      
     }
   }
 
