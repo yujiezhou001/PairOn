@@ -13,10 +13,43 @@
 
 }
 
+// for the popup user
 .gm-style-iw-a{
   .gm-style-iw-t{
     bottom: 5em!important;
   }
+}
+
+// the element pop up user
+#root > div > div:nth-child(2) > div.map > div > div:nth-child(1) > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(4) > div > div > div > div > div > div > div{
+  text-align: center;
+
+  .rounded-circle{
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+  }
+
+  h5{
+    margin: 0;
+  }
+  p{
+    margin-bottom: .5rem;
+    padding-bottom: .5em;
+    border-bottom: 1px solid #dadada;
+  }
+
+  button{
+    font-size: 1.2em;
+    padding: .4em .6em;
+  }
+}
+//first btn (Profile)
+#root > div > div:nth-child(2) > div.map > div > div:nth-child(1) > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(4) > div > div > div > div > div > div > div > a:nth-child(4) > button {
+  margin-right: 0.5em;
+}
+
+// div content for popup
+#root > div > div:nth-child(2) > div.map > div > div:nth-child(1) > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(4) > div > div > div > div > div > div > div {
+  max-width: 10em;
 }
 
 .logo-map{

@@ -87,7 +87,7 @@ class Login extends React.Component {
             />
           </div>
           <div className="loginButton">
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-main-color">
             Login
           </button>
           </div>
@@ -95,9 +95,7 @@ class Login extends React.Component {
         <p>
           Don't have an account? <br />
           <Link to="/register">
-          <button className="btn btn-primary" type="button">
             Join
-          </button>
           </Link>
         </p>
       </div>
