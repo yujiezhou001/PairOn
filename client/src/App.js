@@ -103,7 +103,7 @@ class App extends Component {
       avatarURL: this.state.currentUser.avatarURL,
       description: `${
         this.state.currentUser.firstName
-      }'s event. \n Show up or message him for more info!`,
+      }'s event. \n Show up or message them for more info!`,
       lat: onClickEvent.latLng.lat(),
       lng: onClickEvent.latLng.lng()
     };
