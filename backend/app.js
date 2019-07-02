@@ -70,22 +70,23 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-const clientList = [];
+let clientList = [];
+const currentClient = {};
 let eventsList = [
-// {avatarURL:
-// "https://s3.amazonaws.com/uifaces/faces/twitter/kolsvein/128.jpg"
-// description:
-// "Chuck's event. \n Show up or message him for more info!"
-// id:
-// 8
-// lat:
-// 45.5355364150229
-// lng:
-// -73.49661296986693
-// type:
-// "newEventPin"
-// uuid:
-// "391996bb-8933-4945-ab4c-6b596e794048"}
+  // {avatarURL:
+  // "https://s3.amazonaws.com/uifaces/faces/twitter/kolsvein/128.jpg"
+  // description:
+  // "Chuck's event. \n Show up or message him for more info!"
+  // id:
+  // 8
+  // lat:
+  // 45.5355364150229
+  // lng:
+  // -73.49661296986693
+  // type:
+  // "newEventPin"
+  // uuid:
+  // "391996bb-8933-4945-ab4c-6b596e794048"}
 ];
 
 passport.use(
@@ -102,11 +103,22 @@ passport.use(
         .where("email", username)
         .first()
         .then(user => {
-          console.log("THIS IS DIRECTLY FROM CONSOLE LOG:", user);
+          // console.log("THIS IS DIRECTLY FROM CONSOLE LOG:", user);
           if (!user) return done(null, false);
           if (password !== user.password) {
             return done(null, false);
           } else {
+            currentClient.id = user.id;
+            currentClient.firstName = user.first_name;
+            currentClient.lastName = user.last_name;
+            currentClient.email = user.email;
+            currentClient.hometown = user.hometown;
+            currentClient.experiences = "All";
+            currentClient.avatarURL = user.avatar_url;
+            currentClient.currentLocation = ourLocation;
+            currentClient.aboutMe = user.about_me;
+            currentClient.type = "incomingClientList";
+
             // add the real user / logged in user to the clientList
             // [user] = result;
             clientList.push({
@@ -134,7 +146,7 @@ passport.use(
 );
 
 passport.serializeUser(function(user, done) {
-  console.log("this is from serialized user", user);
+  // console.log("this is from serialized user", user);
   done(null, user);
 });
 
@@ -150,7 +162,7 @@ passport.serializeUser(function(user, done) {
 // });
 
 passport.deserializeUser(function(user, done) {
-  console.log("this is from deserialized user", user);
+  // console.log("this is from deserialized user", user);
   done(null, user);
 });
 
@@ -318,28 +330,27 @@ wss.on("connection", ws => {
 
   wss.clients.forEach(function each(client) {
     client.send(JSON.stringify({ clientList }));
-    console.log("When the ClientList first sent: ", { clientList });
+    // console.log("When the ClientList first sent: ", { clientList });
   });
 
-  ws.send(JSON.stringify({eventsList}));
-
+  ws.send(JSON.stringify({ eventsList }));
 
   ws.on("message", function incoming(message) {
     const messageObj = JSON.parse(message);
     // messageObj.id = uuidv4(); do not use!! overwrites user id!!
 
-    console.log("This is from any received message:", messageObj);
+    // console.log("This is from any received message:", messageObj);
 
     switch (messageObj.type) {
       case "outgoingMessage":
         messageObj.type = "incomingMessage";
         messageObj.id = uuidv4();
-        console.log("OUTGOING MSG:", messageObj);
+        // console.log("OUTGOING MSG:", messageObj);
         wss.broadcast(JSON.stringify(messageObj));
         break;
 
       case "outgoingCurrUserInfo":
-        console.log("BACKEND - MY LOC OBJ", messageObj);
+        // console.log("BACKEND - MY LOC OBJ", messageObj);
         clientList.forEach(function(client) {
           if (client.id === messageObj.id) {
             client.currentLocation = messageObj.myLocation;
@@ -376,5 +387,27 @@ wss.on("connection", ws => {
     }
   });
 
-  ws.on("close", () => console.log("Client disconnected"));
+  // ws.on("close", () => console.log("Client disconnected"));
+
+  ws.on("close", () => {
+    console.log("Client disconnected");
+
+    console.log("THIS CLIENT DISCONNECTED:", currentClient);
+    // remove(clientList, currentClient);
+
+    // console.log("THIS IS THE CURRENT CLIENT:", currentClient);
+
+    const newClientList = clientList.filter(
+      client => client.id !== currentClient.id
+    );
+
+    clientList = newClientList;
+
+    // console.log(
+    //   "This is the new filtered clientlist ON DISCONNECT:",
+    //   newClientList
+    // );
+    // broadcast number of users to every connected user
+    wss.broadcast(JSON.stringify({ clientList }));
+  });
 });

@@ -202,7 +202,9 @@ class App extends Component {
       console.log("CHAT BROADCAST BACK TO ME!", data);
     } else if (data.type === "experiencePick") {
       this.setState(data);
-    } else if (this.state.authorize) {
+      // } else if (this.state.authorize) {
+      //   this.setState(data);
+    } else {
       this.setState(data);
     }
   };
@@ -321,30 +323,30 @@ class App extends Component {
           {this.state.authorize && (
             <div>
               <BtnProfile
-                    btnAbsolutR={this.btnAbsolutR}
-                    autorized={this.state.authorize}
-                    fnlogout={this.logout}
-                    CurrentUserId={this.state.currentUser.id}
-                    CurrentUserImage={this.state.currentUser.avatarURL}
-                  />
-            
-            <Route
-              exact
-              path="/chat/:id"
-              render={props => (
-                <div>
-                  <BtnBack backLinks="/" />
-                  <Chat
-                    {...props}
-                    clientList={this.state.clientList}
-                    addMessage={this.addMessage}
-                    messages={this.state.chatMessages}
-                    updateChatPartner={this.updateChatPartner}
-                    chatPartner={this.state.chatPartner}
-                  />
-                </div>
-              )}
-            />
+                btnAbsolutR={this.btnAbsolutR}
+                autorized={this.state.authorize}
+                fnlogout={this.logout}
+                CurrentUserId={this.state.currentUser.id}
+                CurrentUserImage={this.state.currentUser.avatarURL}
+              />
+
+              <Route
+                exact
+                path="/chat/:id"
+                render={props => (
+                  <div>
+                    <BtnBack backLinks="/" />
+                    <Chat
+                      {...props}
+                      clientList={this.state.clientList}
+                      addMessage={this.addMessage}
+                      messages={this.state.chatMessages}
+                      updateChatPartner={this.updateChatPartner}
+                      chatPartner={this.state.chatPartner}
+                    />
+                  </div>
+                )}
+              />
             </div>
           )}
           {this.state.authorize && (
