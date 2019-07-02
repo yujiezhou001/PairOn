@@ -202,10 +202,10 @@ class App extends Component {
       console.log("CHAT BROADCAST BACK TO ME!", data);
     } else if (data.type === "experiencePick") {
       this.setState(data);
-      // } else if (this.state.authorize) {
-      //   this.setState(data);
-    } else {
+    } else if (this.state.authorize) {
       this.setState(data);
+      // } else {
+      //   this.setState(data);
     }
   };
 

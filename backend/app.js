@@ -322,6 +322,7 @@ const fakeLocations = [
 
 wss.on("connection", ws => {
   console.log("Client connected");
+  console.log("THIS CLIENT CONNECTED:", currentClient);
   // once login authentication working - wrap all this code in "Usercredentials valid?"
   // ws.on("message", function incoming(message) {
   //   const messageObj = JSON.parse(message);
