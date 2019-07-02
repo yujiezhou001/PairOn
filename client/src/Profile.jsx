@@ -124,9 +124,9 @@ class Profile extends React.Component {
 
   render() {
 
-    // const user = this.props.clientList.find(
-    //   userObj => userObj.id === Number(this.props.match.params.id)
-    // );
+    const tempUser = this.props.clientList.find(
+      userObj => userObj.id === Number(this.props.match.params.id)
+    );
 
     const isAccountUser = this.checkCurrentId(this.props.currentid);
 
@@ -134,7 +134,7 @@ class Profile extends React.Component {
     if(isAccountUser) {
       user = this.props.currentUser;
     } else {
-      user = this.props.clientList.reverse().find(
+      user = this.props.clientList.find(
         userObj => userObj.id === Number(this.props.match.params.id)
       )
     }
