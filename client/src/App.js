@@ -259,7 +259,7 @@ class App extends Component {
     };
 
     try {
-      const response = await fetch("http://localhost:3001/current_user", {
+      const response = await fetch("/current_user", {
         credentials: "include"
       });
       const data = await response.json();
