@@ -15,10 +15,3 @@ const Logo = props => {
 };
 
 export default Logo;
-
-{
-  /*
-<<<<<<< HEAD
-      <img style={logoImage} className="logo" src="../pair_on_logo.png"
-=======*/
-}
