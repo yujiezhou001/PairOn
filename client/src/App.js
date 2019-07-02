@@ -202,7 +202,11 @@ class App extends Component {
       console.log("CHAT BROADCAST BACK TO ME!", data);
     } else if (data.type === "experiencePick") {
       this.setState(data);
+    // } else {
+    //   console.log("Is this the CLIENTLIST?", data)
+    //   this.setState(data);
     } else if (this.state.authorize) {
+      console.log("Is this the CLIENTLIST?", data)
       this.setState(data);
     }
   };
@@ -400,6 +404,7 @@ class App extends Component {
                   currentlastName={this.state.currentUser.lastName}
                   currenthometown={this.state.currentUser.hometown}
                   currentAboutMe={this.state.currentUser.aboutMe}
+                  currentUser={this.state.currentUser}
                   currentid={this.state.currentUser.id}
                   authorize={this.handleOnAuthorize}
                 />
