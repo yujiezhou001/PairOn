@@ -115,18 +115,16 @@ export class MapContainer extends Component {
           lng: lng
         }}
         defaultOptions={{ styles: mapStyles }}
-
         onDblClick={this.props.updateEventsList}
       >
-
-        {/*        <Circle
+        {/* <Circle
           defaultCenter={{
             lat: 45.5275387,
             lng: -73.5986187
           }}
           radius={1000}
           options={circleOptions}
-        />*/}
+        /> */}
 
         {/* //render an event marker for each event in the event list with .map function */}
 
@@ -181,9 +179,7 @@ export class MapContainer extends Component {
               </Link>
 
               <Link to={`../../chat/${this.state.selectedEvent.id}`}>
-                <button className="btn btn-outline-color btn-sm">
-                  Chat
-                </button>
+                <button className="btn btn-outline-color btn-sm">Chat</button>
               </Link>
             </div>
           </InfoWindow>
@@ -198,9 +194,11 @@ export class MapContainer extends Component {
           ) {
             // {let personIcon = this.state.selectedPerson ? "/waving-icon-18.jpg" : "/bonhomme.gif"}
             let personIcon = "/waving-icon-18.jpg";
+            let zoomIn = new window.google.maps.Size(40, 40);
 
             if (this.props.currentUserId === person.id) {
-              personIcon = "/currentUser_Location.png";
+              personIcon = "circleOpac.gif";
+              zoomIn = new window.google.maps.Size(60, 60);        
             }
 
             return (
@@ -214,7 +212,7 @@ export class MapContainer extends Component {
                 onClick={() => this.setState({ selectedPerson: person })}
                 icon={{
                   url: personIcon,
-                  scaledSize: new window.google.maps.Size(40, 40)
+                  scaledSize: zoomIn
                 }}
               />
             );
