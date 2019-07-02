@@ -193,7 +193,7 @@ export class MapContainer extends Component {
             person.experiences === "all"
           ) {
             // {let personIcon = this.state.selectedPerson ? "/waving-icon-18.jpg" : "/bonhomme.gif"}
-            let personIcon = "/userHi.gif";
+            let personIcon = "/waving-icon-18.jpg";
             let zoomIn = new window.google.maps.Size(40, 40);
 
             if (this.props.currentUserId === person.id) {
