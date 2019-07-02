@@ -70,7 +70,8 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-const clientList = [];
+let clientList = [];
+const currentClient = {};
 let eventsList = [
 // {avatarURL:
 // "https://s3.amazonaws.com/uifaces/faces/twitter/kolsvein/128.jpg"
@@ -109,18 +110,29 @@ passport.use(
           } else {
             // add the real user / logged in user to the clientList
             // [user] = result;
+            currentClient.id = user.id;
+            currentClient.firstName = user.first_name;
+            currentClient.lastName = user.last_name;
+            currentClient.email = user.email;
+            currentClient.hometown = user.hometown;
+            currentClient.experiences = user.experiences;
+            currentClient.avatarURL = user.avatar_url;
+            currentClient.currentLocation = ourLocation;
+            currentClient.aboutMe = user.about_me;
+            currentClient.type = "incomingClientList";
+
             clientList.push({
-              id: user.id,
-              firstName: user.first_name,
-              lastName: user.last_name,
-              email: user.email,
-              // password: user.password,
-              hometown: user.hometown,
-              experiences: "All",
-              avatarURL: user.avatar_url,
-              currentLocation: ourLocation,
-              aboutMe: user.about_me,
-              type: "incomingClientList"
+                id: user.id,
+                firstName: user.first_name,
+                lastName: user.last_name,
+                email: user.email,
+                // password: user.password,
+                hometown: user.hometown,
+                experiences: "All",
+                avatarURL: user.avatar_url,
+                currentLocation: ourLocation,
+                aboutMe: user.about_me,
+                type: "incomingClientList"
             });
 
             return done(null, user);
@@ -376,5 +388,18 @@ wss.on("connection", ws => {
     }
   });
 
-  ws.on("close", () => console.log("Client disconnected"));
+
+
+  ws.on('close', () => {
+    
+    console.log("Client disconnected")
+
+    // remove(clientList, clientList.find(client => client.id === currentClient.id))
+
+    
+    // clientList = clientList.filter(client => client.id !== currentClient.id)
+    // console.log("This is the new filtered clientlist ON DISCONNECT:", clientList)
+    // wss.broadcast(JSON.stringify({ clientList }));
+
+  })
 });
