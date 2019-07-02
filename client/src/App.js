@@ -202,11 +202,11 @@ class App extends Component {
       console.log("CHAT BROADCAST BACK TO ME!", data);
     } else if (data.type === "experiencePick") {
       this.setState(data);
-    // } else {
-    //   console.log("Is this the CLIENTLIST?", data)
-    //   this.setState(data);
+      // } else {
+      //   console.log("Is this the CLIENTLIST?", data)
+      //   this.setState(data);
     } else if (this.state.authorize) {
-      console.log("Is this the CLIENTLIST?", data)
+      console.log("Is this the CLIENTLIST?", data);
       this.setState(data);
     }
   };
@@ -281,21 +281,19 @@ class App extends Component {
     return (
       <div>
         <Router>
-          <Link to="/chat/" className="btn-chat">
-            {this.state.authorize && (
-              <BtnChat
-                resetUnread={this.resetUnread}
-                unreadMsgs={this.state.unreadMsgs}
-                unread={this.state.unread}
-              />
-            )}
-          </Link>
           <Route
             exact
             path="/"
             render={props =>
               this.state.authorize ? (
                 <div>
+                  <Link to="/chat/" className="btn-chat">
+                    <BtnChat
+                      resetUnread={this.resetUnread}
+                      unreadMsgs={this.state.unreadMsgs}
+                      unread={this.state.unread}
+                    />
+                  </Link>
                   <BtnProfile
                     btnAbsolutR={this.btnAbsolutR}
                     autorized={this.state.authorize}
@@ -325,30 +323,37 @@ class App extends Component {
           {this.state.authorize && (
             <div>
               <BtnProfile
-                    btnAbsolutR={this.btnAbsolutR}
-                    autorized={this.state.authorize}
-                    fnlogout={this.logout}
-                    CurrentUserId={this.state.currentUser.id}
-                    CurrentUserImage={this.state.currentUser.avatarURL}
-                  />
-            
-            <Route
-              exact
-              path="/chat/:id"
-              render={props => (
-                <div>
-                  <BtnBack backLinks="/" />
-                  <Chat
-                    {...props}
-                    clientList={this.state.clientList}
-                    addMessage={this.addMessage}
-                    messages={this.state.chatMessages}
-                    updateChatPartner={this.updateChatPartner}
-                    chatPartner={this.state.chatPartner}
-                  />
-                </div>
-              )}
-            />
+                btnAbsolutR={this.btnAbsolutR}
+                autorized={this.state.authorize}
+                fnlogout={this.logout}
+                CurrentUserId={this.state.currentUser.id}
+                CurrentUserImage={this.state.currentUser.avatarURL}
+              />
+
+              <Route
+                exact
+                path="/chat/:id"
+                render={props => (
+                  <div>
+                    <BtnBack backLinks="/" />
+                    <Link to="/chat/" className="btn-chat">
+                      <BtnChat
+                        resetUnread={this.resetUnread}
+                        unreadMsgs={this.state.unreadMsgs}
+                        unread={this.state.unread}
+                      />
+                    </Link>
+                    <Chat
+                      {...props}
+                      clientList={this.state.clientList}
+                      addMessage={this.addMessage}
+                      messages={this.state.chatMessages}
+                      updateChatPartner={this.updateChatPartner}
+                      chatPartner={this.state.chatPartner}
+                    />
+                  </div>
+                )}
+              />
             </div>
           )}
           {this.state.authorize && (
