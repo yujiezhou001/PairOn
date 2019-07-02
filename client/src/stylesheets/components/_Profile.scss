@@ -15,9 +15,18 @@
     background-color: #fff;
     padding: 3.5em 2em;
     width: 100%;
+    text-align: center;
+    
+    h2 {
+      font-size: 2rem;
+    }
+
+    p {
+      margin-bottom: 2em;
+    }
   }
 
-  .edit-account{
+  .edit-account {
     width: 100%;
   }
 }
