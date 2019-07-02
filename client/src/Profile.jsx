@@ -19,12 +19,12 @@ class Profile extends React.Component {
         aboutMe:
           "Fam actually scenester microdosing church-key pinterest synth copper mug enamel pin narwhal YOLO helvetica 8-bit cardigan. Sartorial selvage hashtag, cliche pug yr artisan iceland scenester art party live-edge. Try-hard synth vaporware austin."
       },
-      firstname: '',
-      lastname: '',
-      hometown: '',
-      email: '',
-      password: '',
-      aboutme: '',
+      firstname: "",
+      lastname: "",
+      hometown: "",
+      email: "",
+      password: "",
+      aboutme: "",
       updated: false,
       isToggleOn: false
     };
@@ -61,60 +61,62 @@ class Profile extends React.Component {
 
   handleOnSubmit(e) {
     e.preventDefault();
-    axios.post("/users/:id", { 
-      firstname: this.state.firstname, 
-      lastname: this.state.lastname,
-      hometown: this.state.hometown,
-      email: this.state.email,
-      password: this.state.password,
-      aboutme: this.state.aboutme
-     }).then(({ data }) => {
-      this.props.authorize(data)
-      this.setState({
-        firstname: data.userObj.first_name,
-        lastname: data.userObj.last_name,
-        hometown: data.userObj.hometown,
-        email: data.userObj.email,
-        password:data.userObj.password,
-        aboutme: data.userObj.about_me,
-        updated:"Your Profile is successfully updated",
+    axios
+      .post("/users/:id", {
+        firstname: this.state.firstname,
+        lastname: this.state.lastname,
+        hometown: this.state.hometown,
+        email: this.state.email,
+        password: this.state.password,
+        aboutme: this.state.aboutme
+      })
+      .then(({ data }) => {
+        this.props.authorize(data);
+        this.setState({
+          firstname: data.userObj.first_name,
+          lastname: data.userObj.last_name,
+          hometown: data.userObj.hometown,
+          email: data.userObj.email,
+          password: data.userObj.password,
+          aboutme: data.userObj.about_me,
+          updated: "Your Profile is successfully updated"
+        });
       });
-    })
   }
 
   handleFirstNameInput(e) {
     this.setState({
-      firstname:e.target.value
+      firstname: e.target.value
     });
   }
 
   handleLastNameInput(e) {
     this.setState({
-      lastname:e.target.value
+      lastname: e.target.value
     });
   }
 
   handleHometownInput(e) {
     this.setState({
-      hometown:e.target.value
+      hometown: e.target.value
     });
   }
 
   handleEmailInput(e) {
     this.setState({
-      email:e.target.value
+      email: e.target.value
     });
   }
 
   handlePasswordInput(e) {
     this.setState({
-      password:e.target.value
+      password: e.target.value
     });
   }
 
   handleAboutMeInput(e) {
     this.setState({
-      aboutme:e.target.value
+      aboutme: e.target.value
     });
   }
 
@@ -123,11 +125,9 @@ class Profile extends React.Component {
   }
 
   render() {
-
-
-    const user = this.props.clientList.reverse().find(
-      userObj => userObj.id === Number(this.props.match.params.id)
-    );
+    const user = this.props.clientList
+      .reverse()
+      .find(userObj => userObj.id === Number(this.props.match.params.id));
 
     const isAccountUser = this.checkCurrentId(this.props.currentid);
 
@@ -163,10 +163,12 @@ class Profile extends React.Component {
       <div className="oter-profile d-flex justify-content-start flex-column align-items-center">
         <img className="rounded-circle" src={user.avatarURL} />
         <div className="about-me d-flex justify-content-start flex-column align-items-center">
-          <h3>{user.firstName}</h3>
+          <h2>{user.firstName}</h2>
           <p>{user.hometown}</p>
-          <h4>About me</h4>
-          <p>{user.aboutMe}</p>
+          <div>
+            <h4>About me</h4>
+            <p>{user.aboutMe}</p>
+          </div>
           {button}
         </div>
       </div>
@@ -257,11 +259,13 @@ class Profile extends React.Component {
               <button type="submit" className="btn btn-outline-color">
                 Update
               </button>
-              {this.state.updated && <div>
-                <p className="updateStatus">
-                  Your profile is successfully updated!
-                </p>
-              </div>}
+              {this.state.updated && (
+                <div>
+                  <p className="updateStatus">
+                    Your profile is successfully updated!
+                  </p>
+                </div>
+              )}
             </form>
           </div>
         ) : (
