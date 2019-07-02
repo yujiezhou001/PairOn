@@ -1,15 +1,14 @@
 import React from "react";
 import axios from "axios";
 import Logo from "./components/Logo.jsx";
-import { Link } from 'react-router-dom';
-
+import { Link } from "react-router-dom";
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
       authorize: false
     };
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
@@ -31,45 +30,49 @@ class Login extends React.Component {
 
   handleOnSubmit(e) {
     e.preventDefault();
-    axios.post("/login", { username: this.state.username, password: this.state.password }).then(({ data }) => {
-      this.setState({
-        authorize:data
+    axios
+      .post("/login", {
+        username: this.state.username,
+        password: this.state.password
+      })
+      .then(({ data }) => {
+        this.setState({
+          authorize: data
+        });
+        this.props.authorize(data);
+        window.location.reload();
       });
-      this.props.authorize(data)
-      window.location.reload()
-    })
   }
 
   handleUsernameChange(e) {
     this.setState({
-      username:e.target.value
+      username: e.target.value
     });
   }
 
   handlePasswordChange(e) {
     this.setState({
-      password:e.target.value
+      password: e.target.value
     });
   }
 
   render() {
-    console.log(this.state.authorize)
+    console.log(this.state.authorize);
     return (
-
-      <div id = "login">
-      <div className="logoClass">
-      <Logo />
-      </div>
+      <div id="login" style={{ margin: "10px" }}>
+        <div className="logoClass">
+          <Logo />
+        </div>
 
         <form onSubmit={this.handleOnSubmit}>
           <div className="form-group">
-            <label htmlFor="inputEmail4">Email address</label>
+            <label htmlFor="inputEmail4">Email</label>
             <input
               type="email"
               name="username"
               className="form-control"
               id="inputEmail"
-              placeholder="Please enter your email"
+              placeholder="Email"
               value={this.state.username}
               onChange={this.handleUsernameChange}
             />
@@ -81,22 +84,22 @@ class Login extends React.Component {
               name="password"
               className="form-control"
               id="inputPassword"
-              placeholder="Please enter your password"
+              placeholder="Password"
               value={this.state.password}
               onChange={this.handlePasswordChange}
             />
           </div>
-          <div className="loginButton">
-          <button type="submit" className="btn btn-main-color">
-            Login
-          </button>
+          <div style={{ padding: "20px" }}>
+            <div className="loginButton">
+              <button type="submit" className="btn btn-main-color">
+                Login
+              </button>
+            </div>
           </div>
         </form>
-        <p>
+        <p style={{ margin: "20px" }}>
           Don't have an account? <br />
-          <Link to="/register">
-            Join
-          </Link>
+          <Link to="/register">Join</Link>
         </p>
       </div>
     );
