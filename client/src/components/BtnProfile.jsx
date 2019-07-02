@@ -22,10 +22,18 @@ const BtnProfile = props => {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <img src={props.CurrentUserImage} alt="Button My profile" className="rounded-circle shadow-sm" />
+          <img
+            src={props.CurrentUserImage}
+            alt="Button My profile"
+            className="rounded-circle shadow-sm"
+          />
           {/* <FontAwesomeIcon style={btnProfile} icon={faUserCircle} /> */}
         </button>
-        <div className="dropdown-menu dropdown-menu-right text-right" aria-labelledby="dropdownMenuButton">
+        <div
+          className="dropdown-menu dropdown-menu-right text-right"
+          aria-labelledby="dropdownMenuButton"
+          style={{ left: "2em!important", minWidth: 0 }}
+        >
           <div className="dropdown-item">
             <Link to={`/users/${props.CurrentUserId}`}>My Profile</Link>
           </div>
@@ -33,7 +41,7 @@ const BtnProfile = props => {
           {autorized && (
             <button className="dropdown-item" onClick={props.fnlogout}>
               {" "}
-              <a href="/login"> logout</a>
+              <a href="/login">Log Out</a>
             </button>
           )}
         </div>

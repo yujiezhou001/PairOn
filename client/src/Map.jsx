@@ -198,7 +198,15 @@ export class MapContainer extends Component {
 
             if (this.props.currentUserId === person.id) {
               personIcon = "circleOpac.gif";
-              zoomIn = new window.google.maps.Size(60, 60);        
+              zoomIn = new window.google.maps.Size(60, 60);
+            }
+
+            if (
+              this.state.selectedPerson &&
+              this.state.selectedPerson.id === person.id
+            ) {
+              personIcon = "userHi.gif";
+              zoomIn = new window.google.maps.Size(40, 40);
             }
 
             return (

@@ -92,7 +92,7 @@ class Login extends React.Component {
           <div style={{ padding: "20px" }}>
             <div className="loginButton">
               <button type="submit" className="btn btn-main-color">
-                Login
+                Log In
               </button>
             </div>
           </div>
