@@ -35,14 +35,16 @@ $bgcolorSports: $bgcolor;
 }
 .menu-item-wrapper {
   min-width: 6em;
-
-  .active {
-    border: 1px blue solid;
-  }
+  // .active {
+  //   border: 1px blue solid;
+  // }
 }
 
 .menu-item.active {
-  border: 1px green solid;
+  border: green 2px;
+  fill: $bgcolor;
+  color: $bgcolor;
+  background-color: $fillcolor;
 }
 
 .scroll-menu-arrow {
@@ -67,7 +69,6 @@ $bgcolorSports: $bgcolor;
   color: $fillcolorAll;
   background-color: $bgcolorAll;
   font-size: 2em;
-
   font-weight: 500;
 }
 .culture {
@@ -103,6 +104,9 @@ $bgcolorSports: $bgcolor;
   stroke: $fillcolorSports;
   fill: $fillcolorSports;
   background-color: $bgcolorSports;
+  &.active {
+    stroke: $bgcolor;
+  };
 }
 
 
