@@ -71,7 +71,7 @@ app.use(function(err, req, res, next) {
 });
 
 let clientList = [];
-const currentClient = {};
+// const currentClient = {};
 let eventsList = [
 // {avatarURL:
 // "https://s3.amazonaws.com/uifaces/faces/twitter/kolsvein/128.jpg"
