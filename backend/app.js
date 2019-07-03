@@ -71,22 +71,36 @@ app.use(function(err, req, res, next) {
 });
 
 let clientList = [];
-// const currentClient = {};
+const currentClient = {};
 let eventsList = [
+{avatarURL:
+"https://s3.amazonaws.com/uifaces/faces/twitter/yesmeck/128.jpg",
+description:
+"Matilda's event. \n Show up or message them for more info!",
+id:
+9,
+lat:
+45.523619,
+lng:
+-73.604802,
+type:
+"newEventPin",
+uuid:
+""}
 // {avatarURL:
-// "https://s3.amazonaws.com/uifaces/faces/twitter/kolsvein/128.jpg"
-// description:
-// "Chuck's event. \n Show up or message him for more info!"
-// id:
-// 8
-// lat:
-// 45.5355364150229
-// lng:
-// -73.49661296986693
-// type:
-// "newEventPin"
-// uuid:
-// "391996bb-8933-4945-ab4c-6b596e794048"}
+//   "https://s3.amazonaws.com/uifaces/faces/twitter/kaspernordkvist/128.jpg",
+//   description:
+//   "Cary's event. \n Show up or message them for more info!",
+//   id:
+//   3,
+//   lat:
+//   45.5271183,
+//   lng:
+//   -73.6043241,
+//   type:
+//   "newEventPin",
+//   uuid:
+//   ""}
 ];
 
 passport.use(
