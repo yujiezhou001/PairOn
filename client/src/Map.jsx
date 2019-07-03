@@ -161,7 +161,7 @@ export class MapContainer extends Component {
               lng: this.state.selectedEvent.lng
             }}
           >
-            <div>
+            <div className="popup-content">
               <img
                 className="rounded-circle shadow-sm"
                 src={this.state.selectedEvent.avatarURL}
@@ -237,7 +237,7 @@ export class MapContainer extends Component {
               lng: this.state.selectedPerson.currentLocation.lng
             }}
           >
-            <div>
+            <div className="popup-content">
               <img
                 className="rounded-circle"
                 src={this.state.selectedPerson.avatarURL}

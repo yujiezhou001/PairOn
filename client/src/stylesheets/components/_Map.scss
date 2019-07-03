@@ -20,7 +20,7 @@
 }
 
 // the element pop up user
-#root > div > div:nth-child(2) > div.map > div > div:nth-child(1) > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(4) > div > div > div > div > div > div > div{
+.popup-content{
   text-align: center;
 
   .rounded-circle{
@@ -36,7 +36,7 @@
     border-bottom: 1px solid #dadada;
   }
 
-  button{
+  a{
     font-size: 1.2em;
     padding: .4em .6em;
   }
