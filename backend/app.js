@@ -73,20 +73,20 @@ app.use(function(err, req, res, next) {
 let clientList = [];
 const currentClient = {};
 let eventsList = [
-{avatarURL:
-"https://s3.amazonaws.com/uifaces/faces/twitter/yesmeck/128.jpg",
-description:
-"Matilda's event. \n Show up or message them for more info!",
-id:
-9,
-lat:
-45.523619,
-lng:
--73.604802,
-type:
-"newEventPin",
-uuid:
-""}
+// {avatarURL:
+// "https://s3.amazonaws.com/uifaces/faces/twitter/yesmeck/128.jpg",
+// description:
+// "Matilda's event. \n Show up or message them for more info!",
+// id:
+// 9,
+// lat:
+// 45.523619,
+// lng:
+// -73.604802,
+// type:
+// "newEventPin",
+// uuid:
+// ""},
 // {avatarURL:
 //   "https://s3.amazonaws.com/uifaces/faces/twitter/kaspernordkvist/128.jpg",
 //   description:
