@@ -4,19 +4,31 @@
 
 PairOn is a real-time interactive app that brings people together to explore the spirit and pulse of a city. It shares real time geo-locations of logged in users and encourages spontaneous meet-ups and friendships between travellers and locals in search of unique experiences.
 
-## Target Users
-
 ## Tech Stack
+
+PostgresSQL
+Express
+WebSockets
+React
+GoogleMap API
+SASS
+Bootstrap 4
+HTML 5
+node.js
+knex.js
+faker.js
+Passport.js
 
 ## Screenshots
 
 !["Screenshot of Start_Page"](docs/Main_Page.png)
 !["Screenshot of Multiple_ Messages"](docs/Multiple_Messages.png)
 
-## Features
-
 ## Project Directory
 
+client - Client side files
+backend - Server side files
+final_project - README and folders mentioned above
 
 ## Running the App
 
