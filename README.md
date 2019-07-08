@@ -55,7 +55,7 @@ open http://localhost:3000
 ## Dependencies
 
 
-### webpack server
+### Webpack server
 
     Dependencies:
         @fortawesome/fontawesome-svg-core: 1.2.19,
