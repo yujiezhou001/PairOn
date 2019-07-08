@@ -22,7 +22,6 @@ PairOn is a real-time interactive app that brings people together to explore the
 ## Screenshots
 
 !["Screenshot of login_page"](docs/login.png)
-!["Screenshot of main_page"](docs/main_page.png)
 !["Screenshot of person_click_page"](docs/person_click.png)
 !["Screenshot of profile_page"](docs/profile.png)
 !["Screenshot of first_chat_page"](docs/first_chat.png)
