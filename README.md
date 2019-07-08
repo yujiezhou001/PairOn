@@ -6,29 +6,40 @@ PairOn is a real-time interactive app that brings people together to explore the
 
 ## Tech Stack
 
-PostgresSQL
-Express
-WebSockets
-React
-GoogleMap API
-SASS
-Bootstrap 4
-HTML 5
-node.js
-knex.js
-faker.js
-Passport.js
+- PostgresSQL
+- Express
+- WebSockets
+- React
+- GoogleMap API
+- SASS
+- Bootstrap 4
+- HTML 5
+- node.js
+- knex.js
+- faker.js
+- Passport.js
 
 ## Screenshots
 
-!["Screenshot of Start_Page"](docs/Main_Page.png)
-!["Screenshot of Multiple_ Messages"](docs/Multiple_Messages.png)
+!["Screenshot of login_page"](docs/login.png)
+!["Screenshot of main_page"](docs/main_page.png)
+!["Screenshot of person_click_page"](docs/person_click.png)
+!["Screenshot of profile_page"](docs/profile.png)
+!["Screenshot of first_chat_page"](docs/first_chat.png)
+!["Screenshot of two_logged_in_users_page"](docs/two_logged_in_users.png)
+!["Screenshot of create_event_page"](docs/create_event.png)
+!["Screenshot of event_chat_page"](docs/event_chat.png)
+!["Screenshot of chat_summary_page"](docs/chat_summary.png)
+!["Screenshot of chat_page"](docs/chat_page.png)
+!["Screenshot of response_page"](docs/response.png)
+!["Screenshot of register_page"](docs/register.png)
+!["Screenshot of update_page"](docs/update.png)
 
 ## Project Directory
 
-client - Client side files
-backend - Server side files
-final_project - README and folders mentioned above
+- client - Client side files
+- backend - Server side files
+- final_project - README and folders mentioned above
 
 ## Running the App
 
