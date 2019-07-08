@@ -80,7 +80,7 @@ open http://localhost:3000
     DevDependencies:
         npm-watch: 0.6.0
 
-### WebSocket && Express server
+### WebSocket & Express server
 
     Dependencies: 
         body-parser: 1.19.0,
