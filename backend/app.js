@@ -72,36 +72,7 @@ app.use(function(err, req, res, next) {
 
 let clientList = [];
 const currentClient = {};
-let eventsList = [
-// {avatarURL:
-// "https://s3.amazonaws.com/uifaces/faces/twitter/yesmeck/128.jpg",
-// description:
-// "Matilda's event. \n Show up or message them for more info!",
-// id:
-// 9,
-// lat:
-// 45.523619,
-// lng:
-// -73.604802,
-// type:
-// "newEventPin",
-// uuid:
-// ""},
-// {avatarURL:
-//   "https://s3.amazonaws.com/uifaces/faces/twitter/kaspernordkvist/128.jpg",
-//   description:
-//   "Cary's event. \n Show up or message them for more info!",
-//   id:
-//   3,
-//   lat:
-//   45.5271183,
-//   lng:
-//   -73.6043241,
-//   type:
-//   "newEventPin",
-//   uuid:
-//   ""}
-];
+let eventsList = [];
 
 passport.use(
   new LocalStrategy(
@@ -117,7 +88,6 @@ passport.use(
         .where("email", username)
         .first()
         .then(user => {
-          console.log("THIS IS DIRECTLY FROM CONSOLE LOG:", user);
           if (!user) return done(null, false);
           if (password !== user.password) {
             return done(null, false);
