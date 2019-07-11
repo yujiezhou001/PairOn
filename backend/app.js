@@ -293,8 +293,7 @@ wss.on("connection", ws => {
 
   wss.clients.forEach(function each(client) {
     client.send(JSON.stringify({ clientList }));
-    // console.log("When the ClientList first sent: ", { clientList });
-    console.log("When the ClientList first sent");
+    console.log("When the ClientList first sent: ", { clientList });
   });
 
   ws.send(JSON.stringify({eventsList}));
