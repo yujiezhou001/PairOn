@@ -71,37 +71,8 @@ app.use(function(err, req, res, next) {
 });
 
 let clientList = [];
-const currentClient = {};
-let eventsList = [
-// {avatarURL:
-// "https://s3.amazonaws.com/uifaces/faces/twitter/yesmeck/128.jpg",
-// description:
-// "Matilda's event. \n Show up or message them for more info!",
-// id:
-// 9,
-// lat:
-// 45.523619,
-// lng:
-// -73.604802,
-// type:
-// "newEventPin",
-// uuid:
-// ""},
-// {avatarURL:
-//   "https://s3.amazonaws.com/uifaces/faces/twitter/kaspernordkvist/128.jpg",
-//   description:
-//   "Cary's event. \n Show up or message them for more info!",
-//   id:
-//   3,
-//   lat:
-//   45.5271183,
-//   lng:
-//   -73.6043241,
-//   type:
-//   "newEventPin",
-//   uuid:
-//   ""}
-];
+let currentUser = {};
+let eventsList = [];
 
 passport.use(
   new LocalStrategy(
@@ -117,39 +88,17 @@ passport.use(
         .where("email", username)
         .first()
         .then(user => {
-          console.log("THIS IS DIRECTLY FROM CONSOLE LOG:", user);
           if (!user) return done(null, false);
           if (password !== user.password) {
             return done(null, false);
           } else {
-            // add the real user / logged in user to the clientList
-            // [user] = result;
-            currentClient.id = user.id;
-            currentClient.firstName = user.first_name;
-            currentClient.lastName = user.last_name;
-            currentClient.email = user.email;
-            currentClient.hometown = user.hometown;
-            currentClient.experiences = user.experiences;
-            currentClient.avatarURL = user.avatar_url;
-            currentClient.currentLocation = ourLocation;
-            currentClient.aboutMe = user.about_me;
-            currentClient.type = "incomingClientList";
-
-            clientList.push({
-                id: user.id,
-                firstName: user.first_name,
-                lastName: user.last_name,
-                email: user.email,
-                // password: user.password,
-                hometown: user.hometown,
-                experiences: "All",
-                avatarURL: user.avatar_url,
-                currentLocation: ourLocation,
-                aboutMe: user.about_me,
-                type: "incomingClientList"
-            });
-
-            return done(null, user);
+            currentUser = user;
+            currentUser.experiences = "All";
+            currentUser.currentLocation = ourLocation;
+            currentUser.type = "incomingClientList";
+            delete currentUser.password;
+            clientList.push(currentUser);
+            return done(null, currentUser);
           }
         })
         .catch(err => {
@@ -344,7 +293,8 @@ wss.on("connection", ws => {
 
   wss.clients.forEach(function each(client) {
     client.send(JSON.stringify({ clientList }));
-    console.log("When the ClientList first sent: ", { clientList });
+    // console.log("When the ClientList first sent: ", { clientList });
+    console.log("When the ClientList first sent");
   });
 
   ws.send(JSON.stringify({eventsList}));
@@ -411,7 +361,7 @@ wss.on("connection", ws => {
     // remove(clientList, clientList.find(client => client.id === currentClient.id))
 
     
-    // clientList = clientList.filter(client => client.id !== currentClient.id)
+    // clientList = clientList.filter(client => client.id !== currentUser.id)
     // console.log("This is the new filtered clientlist ON DISCONNECT:", clientList)
     // wss.broadcast(JSON.stringify({ clientList }));
 

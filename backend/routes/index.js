@@ -57,7 +57,7 @@ router.post('/login',
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
     res.json({userObj: req.user, authorize: true})
-    res.redirect('/')
+    // res.redirect('/')
   });
 
 
