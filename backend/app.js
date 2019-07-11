@@ -364,9 +364,9 @@ wss.on("connection", ws => {
       // remove(clientList, clientList.find(client => client.id === currentClient.id))
   
       
-      // clientList = clientList.filter(client => client.id !== currentUser.id)
-      // console.log("This is the new filtered clientlist ON DISCONNECT:", clientList)
-      // wss.broadcast(JSON.stringify({ clientList }));
+      clientList = clientList.filter(client => client.id !== currentUser.id)
+      console.log("This is the new filtered clientlist ON DISCONNECT:", clientList)
+      wss.broadcast(JSON.stringify({ clientList }));
   
     })
   }
