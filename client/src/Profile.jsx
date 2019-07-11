@@ -171,7 +171,7 @@ class Profile extends React.Component {
 
     const personalProfile = user && (
       <div className="oter-profile d-flex justify-content-start flex-column align-items-center">
-        <img className="rounded-circle" src={user.avatarURL} />
+        <img className="rounded-circle" src={user.avatar_url} />
         <div className="about-me d-flex justify-content-start flex-column align-items-center">
           <h2>{user.firstName}</h2>
           <p>{user.hometown}</p>

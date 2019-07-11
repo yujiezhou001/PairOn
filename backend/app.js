@@ -94,14 +94,19 @@ passport.use(
           if (password !== user.password) {
             return done(null, false);
           } else {
-            currentUser = user;
-            currentUser.experiences = "All";
+            currentUser.id = user.id;
+            currentUser.firstName = user.first_name;
+            currentUser.lastName = user.last_name;
+            currentUser.email = user.email;
+            currentUser.hometown = user.hometown;
+            currentUser.avatarURL = user.avatar_url;
+            currentUser.aboutMe = user.about_me;
+            currentUser.experiences = user.experiences;
             currentUser.currentLocation = ourLocation;
             currentUser.type = "incomingClientList";
-            delete currentUser.password;
             userCredentials = true;
             clientList.push(currentUser);
-            return done(null, currentUser);
+            return done(null, user);
           }
         })
         .catch(err => {
@@ -141,12 +146,12 @@ knex
     results.forEach(userObj => {
       clientList.push({
         id: i,
-        firstName: userObj.first_name,
+        first_name: userObj.first_name,
         hometown: userObj.hometown,
         experiences: fakeExperience[i],
-        avatarURL: userObj.avatar_url,
+        avatar_url: userObj.avatar_url,
         currentLocation: fakeLocations[i], //generateRandomPoint({lat:45.530336999999996, lng:-73.60290119999999}, 100),
-        aboutMe: userObj.about_me,
+        about_me: userObj.about_me,
         type: "incomingClientList"
       });
       i++;
