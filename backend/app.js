@@ -75,7 +75,6 @@ let currentUser = {};
 let eventsList = [];
 let userCredentials = false;
 
-
 passport.use(
   new LocalStrategy(
     {
