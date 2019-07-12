@@ -214,15 +214,15 @@ class App extends Component {
   handleOnAuthorize = data => {
     const tempObj = {
       id: data.userObj.id,
-      firstName: data.userObj.first_name,
-      lastName: data.userObj.last_name,
+      firstName: data.userObj.firstName,
+      lastName: data.userObj.lastName,
       email: data.userObj.email,
       // password: data.userObj.password,
       hometown: data.userObj.hometown,
       experiences: "all",
-      avatarURL: data.userObj.avatar_url,
+      avatarURL: data.userObj.avatarURL,
       currentLocation: { lat: 0, lng: 0 },
-      aboutMe: data.userObj.about_me,
+      aboutMe: data.userObj.aboutMe,
       type: "real"
     };
     console.log("handle on Authorize: ", data);

@@ -71,8 +71,9 @@ app.use(function(err, req, res, next) {
 });
 
 let clientList = [];
-const currentClient = {};
+let currentUser = {};
 let eventsList = [];
+let userCredentials = false;
 
 passport.use(
   new LocalStrategy(
@@ -92,34 +93,31 @@ passport.use(
           if (password !== user.password) {
             return done(null, false);
           } else {
-            // add the real user / logged in user to the clientList
-            // [user] = result;
-            currentClient.id = user.id;
-            currentClient.firstName = user.first_name;
-            currentClient.lastName = user.last_name;
-            currentClient.email = user.email;
-            currentClient.hometown = user.hometown;
-            currentClient.experiences = user.experiences;
-            currentClient.avatarURL = user.avatar_url;
-            currentClient.currentLocation = ourLocation;
-            currentClient.aboutMe = user.about_me;
-            currentClient.type = "incomingClientList";
-
+            currentUser.id = user.id;
+            currentUser.firstName = user.first_name;
+            currentUser.lastName = user.last_name;
+            currentUser.email = user.email;
+            currentUser.hometown = user.hometown;
+            currentUser.avatarURL = user.avatar_url;
+            currentUser.aboutMe = user.about_me;
+            currentUser.experiences = user.experiences;
+            currentUser.currentLocation = ourLocation;
+            currentUser.type = "incomingClientList";
+            userCredentials = true;
             clientList.push({
-                id: user.id,
-                firstName: user.first_name,
-                lastName: user.last_name,
-                email: user.email,
-                // password: user.password,
-                hometown: user.hometown,
-                experiences: "All",
-                avatarURL: user.avatar_url,
-                currentLocation: ourLocation,
-                aboutMe: user.about_me,
-                type: "incomingClientList"
-            });
-
-            return done(null, user);
+              id: user.id,
+              firstName: user.first_name,
+              lastName: user.last_name,
+              email: user.email,
+              // password: user.password,
+              hometown: user.hometown,
+              experiences: "All",
+              avatarURL: user.avatar_url,
+              currentLocation: ourLocation,
+              aboutMe: user.about_me,
+              type: "incomingClientList"
+          });
+            return done(null, currentUser);
           }
         })
         .catch(err => {
@@ -304,6 +302,7 @@ const fakeLocations = [
   }
 ];
 
+
 wss.on("connection", ws => {
   console.log("Client connected");
   // once login authentication working - wrap all this code in "Usercredentials valid?"
@@ -311,79 +310,81 @@ wss.on("connection", ws => {
   //   const messageObj = JSON.parse(message);
   //   console.log("This is from received message:", messageObj);
   // });
-
-  wss.clients.forEach(function each(client) {
-    client.send(JSON.stringify({ clientList }));
-    console.log("When the ClientList first sent: ", { clientList });
-  });
-
-  ws.send(JSON.stringify({eventsList}));
-
-
-  ws.on("message", function incoming(message) {
-    const messageObj = JSON.parse(message);
-    // messageObj.id = uuidv4(); do not use!! overwrites user id!!
-
-    console.log("This is from any received message:", messageObj);
-
-    switch (messageObj.type) {
-      case "outgoingMessage":
-        messageObj.type = "incomingMessage";
-        messageObj.id = uuidv4();
-        console.log("OUTGOING MSG:", messageObj);
-        wss.broadcast(JSON.stringify(messageObj));
-        break;
-
-      case "outgoingCurrUserInfo":
-        console.log("BACKEND - MY LOC OBJ", messageObj);
-        clientList.forEach(function(client) {
-          if (client.id === messageObj.id) {
-            client.currentLocation = messageObj.myLocation;
-            //DO not change, this is updating clientlist and below broadcasting!
-          }
-        });
-        wss.broadcast(JSON.stringify({ clientList }));
-        break;
-
-      case "experiencePick":
-        clientList.forEach(function(client) {
-          if (client.id === messageObj.id) {
-            client.experiences = messageObj.experiences;
-            //DO not change, this is updating clientlist and below broadcasting!
-          }
-        });
-        wss.broadcast(JSON.stringify({ clientList }));
-        break;
-
-      case "newEventPin":
-        messageObj.uuid = uuidv4();
-        eventsList.push(messageObj);
-        wss.broadcast(JSON.stringify({ eventsList }));
-        break;
-
-      case "removeEvent":
-        eventsList = eventsList.filter(oneEvent => {
-          if (oneEvent.uuid !== messageObj.uuid) {
-            return oneEvent;
-          }
-        });
-        wss.broadcast(JSON.stringify({ eventsList }));
-        break;
-    }
-  });
-
-
-
-  ws.on('close', () => {
-    
-    console.log("Client disconnected")
-
-    // remove(clientList, clientList.find(client => client.id === currentClient.id))
-
-    
-    // clientList = clientList.filter(client => client.id !== currentClient.id)
-    // console.log("This is the new filtered clientlist ON DISCONNECT:", clientList)
-    // wss.broadcast(JSON.stringify({ clientList }));
-
-  })
+  if (userCredentials === true) {
+    wss.clients.forEach(function each(client) {
+      client.send(JSON.stringify({ clientList }));
+      console.log("When the ClientList first sent: ", { clientList });
+    });
+  
+    ws.send(JSON.stringify({eventsList}));
+  
+  
+    ws.on("message", function incoming(message) {
+      const messageObj = JSON.parse(message);
+      // messageObj.id = uuidv4(); do not use!! overwrites user id!!
+  
+      console.log("This is from any received message:", messageObj);
+  
+      switch (messageObj.type) {
+        case "outgoingMessage":
+          messageObj.type = "incomingMessage";
+          messageObj.id = uuidv4();
+          console.log("OUTGOING MSG:", messageObj);
+          wss.broadcast(JSON.stringify(messageObj));
+          break;
+  
+        case "outgoingCurrUserInfo":
+          console.log("BACKEND - MY LOC OBJ", messageObj);
+          clientList.forEach(function(client) {
+            if (client.id === messageObj.id) {
+              client.currentLocation = messageObj.myLocation;
+              //DO not change, this is updating clientlist and below broadcasting!
+            }
+          });
+          wss.broadcast(JSON.stringify({ clientList }));
+          break;
+  
+        case "experiencePick":
+          clientList.forEach(function(client) {
+            if (client.id === messageObj.id) {
+              client.experiences = messageObj.experiences;
+              //DO not change, this is updating clientlist and below broadcasting!
+            }
+          });
+          wss.broadcast(JSON.stringify({ clientList }));
+          break;
+  
+        case "newEventPin":
+          messageObj.uuid = uuidv4();
+          eventsList.push(messageObj);
+          wss.broadcast(JSON.stringify({ eventsList }));
+          break;
+  
+        case "removeEvent":
+          eventsList = eventsList.filter(oneEvent => {
+            if (oneEvent.uuid !== messageObj.uuid) {
+              return oneEvent;
+            }
+          });
+          wss.broadcast(JSON.stringify({ eventsList }));
+          break;
+      }
+    });
+  
+  
+  
+    ws.on('close', () => {
+      
+      console.log("Client disconnected")
+  
+      // remove(clientList, clientList.find(client => client.id === currentClient.id))
+  
+      
+      clientList = clientList.filter(client => client.id !== currentUser.id)
+      console.log("This is the new filtered clientlist ON DISCONNECT:", clientList)
+      wss.broadcast(JSON.stringify({ clientList }));
+  
+    })
+  }
+  
 });
