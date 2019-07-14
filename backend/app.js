@@ -231,6 +231,7 @@ const fakeExperience = [
   "culture"
 ];
 
+//Create fake locations for fake users
 const fakeLocations = [
   { lat: 45.525063, lng: -73.59943 },
 
