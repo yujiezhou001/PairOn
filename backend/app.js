@@ -90,9 +90,9 @@ passport.use(
         .where("email", username)
         .first()
         .then(user => {
-          if (!user) return done(null, false);
+          if (!user) return done(null, false, { message: 'Invalid Email' });
           if (password !== user.password) {
-            return done(null, false);
+            return done(null, false, { message: 'Invalid Password' });
           } else {
             currentUser.id = user.id;
             currentUser.firstName = user.first_name;
@@ -122,7 +122,7 @@ passport.use(
           }
         })
         .catch(err => {
-          return done(err);
+          return (err);
         });
     }
   )
