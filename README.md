@@ -43,7 +43,13 @@ PairOn is a real-time interactive app that brings people together to explore the
 ## Running the App
 
 
-Install the dependencies and start the server in both backend and client folder.
+Install the dependencies, run migration and seed in backend folder, and start the server in both backend and client folder.
+
+```
+knex migrate:latest
+knex seed:run
+
+```
 
 ```
 npm install
