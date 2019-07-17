@@ -284,6 +284,7 @@ const fakeLocations = [
 wss.on("connection", ws => {
   console.log("Client connected");
   // once login authentication working - wrap all this code in "Usercredentials valid?"
+  //Send clientList back to front end only after user is logged in
   if (userCredentials === true) {
     wss.clients.forEach(function each(client) {
       client.send(JSON.stringify({ clientList }));
@@ -301,7 +302,7 @@ wss.on("connection", ws => {
           messageObj.id = uuidv4();
           wss.broadcast(JSON.stringify(messageObj));
           break;
-  
+        // Updating current user's location in the clientList
         case "outgoingCurrUserInfo":
           clientList.forEach(function(client) {
             if (client.id === messageObj.id) {
@@ -311,7 +312,7 @@ wss.on("connection", ws => {
           });
           wss.broadcast(JSON.stringify({ clientList }));
           break;
-  
+        // Updating clientList with current user's experience
         case "experiencePick":
           clientList.forEach(function(client) {
             if (client.id === messageObj.id) {
@@ -321,13 +322,13 @@ wss.on("connection", ws => {
           });
           wss.broadcast(JSON.stringify({ clientList }));
           break;
-  
+        // Creating events and push current user's event in the eventList
         case "newEventPin":
           messageObj.uuid = uuidv4();
           eventsList.push(messageObj);
           wss.broadcast(JSON.stringify({ eventsList }));
           break;
-  
+        // Removing current user's event
         case "removeEvent":
           eventsList = eventsList.filter(oneEvent => {
             if (oneEvent.uuid !== messageObj.uuid) {
