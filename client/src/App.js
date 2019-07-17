@@ -240,7 +240,7 @@ class App extends Component {
       const data = await response.json();
       this.handleOnAuthorize(data);
     } catch (e) {
-      console.log("Wrong Username or Password!")
+      // console.log("Wrong Username or Password!")
     }
   }
 

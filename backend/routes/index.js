@@ -45,10 +45,12 @@ router.post('/register', function(req, res, next) {
     .returning(['id', 'first_name', 'last_name', 'email', 'password', 'hometown', 'avatar_url', 'about_me', 'type', 'created_at', 'updated_at'])
     .then(results => {
       const user = results[0];
-      req.login(user, function(err) {
-        if (err) { return next(err); }
-        res.json({userObj: req.user, authorize: true})
-      });
+      // req.login(user, function(err) {
+      //   if (err) { return next(err); }
+      //   res.json({userObj: req.user, authorize: true})
+      // });
+      res.send(`Congratulations ${user.first_name}! You have successfully registered.\n
+      Please click login below.`)
     })
 });
 

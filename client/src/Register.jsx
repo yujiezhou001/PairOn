@@ -12,7 +12,8 @@ class Register extends React.Component {
       hometown: "",
       email: "",
       password: "",
-      authorize: false
+      authorize: false,
+      message: ""
     };
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.handleFirstNameInput = this.handleFirstNameInput.bind(this);
@@ -47,10 +48,10 @@ class Register extends React.Component {
       .then(({ data }) => {
         console.log("Received from register:", data);
         this.setState({
-          authorize: data
+          message: data
         });
-        this.props.authorize(data);
-        window.location.reload();
+        // this.props.authorize(data);
+        // window.location.reload();
       });
   }
 
@@ -89,6 +90,11 @@ class Register extends React.Component {
       <div id="register">
         <div className="logoClass">
           <Logo />
+        </div>
+        <div className="message">
+          <p>
+            {this.state.message}
+          </p>
         </div>
         <form onSubmit={this.handleOnSubmit}>
           <div className="form-group">

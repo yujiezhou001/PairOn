@@ -23,6 +23,10 @@
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
+#register .message p {
+    color: green;
+}
+
 #register p {
     display: block;
     padding: .375rem .75rem;
@@ -66,3 +70,5 @@
 #register .form-group {
     width: 20rem;
 }
+
+
