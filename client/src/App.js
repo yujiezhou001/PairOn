@@ -56,8 +56,6 @@ class App extends Component {
   updateCurrentLocation = locationObject => {
     let currentUser = this.state.currentUser;
     currentUser.currentLocation = locationObject;
-    console.log("THIS IS CURRENT USER - FE:", currentUser);
-    // this.setState(currentUser);
 
     this.setState({ currentUser: currentUser });
 
@@ -68,8 +66,6 @@ class App extends Component {
     };
 
     this.socket.send(JSON.stringify(locObject));
-    // console.log("USER OBJ SENT TO BACKEND", locObject);
-    // this.socket.send(JSON.stringify(locationObject))
   };
 
   updateExperiences = experience => {
@@ -82,21 +78,16 @@ class App extends Component {
       experiences: experience
     };
     this.socket.send(JSON.stringify(experienceObj));
-    console.log("EXP OBJ:", experienceObj);
   };
 
   updateChatPartner = userId => {
     var chatPartner = this.state.clientList.find(
       element => element.id === parseInt(userId)
     );
-
-    console.log(chatPartner);
-
     this.setState({ chatPartner });
   };
 
   updateEventsList = onClickEvent => {
-    //let newEventsList = this.state.eventsList;
     const newEventsObj = {
       type: "newEventPin",
       id: this.state.currentUser.id,
@@ -108,13 +99,9 @@ class App extends Component {
       lng: onClickEvent.latLng.lng()
     };
     this.socket.send(JSON.stringify(newEventsObj));
-    // newEventsList.push
-    // this.setState(newEventsList)
-    //console.log(onClickEvent)
   };
 
   removeEventPin = oneEvent => {
-    //console.log(oneEvent);
     if (this.state.currentUser.id === oneEvent.id) {
       let pinRemoval = {
         type: "removeEvent",
@@ -146,9 +133,6 @@ class App extends Component {
       type: "outgoingMessage",
       datetime: `${time}`
     };
-
-    console.log("SEND", newMessage, "TO BACKEND!!!!");
-    // console.log(messageObject);
     this.socket.send(JSON.stringify(messageObject));
   };
 
@@ -168,7 +152,7 @@ class App extends Component {
           this.setState({ unread: true });
 
           const newUnreadCount = this.state.unreadMsgs + 1;
-          console.log("UNREAD COUNT", newUnreadCount);
+         
           this.setState({ unreadMsgs: newUnreadCount });
 
           toaster.notify(
@@ -202,11 +186,7 @@ class App extends Component {
       console.log("CHAT BROADCAST BACK TO ME!", data);
     } else if (data.type === "experiencePick") {
       this.setState(data);
-      // } else {
-      //   console.log("Is this the CLIENTLIST?", data)
-      //   this.setState(data);
     } else if (this.state.authorize) {
-      console.log("Is this the CLIENTLIST?", data);
       this.setState(data);
     }
   };
@@ -217,7 +197,6 @@ class App extends Component {
       firstName: data.userObj.firstName,
       lastName: data.userObj.lastName,
       email: data.userObj.email,
-      // password: data.userObj.password,
       hometown: data.userObj.hometown,
       experiences: "all",
       avatarURL: data.userObj.avatarURL,
@@ -225,7 +204,6 @@ class App extends Component {
       aboutMe: data.userObj.aboutMe,
       type: "real"
     };
-    console.log("handle on Authorize: ", data);
     this.setState({ currentUser: tempObj, authorize: data.authorize });
   };
 
@@ -235,7 +213,6 @@ class App extends Component {
       firstName: data.userObj.first_name,
       lastName: data.userObj.last_name,
       email: data.userObj.email,
-      // password: data.userObj.password,
       hometown: data.userObj.hometown,
       experiences: "all",
       avatarURL: data.userObj.avatar_url,
@@ -243,7 +220,6 @@ class App extends Component {
       aboutMe: data.userObj.about_me,
       type: "real"
     };
-    console.log("handle on Update: ", data);
     this.setState({ currentUser: tempObj });
   };
 
@@ -265,7 +241,7 @@ class App extends Component {
       const data = await response.json();
       this.handleOnAuthorize(data);
     } catch (e) {
-      // not logged in
+      console.log("Wrong Username or Password!")
     }
   }
 
