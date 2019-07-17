@@ -152,7 +152,6 @@ class App extends Component {
           this.setState({ unread: true });
 
           const newUnreadCount = this.state.unreadMsgs + 1;
-         
           this.setState({ unreadMsgs: newUnreadCount });
 
           toaster.notify(
@@ -183,9 +182,10 @@ class App extends Component {
       } else if (this.state.currentUser.id === data.senderId) {
         this.setState({ chatMessages: [...this.state.chatMessages, data] });
       }
-      console.log("CHAT BROADCAST BACK TO ME!", data);
+      
     } else if (data.type === "experiencePick") {
       this.setState(data);
+    
     } else if (this.state.authorize) {
       this.setState(data);
     }
@@ -230,7 +230,6 @@ class App extends Component {
       console.log("Connected to server");
     };
     this.socket.onmessage = e => {
-      console.log("WS EVENT", e);
       this.handleOnMessage(e);
     };
 

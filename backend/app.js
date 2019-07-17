@@ -70,13 +70,13 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
-//Create empty arrays and objects.
+// Create empty arrays and objects
 let clientList = [];
 let currentUser = {};
 let eventsList = [];
 let userCredentials = false;
 
-//Authentication
+// Authentication
 passport.use(
   new LocalStrategy(
     {
@@ -91,9 +91,9 @@ passport.use(
         .where("email", username)
         .first()
         .then(user => {
-          if (!user) return done(null, false);
+          if (!user) return done(null, false, { message: 'Invalid Email' });
           if (password !== user.password) {
-            return done(null, false);
+            return done(null, false, { message: 'Invalid Password' });
           } else {
             currentUser.id = user.id;
             currentUser.firstName = user.first_name;
@@ -111,7 +111,6 @@ passport.use(
               firstName: user.first_name,
               lastName: user.last_name,
               email: user.email,
-              // password: user.password,
               hometown: user.hometown,
               experiences: "All",
               avatarURL: user.avatar_url,
@@ -123,7 +122,7 @@ passport.use(
           }
         })
         .catch(err => {
-          return done(err);
+          return (err);
         });
     }
   )
@@ -137,7 +136,7 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-//Fake users being the first 10 users in the database
+//Select first ten users in the database to show on the map
 knex
   .select("*")
   .from("users")
@@ -168,22 +167,18 @@ server.listen(PORT, () => {
 const uuidv4 = require("uuid/v4");
 const wss = new SocketServer.Server({ server });
 
-// Set up a callback that will run when a client connects to the server
-// When a client connects they are assigned a socket, represented by
-// the ws parameter in the callback.
-
-// Create broadcast function to send data to all clients
+//Create broadcast function to send data to all clients
 wss.broadcast = function broadcast(message) {
   wss.clients.forEach(function each(client) {
     client.send(message);
   });
 };
 
-// Function that generates random geolation around our location.
+//Function that generates random geolation around our location.
 function generateRandomPoint(center, radius) {
   var x0 = center.lng;
   var y0 = center.lat;
-  // Convert Radius from meters to degrees.
+  //Convert Radius from meters to degrees.
   var rd = radius / 111300;
 
   var u = Math.random();
@@ -196,7 +191,7 @@ function generateRandomPoint(center, radius) {
 
   var xp = x / Math.cos(y0);
 
-  // Resulting point.
+  //Resulting point.
   return { lat: y + y0, lng: xp + x0 };
 }
 
@@ -212,7 +207,7 @@ const ourLocation = { lat: 0, lng: 0 }; //{ lat: 45.530336999999996, lng: -73.60
 const id = uuidv4();
 const geolocations = generateRandomPoints(ourLocation, 100, 20);
 
-//Create fake experiences for fake users
+//Create experiences for selected users who show on the map
 const fakeExperience = [
   "all",
   "food",
@@ -225,7 +220,8 @@ const fakeExperience = [
   "culture"
 ];
 
-//Create fake locations for fake users
+
+//Create locations for users who show on the map
 const fakeLocations = [
   { lat: 45.525063, lng: -73.59943 },
 
@@ -283,8 +279,7 @@ const fakeLocations = [
 
 wss.on("connection", ws => {
   console.log("Client connected");
-  // once login authentication working - wrap all this code in "Usercredentials valid?"
-  //Send clientList back to front end only after user is logged in
+  //Send clientList to front end upon user login
   if (userCredentials === true) {
     wss.clients.forEach(function each(client) {
       client.send(JSON.stringify({ clientList }));
@@ -295,14 +290,16 @@ wss.on("connection", ws => {
   
     ws.on("message", function incoming(message) {
       const messageObj = JSON.parse(message);
-      // messageObj.id = uuidv4(); do not use!! overwrites user id!!
+  
+    
       switch (messageObj.type) {
+        //Send chat messages backt to front-end
         case "outgoingMessage":
           messageObj.type = "incomingMessage";
           messageObj.id = uuidv4();
           wss.broadcast(JSON.stringify(messageObj));
           break;
-        // Updating current user's location in the clientList
+        //Update current user's real time location in the clientList
         case "outgoingCurrUserInfo":
           clientList.forEach(function(client) {
             if (client.id === messageObj.id) {
@@ -312,7 +309,7 @@ wss.on("connection", ws => {
           });
           wss.broadcast(JSON.stringify({ clientList }));
           break;
-        // Updating clientList with current user's experience
+        //Update current user's selected experience in the clientList
         case "experiencePick":
           clientList.forEach(function(client) {
             if (client.id === messageObj.id) {
@@ -322,13 +319,13 @@ wss.on("connection", ws => {
           });
           wss.broadcast(JSON.stringify({ clientList }));
           break;
-        // Creating events and push current user's event in the eventList
+        //Create current user's event
         case "newEventPin":
           messageObj.uuid = uuidv4();
           eventsList.push(messageObj);
           wss.broadcast(JSON.stringify({ eventsList }));
           break;
-        // Removing current user's event
+        //Remove current user's event
         case "removeEvent":
           eventsList = eventsList.filter(oneEvent => {
             if (oneEvent.uuid !== messageObj.uuid) {
@@ -345,6 +342,8 @@ wss.on("connection", ws => {
     ws.on('close', () => {
       
       console.log("Client disconnected")
+  
+      //Current user is removed from clientList on disconnection.
   
       
       clientList = clientList.filter(client => client.id !== currentUser.id)
