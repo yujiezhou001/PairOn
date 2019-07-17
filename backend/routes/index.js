@@ -12,8 +12,8 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+//Current user route that indicates who's the current user
 router.get('/current_user', (req, res) => {
-  console.log("Current User:", req.user)
   res.json({userObj: req.user, authorize: true})
 })
 
@@ -23,6 +23,7 @@ router.post('/chat', function(req, res, next) {
   })
 });
 
+//Post request for registration
 router.post('/register', function(req, res, next) {
   const { firstname, lastname, email, password, hometown } = req.body;
   const avartar_url = faker.internet.avatar();
@@ -44,13 +45,13 @@ router.post('/register', function(req, res, next) {
     .then(results => {
       const user = results[0];
       req.login(user, function(err) {
-        console.log("Registered User:", user);
         if (err) { return next(err); }
         res.json({userObj: req.user, authorize: true})
       });
     })
 });
 
+//Post Request for login
 router.post('/login',
   passport.authenticate('local'),
   function(req, res) {
@@ -72,7 +73,6 @@ router.post('/users/:id', function(req, res, next) {
   const { firstname, lastname, hometown, email, password, aboutme } = req.body;
   const user_id = req.user.id;
   const profileObject = {};
-  console.log("This is from updated profile", user_id)
   profileObject.first_name = firstname;
   profileObject.last_name = lastname;
   profileObject.email = email;
@@ -104,7 +104,6 @@ router.post('/users/:id', function(req, res, next) {
     .then(results => {
       const user = results[0];
       req.login(user, function(err) {
-        console.log("Updated:", user);
         if (err) { return next(err); }
         res.json({userObj: user, authorize: true})
       });

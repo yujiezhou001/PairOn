@@ -70,12 +70,13 @@ app.use(function(err, req, res, next) {
   res.render("error");
 });
 
+//Create empty arrays and objects.
 let clientList = [];
 let currentUser = {};
 let eventsList = [];
 let userCredentials = false;
 
-
+//Authentication
 passport.use(
   new LocalStrategy(
     {
@@ -129,15 +130,14 @@ passport.use(
 );
 
 passport.serializeUser(function(user, done) {
-  console.log("this is from serialized user", user);
   done(null, user);
 });
 
 passport.deserializeUser(function(user, done) {
-  console.log("this is from deserialized user", user);
   done(null, user);
 });
 
+//Fake users being the first 10 users in the database
 knex
   .select("*")
   .from("users")
@@ -156,15 +156,8 @@ knex
         type: "incomingClientList"
       });
       i++;
-      //console.log(results);
     });
   });
-
-// app.post('/login',
-//   passport.authenticate('local', { successRedirect: '/',
-//                                    failureRedirect: '/login',
-//                                    failureFlash: 'Invalid username or password.'})
-//   );
 
 //Socket Server
 const PORT = 3001;
@@ -219,6 +212,7 @@ const ourLocation = { lat: 0, lng: 0 }; //{ lat: 45.530336999999996, lng: -73.60
 const id = uuidv4();
 const geolocations = generateRandomPoints(ourLocation, 100, 20);
 
+//Create fake experiences for fake users
 const fakeExperience = [
   "all",
   "food",
@@ -290,14 +284,9 @@ const fakeLocations = [
 wss.on("connection", ws => {
   console.log("Client connected");
   // once login authentication working - wrap all this code in "Usercredentials valid?"
-  // ws.on("message", function incoming(message) {
-  //   const messageObj = JSON.parse(message);
-  //   console.log("This is from received message:", messageObj);
-  // });
   if (userCredentials === true) {
     wss.clients.forEach(function each(client) {
       client.send(JSON.stringify({ clientList }));
-      console.log("When the ClientList first sent: ", { clientList });
     });
   
     ws.send(JSON.stringify({eventsList}));
@@ -306,19 +295,14 @@ wss.on("connection", ws => {
     ws.on("message", function incoming(message) {
       const messageObj = JSON.parse(message);
       // messageObj.id = uuidv4(); do not use!! overwrites user id!!
-  
-      console.log("This is from any received message:", messageObj);
-  
       switch (messageObj.type) {
         case "outgoingMessage":
           messageObj.type = "incomingMessage";
           messageObj.id = uuidv4();
-          console.log("OUTGOING MSG:", messageObj);
           wss.broadcast(JSON.stringify(messageObj));
           break;
   
         case "outgoingCurrUserInfo":
-          console.log("BACKEND - MY LOC OBJ", messageObj);
           clientList.forEach(function(client) {
             if (client.id === messageObj.id) {
               client.currentLocation = messageObj.myLocation;
@@ -356,16 +340,13 @@ wss.on("connection", ws => {
     });
   
   
-  
+//Current user disappear from the map after closing connection
     ws.on('close', () => {
       
       console.log("Client disconnected")
   
-      // remove(clientList, clientList.find(client => client.id === currentClient.id))
-  
       
       clientList = clientList.filter(client => client.id !== currentUser.id)
-      console.log("This is the new filtered clientlist ON DISCONNECT:", clientList)
       wss.broadcast(JSON.stringify({ clientList }));
   
     })
