@@ -220,6 +220,7 @@ const fakeExperience = [
   "culture"
 ];
 
+
 //Create locations for users who show on the map
 const fakeLocations = [
   { lat: 45.525063, lng: -73.59943 },
