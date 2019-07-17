@@ -17,6 +17,7 @@ router.get('/current_user', (req, res) => {
   res.json({userObj: req.user, authorize: true})
 })
 
+//Post request for chat button (not being used)
 router.post('/chat', function(req, res, next) {
   res.json({
     test: "you hit chat"
@@ -58,10 +59,9 @@ router.post('/login',
     // If this function gets called, authentication was successful.
     // `req.user` contains the authenticated user.
     res.json({userObj: req.user, authorize: true})
-    // res.redirect('/')
   });
 
-
+//Logout 
 router.get('/logout', function(req, res){
   req.session.destroy(function (err) {
     res.clearCookie('connect.sid');
@@ -69,6 +69,7 @@ router.get('/logout', function(req, res){
   });
 });
 
+//Post request for update current user's profile
 router.post('/users/:id', function(req, res, next) {
   const { firstname, lastname, hometown, email, password, aboutme } = req.body;
   const user_id = req.user.id;
